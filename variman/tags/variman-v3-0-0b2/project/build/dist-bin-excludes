@@ -1,4 +1,0 @@
-webapp/WEB-INF/rets/rets-config.xml
-webapp/WEB-INF/rets/rets-logging.properties
-**/*.so
-**/*.dll
