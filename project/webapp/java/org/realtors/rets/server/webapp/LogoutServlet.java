@@ -28,33 +28,30 @@ import org.realtors.rets.server.RetsServerException;
  * @web.servlet name="logout-servlet"
  * @web.servlet-mapping url-pattern="/rets/logout"
  */
-public class LogoutServlet extends RetsServlet
-{
-    public void init() throws ServletException
-    {
-        super.init();
-        mTransaction = new LogoutTransaction();
-    }
+public class LogoutServlet extends RetsServlet {
+  private LogoutTransaction mTransaction;
 
-    /**
-     * Logs out of a RETS server.
-     *
-     * @param request
-     * @param response
-     * @throws RetsServerException
-     * @throws IOException
-     */
-    protected void doRets(RetsServletRequest request,
-                          RetsServletResponse response)
-        throws RetsServerException, IOException
-    {
-        HttpSession session = request.getSession();
-        AccountingStatistics stats = getStatistics(request.getSession());
-        response.setContentType("text/xml");
-        PrintWriter out = response.getWriter();
-        mTransaction.execute(out, stats);
-        SessionFilter.invalidateSession(session);
-    }
+  public void init() throws ServletException {
+    super.init();
+    mTransaction = new LogoutTransaction();
+  }
 
-    private LogoutTransaction mTransaction;
+  /**
+   * Logs out of a RETS server.
+   *
+   * @param request
+   * @param response
+   * @throws RetsServerException
+   * @throws IOException
+   */
+  protected void doRets(RetsServletRequest request,
+                        RetsServletResponse response)
+    throws RetsServerException, IOException {
+    HttpSession session = request.getSession();
+    AccountingStatistics stats = getStatistics(request.getSession());
+    response.setContentType("text/xml");
+    PrintWriter out = response.getWriter();
+    mTransaction.execute(out, stats);
+    SessionFilter.invalidateSession(session);
+  }
 }

@@ -11,16 +11,15 @@ import org.realtors.rets.server.RetsServerException;
  * Time: 4:00:19 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface ObjectSet
-{
-    public List findAllObjects(String type) throws RetsServerException;
+public interface ObjectSet {
+  public static final int DEFAULT_OBJECT_ID = 0;
 
-    public ObjectDescriptor findObject(String type, int objectId)
-        throws RetsServerException;
-    
-    public void setResource(String resource);
-    
-    public void setResourceEntity(String resourceEntity);
+  public List findAllObjects(String type) throws RetsServerException;
 
-    public static final int DEFAULT_OBJECT_ID = 0;
+  public ObjectDescriptor findObject(String type, int objectId)
+    throws RetsServerException;
+
+  public void setResource(String resource);
+
+  public void setResourceEntity(String resourceEntity);
 }

@@ -14,35 +14,29 @@ package org.realtors.rets.server;
  * A class representing an error case that can be represented by a RETS reply
  * code.
  */
-public class RetsReplyException extends RetsServerException
-{
-    public RetsReplyException(int replyCode, String meaning)
-    {
-        super(meaning);
-        mReplyCode = replyCode;
-        mMeaning = meaning;
-    }
+public class RetsReplyException extends RetsServerException {
+  private int mReplyCode;
+  private String mMeaning;
 
-    public RetsReplyException(ReplyCode replyCode)
-    {
-        this(replyCode.getValue(), replyCode.getName());
-    }
+  public RetsReplyException(int replyCode, String meaning) {
+    super(meaning);
+    mReplyCode = replyCode;
+    mMeaning = meaning;
+  }
 
-    public RetsReplyException(ReplyCode replyCode, String meaning)
-    {
-        this(replyCode.getValue(), replyCode.getName() + ": " + meaning);
-    }
+  public RetsReplyException(ReplyCode replyCode) {
+    this(replyCode.getValue(), replyCode.getName());
+  }
 
-    public int getReplyCode()
-    {
-        return mReplyCode;
-    }
+  public RetsReplyException(ReplyCode replyCode, String meaning) {
+    this(replyCode.getValue(), replyCode.getName() + ": " + meaning);
+  }
 
-    public String getMeaning()
-    {
-        return mMeaning;
-    }
+  public int getReplyCode() {
+    return mReplyCode;
+  }
 
-    private int mReplyCode;
-    private String mMeaning;
+  public String getMeaning() {
+    return mMeaning;
+  }
 }

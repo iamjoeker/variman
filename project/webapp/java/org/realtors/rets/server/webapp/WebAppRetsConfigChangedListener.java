@@ -14,21 +14,21 @@ import org.realtors.rets.server.config.RetsConfigChangedListener;
 /**
  * A simple RetsConfigChangedListener that reloads the RETS configuration in
  * the WebApp.
- * 
+ *
  * @author timbo
  */
 public class WebAppRetsConfigChangedListener implements RetsConfigChangedListener {
-    private Logger LOG = Logger.getLogger(WebAppRetsConfigChangedListener.class);
+  private Logger LOG = Logger.getLogger(WebAppRetsConfigChangedListener.class);
 
-    /*- (non-Javadoc)
-     * @see org.realtors.rets.server.config.RetsConfigChangedListener#retsConfigChanged()
-     */
-    public void retsConfigChanged() {
-        try {
-            WebApp.loadConfiguration();
-        } catch (RetsServerException e) {
-            LOG.warn("Unable to reset RETS configuration in the application.");
-        }
+  /*- (non-Javadoc)
+   * @see org.realtors.rets.server.config.RetsConfigChangedListener#retsConfigChanged()
+   */
+  public void retsConfigChanged() {
+    try {
+      WebApp.loadConfiguration();
+    } catch (RetsServerException e) {
+      LOG.warn("Unable to reset RETS configuration in the application.");
     }
+  }
 
 }

@@ -12,167 +12,137 @@ import org.realtors.rets.server.Util;
 import org.realtors.rets.server.IOUtils;
 import org.realtors.rets.server.ReplyCode;
 
-public class ObjectDescriptor
-{
-    public ObjectDescriptor(String objectKey, int objectId, URL url)
-    {
-        this(objectKey, objectId, url, null);
-    }
+public class ObjectDescriptor {
+  private String mObjectKey;
+  private int mObjectId;
+  private URL mUrl;
+  private boolean mIsLocal;
+  private String mDescription;
+  private boolean mRemoteLocationAllowable;
+  private ReplyCode mRetsReplyCode;
 
-    public ObjectDescriptor(String objectKey, int objectId, URL url,
-                            String description)
-    {
-        mObjectKey = objectKey;
-        mObjectId = objectId;
-        mUrl = url;
-        if (url.getProtocol().equals("file"))
-        {
-            mIsLocal = true;
-        }
-        else
-        {
-            mIsLocal = false;
-        }
-        mDescription = description;
-        mRemoteLocationAllowable = false;
-        mRetsReplyCode = ReplyCode.SUCCESSFUL;
-    }
-    
-    public String getObjectKey()
-    {
-        return mObjectKey;
-    }
+  public ObjectDescriptor(String objectKey, int objectId, URL url) {
+    this(objectKey, objectId, url, null);
+  }
 
-    public void setObjectKey(String objectKey)
-    {
-        mObjectKey = objectKey;
+  public ObjectDescriptor(String objectKey, int objectId, URL url,
+                          String description) {
+    mObjectKey = objectKey;
+    mObjectId = objectId;
+    mUrl = url;
+    if (url.getProtocol().equals("file")) {
+      mIsLocal = true;
+    } else {
+      mIsLocal = false;
     }
+    mDescription = description;
+    mRemoteLocationAllowable = false;
+    mRetsReplyCode = ReplyCode.SUCCESSFUL;
+  }
 
-    public int getObjectId()
-    {
-        return mObjectId;
-    }
+  public String getObjectKey() {
+    return mObjectKey;
+  }
 
-    public void setObjectId(int objectId)
-    {
-        mObjectId = objectId;
-    }
+  public void setObjectKey(String objectKey) {
+    mObjectKey = objectKey;
+  }
 
-    public URL getUrl()
-    {
-        return mUrl;
-    }
+  public int getObjectId() {
+    return mObjectId;
+  }
 
-    public boolean isLocal()
-    {
-        return mIsLocal;
-    }
+  public void setObjectId(int objectId) {
+    mObjectId = objectId;
+  }
 
-    public String getDescription()
-    {
-        return mDescription;
-    }
+  public URL getUrl() {
+    return mUrl;
+  }
 
-    public void setDescription(String description)
-    {
-        mDescription = description;
-    }
+  public boolean isLocal() {
+    return mIsLocal;
+  }
 
-    public void setRemoteLocationAllowable(boolean remoteLocationAllowable)
-    {
-        mRemoteLocationAllowable = remoteLocationAllowable;
-    }
+  public String getDescription() {
+    return mDescription;
+  }
 
-    public boolean isRemoteLocationAllowable()
-    {
-        return mRemoteLocationAllowable;
-    }
+  public void setDescription(String description) {
+    mDescription = description;
+  }
 
-    public String getLocationUrl(String  baseUrl)
-    {
-        if (mRemoteLocationAllowable && !mIsLocal)
-        {
-            return mUrl.toString();
-        }
-        else
-        {
-            StringBuffer buffer = new StringBuffer(baseUrl);
-            buffer.append(mObjectKey).append("/").append(mObjectId);
-            return buffer.toString();
-        }
-    }
-    
-    public ReplyCode getRetsReplyCode()
-    {
-    	return mRetsReplyCode;
-    }
-    
-    public void setRetsReplyCode(ReplyCode retsReplyCode)
-    {
-    	mRetsReplyCode = retsReplyCode;
-    }
+  public boolean isRemoteLocationAllowable() {
+    return mRemoteLocationAllowable;
+  }
 
-    public ObjectStream openObjectStream() throws IOException
-    {
-        if (mIsLocal)
-        {
-            return new FileObjectStream(IOUtils.urlToFile(mUrl));
-        }
-        else
-        {
-            return new UrlObjectStream(mUrl);
-        }
-    }
+  public void setRemoteLocationAllowable(boolean remoteLocationAllowable) {
+    mRemoteLocationAllowable = remoteLocationAllowable;
+  }
 
-    public String toString()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append(mObjectKey)
-            .append(mObjectId)
-            .append(mUrl)
-            .append(mIsLocal)
-            .append(mDescription)
-            .append(mRemoteLocationAllowable)
-            .append(mRetsReplyCode)
-            .toString();
+  public String getLocationUrl(String baseUrl) {
+    if (mRemoteLocationAllowable && !mIsLocal) {
+      return mUrl.toString();
+    } else {
+      StringBuffer buffer = new StringBuffer(baseUrl);
+      buffer.append(mObjectKey).append("/").append(mObjectId);
+      return buffer.toString();
     }
+  }
 
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof ObjectDescriptor))
-        {
-            return false;
-        }
-        ObjectDescriptor rhs = (ObjectDescriptor) obj;
-        return new EqualsBuilder()
-            .append(mObjectKey,  rhs.mObjectKey)
-            .append(mObjectId, rhs.mObjectId)
-            .append(mUrl, rhs.mUrl)
-            .append(mIsLocal, rhs.mIsLocal)
-            .append(mDescription, rhs.mDescription)
-            .append(mRemoteLocationAllowable, rhs.mRemoteLocationAllowable)
-            .append(mRetsReplyCode, rhs.mRetsReplyCode)
-            .isEquals();
+  public ReplyCode getRetsReplyCode() {
+    return mRetsReplyCode;
+  }
+
+  public void setRetsReplyCode(ReplyCode retsReplyCode) {
+    mRetsReplyCode = retsReplyCode;
+  }
+
+  public ObjectStream openObjectStream() throws IOException {
+    if (mIsLocal) {
+      return new FileObjectStream(IOUtils.urlToFile(mUrl));
+    } else {
+      return new UrlObjectStream(mUrl);
     }
+  }
 
-    public int hashCode()
-    {
-        return new HashCodeBuilder()
-            .append(mObjectKey)
-            .append(mObjectId)
-            .append(mUrl)
-            .append(mIsLocal)
-            .append(mDescription)
-            .append(mRemoteLocationAllowable)
-            .append(mRetsReplyCode)
-            .toHashCode();
+  public String toString() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append(mObjectKey)
+      .append(mObjectId)
+      .append(mUrl)
+      .append(mIsLocal)
+      .append(mDescription)
+      .append(mRemoteLocationAllowable)
+      .append(mRetsReplyCode)
+      .toString();
+  }
+
+  public boolean equals(Object obj) {
+    if (!(obj instanceof ObjectDescriptor)) {
+      return false;
     }
+    ObjectDescriptor rhs = (ObjectDescriptor) obj;
+    return new EqualsBuilder()
+      .append(mObjectKey, rhs.mObjectKey)
+      .append(mObjectId, rhs.mObjectId)
+      .append(mUrl, rhs.mUrl)
+      .append(mIsLocal, rhs.mIsLocal)
+      .append(mDescription, rhs.mDescription)
+      .append(mRemoteLocationAllowable, rhs.mRemoteLocationAllowable)
+      .append(mRetsReplyCode, rhs.mRetsReplyCode)
+      .isEquals();
+  }
 
-    private String mObjectKey;
-    private int mObjectId;
-    private URL mUrl;
-    private boolean mIsLocal;
-    private String mDescription;
-    private boolean mRemoteLocationAllowable;
-    private ReplyCode mRetsReplyCode;
+  public int hashCode() {
+    return new HashCodeBuilder()
+      .append(mObjectKey)
+      .append(mObjectId)
+      .append(mUrl)
+      .append(mIsLocal)
+      .append(mDescription)
+      .append(mRemoteLocationAllowable)
+      .append(mRetsReplyCode)
+      .toHashCode();
+  }
 }

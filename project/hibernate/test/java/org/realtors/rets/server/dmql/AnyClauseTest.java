@@ -10,18 +10,15 @@ package org.realtors.rets.server.dmql;
 
 import junit.framework.TestCase;
 
-public class AnyClauseTest extends TestCase
-{
-    public void testToSql() 
-    {
-        AnyClause anyClause = new AnyClause("field");
-        assertEquals("(field is null or field is not null) ", TestUtil.toSql(anyClause));
-    }
+public class AnyClauseTest extends TestCase {
+  public void testToSql() {
+    AnyClause anyClause = new AnyClause("field");
+    assertEquals("(field is null or field is not null) ", TestUtil.toSql(anyClause));
+  }
 
-    public void testEquals()
-    {
-        AnyClause anyClause1 = new AnyClause("field");
-        AnyClause anyClause2 = new AnyClause("field");
-        assertEquals(anyClause1, anyClause2);
-    }
+  public void testEquals() {
+    AnyClause anyClause1 = new AnyClause("field");
+    AnyClause anyClause2 = new AnyClause("field");
+    assertEquals(anyClause1, anyClause2);
+  }
 }

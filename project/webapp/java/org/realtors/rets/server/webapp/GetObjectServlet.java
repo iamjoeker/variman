@@ -24,55 +24,47 @@ import org.realtors.rets.server.protocol.GetObjectResponse;
 
 /**
  * @web.servlet name="get-object-servlet"
- * @web.servlet-mapping  url-pattern="/rets/getObject"
+ * @web.servlet-mapping url-pattern="/rets/getObject"
  */
-public class GetObjectServlet extends RetsServlet
-{
-    protected void doRets(RetsServletRequest request,
-                          RetsServletResponse response)
-        throws RetsServerException, IOException
-    {
-        GetObjectParameters parameters =
-            new GetObjectParameters(request.getParameterMap());
-        GetObjectTransaction transaction =
-            new GetObjectTransaction(parameters);
-        RetsConfig retsConfig = RetsServer.getRetsConfiguration();
-        transaction.setRootDirectory(retsConfig.getGetObjectRoot());
-        transaction.setPhotoPattern(retsConfig.getPhotoPattern());
-        transaction.setObjectSetPattern(retsConfig.getObjectSetPattern());
-        StringBuffer location = ServletUtils.getContextPath(request);
-        location.append("/objects/");
-        transaction.setBaseLocationUrl(location.toString());
-        transaction.execute(new Response(response));
+public class GetObjectServlet extends RetsServlet {
+  protected void doRets(RetsServletRequest request,
+                        RetsServletResponse response)
+    throws RetsServerException, IOException {
+    GetObjectParameters parameters =
+      new GetObjectParameters(request.getParameterMap());
+    GetObjectTransaction transaction =
+      new GetObjectTransaction(parameters);
+    RetsConfig retsConfig = RetsServer.getRetsConfiguration();
+    transaction.setRootDirectory(retsConfig.getGetObjectRoot());
+    transaction.setPhotoPattern(retsConfig.getPhotoPattern());
+    transaction.setObjectSetPattern(retsConfig.getObjectSetPattern());
+    StringBuffer location = ServletUtils.getContextPath(request);
+    location.append("/objects/");
+    transaction.setBaseLocationUrl(location.toString());
+    transaction.execute(new Response(response));
+  }
+
+  protected boolean isXmlResponse() {
+    return true;
+  }
+
+  private static class Response implements GetObjectResponse {
+    private HttpServletResponse mHttpResponse;
+
+    public Response(HttpServletResponse httpResponse) {
+      mHttpResponse = httpResponse;
     }
 
-    protected boolean isXmlResponse()
-    {
-        return true;
+    public OutputStream getOutputStream() throws IOException {
+      return mHttpResponse.getOutputStream();
     }
 
-    private static class Response implements GetObjectResponse
-    {
-        public Response(HttpServletResponse httpResponse)
-        {
-            mHttpResponse = httpResponse;
-        }
-
-        public OutputStream getOutputStream() throws IOException
-        {
-            return mHttpResponse.getOutputStream();
-        }
-
-        public void setContentType(String contentType)
-        {
-            mHttpResponse.setContentType(contentType);
-        }
-
-        public void setHeader(String name, String value)
-        {
-            mHttpResponse.setHeader(name, value);
-        }
-
-        private HttpServletResponse mHttpResponse;
+    public void setContentType(String contentType) {
+      mHttpResponse.setContentType(contentType);
     }
+
+    public void setHeader(String name, String value) {
+      mHttpResponse.setHeader(name, value);
+    }
+  }
 }

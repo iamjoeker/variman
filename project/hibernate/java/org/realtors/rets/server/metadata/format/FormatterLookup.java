@@ -11,7 +11,6 @@ import java.util.Collection;
 
 import org.realtors.rets.common.metadata.MetaObject;
 
-public interface FormatterLookup
-{
-    public MetadataFormatter lookupFormatter(Collection<MetaObject> metadataCollection);
+public interface FormatterLookup {
+  public MetadataFormatter lookupFormatter(Collection<MetaObject> metadataCollection);
 }

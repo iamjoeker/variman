@@ -17,42 +17,36 @@ import org.realtors.rets.server.Util;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
-public class LessThanClause implements SqlConverter
-{
-    public LessThanClause(String field, SqlConverter sqlConverter)
-    {
-        mField = field;
-        mSqlConverter = sqlConverter;
-    }
+public class LessThanClause implements SqlConverter {
+  private String mField;
+  private SqlConverter mSqlConverter;
 
-    public void toSql(PrintWriter out)
-    {
-        out.print(mField);
-        out.print(" <= ");
-        mSqlConverter.toSql(out);
-    }
+  public LessThanClause(String field, SqlConverter sqlConverter) {
+    mField = field;
+    mSqlConverter = sqlConverter;
+  }
 
-    public String toString()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append("field", mField)
-            .append("sqlConverter", mSqlConverter)
-            .toString();
-    }
+  public void toSql(PrintWriter out) {
+    out.print(mField);
+    out.print(" <= ");
+    mSqlConverter.toSql(out);
+  }
 
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof LessThanClause))
-        {
-            return false;
-        }
-        LessThanClause rhs = (LessThanClause) obj;
-        return new EqualsBuilder()
-            .append(mField, rhs.mField)
-            .append(mSqlConverter, rhs.mSqlConverter)
-            .isEquals();
-    }
+  public String toString() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append("field", mField)
+      .append("sqlConverter", mSqlConverter)
+      .toString();
+  }
 
-    private String mField;
-    private SqlConverter mSqlConverter;
+  public boolean equals(Object obj) {
+    if (!(obj instanceof LessThanClause)) {
+      return false;
+    }
+    LessThanClause rhs = (LessThanClause) obj;
+    return new EqualsBuilder()
+      .append(mField, rhs.mField)
+      .append(mSqlConverter, rhs.mSqlConverter)
+      .isEquals();
+  }
 }

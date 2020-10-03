@@ -13,21 +13,19 @@ import org.realtors.rets.server.dmql.DmqlParserMetadata;
 /**
  * Contains the sql statements created by a SearchSqlBuilder implementation.
  */
-public interface SqlStatements
-{
-    public Query getCountQuery();
+public interface SqlStatements {
+  public Query getCountQuery();
 
-    public SearchQuery getSearchQuery();
+  public SearchQuery getSearchQuery();
 
-    public interface Query
-    {
-        public String getSql();
-    }
+  public interface Query {
+    public String getSql();
+  }
 
-    public interface SearchQuery extends Query
-    {
-        public List<String> getSelectedColumnNames();
-        public DmqlParserMetadata getDmqlParserMetadata();
-    }
+  public interface SearchQuery extends Query {
+    public List<String> getSelectedColumnNames();
+
+    public DmqlParserMetadata getDmqlParserMetadata();
+  }
 
 }

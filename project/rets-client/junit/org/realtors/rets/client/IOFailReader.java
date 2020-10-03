@@ -6,30 +6,30 @@ import java.io.Reader;
 
 public class IOFailReader extends FilterReader {
 
-	protected IOFailReader(Reader reader) {
-		super(reader);
-	}
+  private boolean mFailRead;
 
-	public void setFailRead(boolean failRead) {
-		this.mFailRead = failRead;
-	}
+  protected IOFailReader(Reader reader) {
+    super(reader);
+  }
 
-	@Override
-	public int read() throws IOException {
-		checkFailRead();
-		return super.read();
-	}
+  public void setFailRead(boolean failRead) {
+    this.mFailRead = failRead;
+  }
 
-	@Override
-	public int read(char[] cbuf, int off, int len) throws IOException {
-		checkFailRead();
-		return super.read(cbuf, off, len);
-	}
+  @Override
+  public int read() throws IOException {
+    checkFailRead();
+    return super.read();
+  }
 
-	private void checkFailRead() throws IOException {
-		if (this.mFailRead)
-			throw new IOException("Simulated IOException");
-	}
+  @Override
+  public int read(char[] cbuf, int off, int len) throws IOException {
+    checkFailRead();
+    return super.read(cbuf, off, len);
+  }
 
-	private boolean mFailRead;
+  private void checkFailRead() throws IOException {
+    if (this.mFailRead)
+      throw new IOException("Simulated IOException");
+  }
 }

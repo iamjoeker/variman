@@ -14,251 +14,240 @@ import org.realtors.rets.common.metadata.MetadataElement;
 import org.realtors.rets.common.metadata.MetadataType;
 
 public class MSystem extends MetaObject {
-	private static final String METADATATYPENAME = "System";
+  public static final String SYSTEMID = "SystemID";
+  public static final String SYSTEMDESCRIPTION = "SystemDescription";
+  public static final String COMMENTS = "COMMENTS";
+  public static final String DATE = "Date";
+  public static final String VERSION = "Version";
+  // 1.7.2
+  public static final String TIMEZONEOFFSET = "TimeZoneOffset";
+  private static final String METADATATYPENAME = "System";
+  private static final MResource[] EMPTY_RESOURCE_ARRAY = {};
+  private static final MForeignKey[] EMPTY_FOREIGN_KEY_ARRAY = {};
+  private static final List<MetadataElement> sAttributes =
+    new ArrayList<MetadataElement>() {{
+      add(new MetadataElement(SYSTEMID, sAlphanum10, sREQUIRED));
+      add(new MetadataElement(SYSTEMDESCRIPTION, sPlaintext64));
+      add(new MetadataElement(DATE, sAttrDate, sREQUIRED));
+      add(new MetadataElement(VERSION, sAttrVersion, sREQUIRED));
+      add(new MetadataElement(COMMENTS, sText));
+      add(new MetadataElement(TIMEZONEOFFSET, sTIMEZONEOFFSET, RetsVersion.RETS_1_7_2));
+    }};
+  private static final MetadataType[] CHILDREN = {MetadataType.RESOURCE, MetadataType.FOREIGN_KEYS};
 
-	private static final MResource[] EMPTY_RESOURCE_ARRAY = {};
-	private static final MForeignKey[] EMPTY_FOREIGN_KEY_ARRAY = {};
+  public MSystem() {
+    this(DEFAULT_PARSING);
+  }
 
-	public static final String SYSTEMID = "SystemID";
-	public static final String SYSTEMDESCRIPTION = "SystemDescription";
-	public static final String COMMENTS = "COMMENTS";
-	public static final String DATE = "Date";
-	public static final String VERSION = "Version";
-	// 1.7.2
-	public static final String TIMEZONEOFFSET = "TimeZoneOffset";
+  public MSystem(boolean strictParsing) {
+    super(strictParsing);
+  }
 
-	private static final List<MetadataElement> sAttributes =
-		new ArrayList<MetadataElement>()
-		{{
-			add(new MetadataElement(SYSTEMID, sAlphanum10, sREQUIRED));
-			add(new MetadataElement(SYSTEMDESCRIPTION, sPlaintext64));
-			add(new MetadataElement(DATE, sAttrDate, sREQUIRED));
-			add(new MetadataElement(VERSION, sAttrVersion, sREQUIRED));
-			add(new MetadataElement(COMMENTS, sText));
-			add(new MetadataElement(TIMEZONEOFFSET, sTIMEZONEOFFSET, RetsVersion.RETS_1_7_2));
-		}};
+  /**
+   * Add an attribute to the class static attributes.
+   *
+   * @param name     Attribute Name
+   * @param type     Attribute Type
+   * @param required TRUE, the attribute is required. FALSE otherwise.
+   */
+  public static void addAttribute(String name, AttrType<?> type, boolean required) {
+    MetadataElement element = new MetadataElement(name, type, required);
+    sAttributes.add(element);
+  }
 
-	public MSystem() {
-		this(DEFAULT_PARSING);
-	}
+  /**
+   * Update (or add) the attribute. This is intended for use where the
+   * metadata model is being changed or expanded.
+   *
+   * @param name     Attribute Name
+   * @param type     Attribute Type
+   * @param required TRUE, the attribute is required. FALSE otherwise.
+   */
+  public static void updateAttribute(String name, AttrType<?> type, boolean required) {
+    boolean found = false;
+    if (sAttributes == null) {
+      return;
+    }
 
-	public MSystem(boolean strictParsing) {
-		super(strictParsing);
-	}
+    clearAttributeMapCache();
+    MetadataElement element = new MetadataElement(name, type, required);
 
-	/**
-	 * Add an attribute to the class static attributes.
-	 * @param name Attribute Name
-	 * @param type Attribute Type
-	 * @param required TRUE, the attribute is required. FALSE otherwise.
-	 */
-	public static void addAttribute(String name, AttrType<?> type, boolean required)
-	{
-		MetadataElement element = new MetadataElement(name, type, required);
-		sAttributes.add(element);
-	}
+    for (int i = 0; i < sAttributes.size(); i++) {
+      if (sAttributes.get(i).getName().equals(name)) {
+        found = true;
+        sAttributes.set(i, element);
+        break;
+      }
+    }
+    if (!found) {
+      sAttributes.add(element);
+    }
+  }
 
-	/*
-	 * Add the attributes to the map. This must be done here to
-	 * make sure static initialization properly takes place.
-	 */
-	@Override
-	protected void addAttributesToMap(Map<String, AttrType<?>> attributeMap) 
-	{
-		for (MetadataElement element : sAttributes)
-		{
-			attributeMap.put(element.getName(), element.getType());
-		}
-	}
+  /*
+   * Add the attributes to the map. This must be done here to
+   * make sure static initialization properly takes place.
+   */
+  @Override
+  protected void addAttributesToMap(Map<String, AttrType<?>> attributeMap) {
+    for (MetadataElement element : sAttributes) {
+      attributeMap.put(element.getName(), element.getType());
+    }
+  }
 
-	/**
-	 * Returns whether or not the attribute is required.
-	 * @param name Name of the attribute.
-	 * @return TRUE if the attribute is required, FALSE otherwise.
-	 */
-	@Override
-	public boolean isAttributeRequired(String name)
-	{
-		for (MetadataElement element : MSystem.sAttributes)
-		{
-			if (element.getName().equals(name)) {
-				return element.isRequired();
-			}
-		}
-		
-		return false;
-	}
+  /**
+   * Returns whether or not the attribute is required.
+   *
+   * @param name Name of the attribute.
+   * @return TRUE if the attribute is required, FALSE otherwise.
+   */
+  @Override
+  public boolean isAttributeRequired(String name) {
+    for (MetadataElement element : MSystem.sAttributes) {
+      if (element.getName().equals(name)) {
+        return element.isRequired();
+      }
+    }
 
-	/**
-	 * Update (or add) the attribute. This is intended for use where the 
-	 * metadata model is being changed or expanded.
-	 * @param name Attribute Name
-	 * @param type Attribute Type
-	 * @param required TRUE, the attribute is required. FALSE otherwise.
-	 */
-	public static void updateAttribute(String name, AttrType<?> type, boolean required)
-	{
-		boolean found = false;
-		if (sAttributes == null) {
-			return;
-		}
-		
-		clearAttributeMapCache();
-		MetadataElement element = new MetadataElement(name, type, required);
-		
-		for (int i = 0; i < sAttributes.size(); i++)
-		{
-			if (sAttributes.get(i).getName().equals(name))
-			{
-				found = true;
-				sAttributes.set(i, element);
-				break;
-			}
-		}
-		if (!found)
-		{
-			sAttributes.add(element);
-		}
-	}
+    return false;
+  }
 
-	public String getSystemID() {
-		return getStringAttribute(SYSTEMID);
-	}
+  public String getSystemID() {
+    return getStringAttribute(SYSTEMID);
+  }
 
-	public void setSystemID(String systemId) {
-		String systemIdStr = sAlphanum10.render(systemId);
-		setAttribute(SYSTEMID, systemIdStr);
-	}
+  public void setSystemID(String systemId) {
+    String systemIdStr = sAlphanum10.render(systemId);
+    setAttribute(SYSTEMID, systemIdStr);
+  }
 
-	public String getComments() {
-		return getStringAttribute(COMMENTS);
-	}
+  public String getComments() {
+    return getStringAttribute(COMMENTS);
+  }
 
-	public void setComments(String comment) {
-		String commentStr = sText.render(comment);
-		setAttribute(COMMENTS, commentStr);
-	}
+  public void setComments(String comment) {
+    String commentStr = sText.render(comment);
+    setAttribute(COMMENTS, commentStr);
+  }
 
-	public String getSystemDescription() {
-		return getStringAttribute(SYSTEMDESCRIPTION);
-	}
+  public String getSystemDescription() {
+    return getStringAttribute(SYSTEMDESCRIPTION);
+  }
 
-	public void setSystemDescription(String systemDescription) {
-		String systemDescriptionStr = sPlaintext64.render(systemDescription);
-		setAttribute(SYSTEMDESCRIPTION, systemDescriptionStr);
-	}
+  public void setSystemDescription(String systemDescription) {
+    String systemDescriptionStr = sPlaintext64.render(systemDescription);
+    setAttribute(SYSTEMDESCRIPTION, systemDescriptionStr);
+  }
 
-	public Date getDate() {
-		return getDateAttribute(DATE);
-	}
+  public Date getDate() {
+    return getDateAttribute(DATE);
+  }
 
-	public void setDate(Date date) {
-		String dateStr = sAttrDate.render(date);
-		setAttribute(DATE, dateStr);
-	}
+  public void setDate(Date date) {
+    String dateStr = sAttrDate.render(date);
+    setAttribute(DATE, dateStr);
+  }
 
-	public int getVersion() {
-		return getIntAttribute(VERSION);
-	}
+  public int getVersion() {
+    return getIntAttribute(VERSION);
+  }
 
-	public void setVersion(int version) {
-		String versionStr = sAttrVersion.render(Integer.valueOf(version));
-		setAttribute(VERSION, versionStr);
-	}
+  public void setVersion(int version) {
+    String versionStr = sAttrVersion.render(Integer.valueOf(version));
+    setAttribute(VERSION, versionStr);
+  }
 
-	public String getTimeZoneOffset() {
-		return getAttributeAsString(TIMEZONEOFFSET);
-	}
+  public String getTimeZoneOffset() {
+    return getAttributeAsString(TIMEZONEOFFSET);
+  }
 
-	public void setTimeZoneOffset(String timeZoneOffset) {
+  public void setTimeZoneOffset(String timeZoneOffset) {
 //		String timeZoneOffsetStr = sTIMEZONEOFFSET.render((Integer)null); // The AttrTimeZone.render method expects an Integer.
-		setAttribute(TIMEZONEOFFSET, timeZoneOffset);
-	}
+    setAttribute(TIMEZONEOFFSET, timeZoneOffset);
+  }
 
-	public MResource getMResource(String resourceID) {
-		return (MResource) getChild(MetadataType.RESOURCE, resourceID);
-	}
+  public MResource getMResource(String resourceID) {
+    return (MResource) getChild(MetadataType.RESOURCE, resourceID);
+  }
 
-	public Set<MResource> getResources() {
-		MResource[] mResources = getMResources();
-		int numResources = mResources.length;
-		Set<MResource> resources = new LinkedHashSet<MResource>(numResources);
-		for (MResource mResource : mResources) {
-			resources.add(mResource);
-		}
-		return resources;
-	}
+  public Set<MResource> getResources() {
+    MResource[] mResources = getMResources();
+    int numResources = mResources.length;
+    Set<MResource> resources = new LinkedHashSet<MResource>(numResources);
+    for (MResource mResource : mResources) {
+      resources.add(mResource);
+    }
+    return resources;
+  }
 
-	public void setResources(Set<MResource> resources) {
-		MResource[] mResources = resources.toArray(EMPTY_RESOURCE_ARRAY);
-		setMResources(mResources);
-	}
+  public void setResources(Set<MResource> resources) {
+    MResource[] mResources = resources.toArray(EMPTY_RESOURCE_ARRAY);
+    setMResources(mResources);
+  }
 
-	public MResource[] getMResources() {
-		return getChildren(MetadataType.RESOURCE).toArray(EMPTY_RESOURCE_ARRAY);
-	}
+  public MResource[] getMResources() {
+    return getChildren(MetadataType.RESOURCE).toArray(EMPTY_RESOURCE_ARRAY);
+  }
 
-	public void setMResources(MResource[] resources) {
-		deleteAllChildren(MetadataType.RESOURCE);
-		if (resources != null) {
-			addChildren(MetadataType.RESOURCE, resources);
-		}
-	}
+  public void setMResources(MResource[] resources) {
+    deleteAllChildren(MetadataType.RESOURCE);
+    if (resources != null) {
+      addChildren(MetadataType.RESOURCE, resources);
+    }
+  }
 
-	public Set<MForeignKey> getForeignKeys() {
-		MForeignKey[] mForeignKeys = getMForeignKeys();
-		int numForeignKeys = mForeignKeys.length;
-		Set<MForeignKey> foreignkeys = new LinkedHashSet<MForeignKey>(numForeignKeys);
-		for (MForeignKey mForeignKey : mForeignKeys) {
-			foreignkeys.add(mForeignKey);
-		}
-		return foreignkeys;
-	}
+  public Set<MForeignKey> getForeignKeys() {
+    MForeignKey[] mForeignKeys = getMForeignKeys();
+    int numForeignKeys = mForeignKeys.length;
+    Set<MForeignKey> foreignkeys = new LinkedHashSet<MForeignKey>(numForeignKeys);
+    for (MForeignKey mForeignKey : mForeignKeys) {
+      foreignkeys.add(mForeignKey);
+    }
+    return foreignkeys;
+  }
 
-	public void setForeignKeys(Set<MForeignKey> foreignkeys) {
-		MForeignKey[] mForeignKeys = foreignkeys.toArray(EMPTY_FOREIGN_KEY_ARRAY);
-		setMForeignKeys(mForeignKeys);
-	}
+  public void setForeignKeys(Set<MForeignKey> foreignkeys) {
+    MForeignKey[] mForeignKeys = foreignkeys.toArray(EMPTY_FOREIGN_KEY_ARRAY);
+    setMForeignKeys(mForeignKeys);
+  }
 
-	public MForeignKey getMForeignKey(String foreignKeyID) {
-		return (MForeignKey) getChild(MetadataType.FOREIGN_KEYS, foreignKeyID);
-	}
+  public MForeignKey getMForeignKey(String foreignKeyID) {
+    return (MForeignKey) getChild(MetadataType.FOREIGN_KEYS, foreignKeyID);
+  }
 
-	public MForeignKey[] getMForeignKeys() {
-		return getChildren(MetadataType.FOREIGN_KEYS).toArray(EMPTY_FOREIGN_KEY_ARRAY);
-	}
+  public MForeignKey[] getMForeignKeys() {
+    return getChildren(MetadataType.FOREIGN_KEYS).toArray(EMPTY_FOREIGN_KEY_ARRAY);
+  }
 
-	public void setMForeignKeys(MForeignKey[] foreignKeys) {
-		deleteAllChildren(MetadataType.FOREIGN_KEYS);
-		if (foreignKeys != null) {
-			addChildren(MetadataType.FOREIGN_KEYS, foreignKeys);
-		}
-	}
+  public void setMForeignKeys(MForeignKey[] foreignKeys) {
+    deleteAllChildren(MetadataType.FOREIGN_KEYS);
+    if (foreignKeys != null) {
+      addChildren(MetadataType.FOREIGN_KEYS, foreignKeys);
+    }
+  }
 
-	@Override
-	public MetadataType[] getChildTypes() {
-		return CHILDREN;
-	}
+  @Override
+  public MetadataType[] getChildTypes() {
+    return CHILDREN;
+  }
 
-	@Override
-	protected String getIdAttr() {
-		return null;
-	}
+  @Override
+  protected String getIdAttr() {
+    return null;
+  }
 
-	@Override
-	public final String getMetadataTypeName() {
-		return METADATATYPENAME;
-	}
+  @Override
+  public final String getMetadataTypeName() {
+    return METADATATYPENAME;
+  }
 
-	@Override
-	public final MetadataType getMetadataType() {
-		return MetadataType.SYSTEM;
-	}
+  @Override
+  public final MetadataType getMetadataType() {
+    return MetadataType.SYSTEM;
+  }
 
-	private static final MetadataType[] CHILDREN = { MetadataType.RESOURCE, MetadataType.FOREIGN_KEYS };
-
-	@Override
-	public String getLevel() {
-		return "";
-	}
+  @Override
+  public String getLevel() {
+    return "";
+  }
 }

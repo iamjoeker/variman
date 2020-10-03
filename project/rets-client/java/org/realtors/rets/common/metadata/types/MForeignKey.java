@@ -12,307 +12,298 @@ import org.realtors.rets.common.metadata.MetadataElement;
 import org.realtors.rets.common.metadata.MetadataType;
 
 public class MForeignKey extends MetaObject {
-	private static final String METADATATYPENAME = "ForeignKey";
+  public static final String FOREIGNKEYID = "ForeignKeyID";
+  public static final String PARENTRESOURCEID = "ParentResourceID";
+  public static final String PARENTCLASSID = "ParentClassID";
+  public static final String PARENTSYSTEMNAME = "ParentSystemName";
+  public static final String CHILDRESOURCEID = "ChildResourceID";
+  public static final String CHILDCLASSID = "ChildClassID";
+  public static final String CHILDSYSTEMNAME = "ChildSystemName";
+  // 1.7
+  public static final String CONDITIONALPARENTFIELD = "ConditionalParentField";
+  public static final String CONDITIONALPARENTVALUE = "ConditionalParentValue";
+  private static final String METADATATYPENAME = "ForeignKey";
+  private static final List<MetadataElement> sAttributes =
+    new ArrayList<MetadataElement>() {{
+      add(new MetadataElement(FOREIGNKEYID, sRETSID, sREQUIRED));
+      add(new MetadataElement(PARENTRESOURCEID, sRETSID, sREQUIRED));
+      add(new MetadataElement(PARENTCLASSID, sRETSID, sREQUIRED));
+      add(new MetadataElement(PARENTSYSTEMNAME, sRETSNAME, sREQUIRED));
+      add(new MetadataElement(CHILDRESOURCEID, sRETSID));
+      add(new MetadataElement(CHILDCLASSID, sRETSID));
+      add(new MetadataElement(CHILDSYSTEMNAME, sRETSNAME));
 
-	public static final String FOREIGNKEYID = "ForeignKeyID";
-	public static final String PARENTRESOURCEID = "ParentResourceID";
-	public static final String PARENTCLASSID = "ParentClassID";
-	public static final String PARENTSYSTEMNAME = "ParentSystemName";
-	public static final String CHILDRESOURCEID = "ChildResourceID";
-	public static final String CHILDCLASSID = "ChildClassID";
-	public static final String CHILDSYSTEMNAME = "ChildSystemName";
-	// 1.7
-	public static final String CONDITIONALPARENTFIELD = "ConditionalParentField";
-	public static final String CONDITIONALPARENTVALUE = "ConditionalParentValue";
+      // 1.7
+      add(new MetadataElement(CONDITIONALPARENTFIELD, sRETSNAME, RetsVersion.RETS_1_7));
+      add(new MetadataElement(CONDITIONALPARENTVALUE, sRETSNAME, RetsVersion.RETS_1_7));
+    }};
 
-	private static final List<MetadataElement> sAttributes =
-		new ArrayList<MetadataElement>()
-		{{
-			add(new MetadataElement(FOREIGNKEYID, sRETSID, sREQUIRED));
-			add(new MetadataElement(PARENTRESOURCEID, sRETSID, sREQUIRED));
-			add(new MetadataElement(PARENTCLASSID, sRETSID, sREQUIRED));
-			add(new MetadataElement(PARENTSYSTEMNAME, sRETSNAME, sREQUIRED));
-			add(new MetadataElement(CHILDRESOURCEID, sRETSID));
-			add(new MetadataElement(CHILDCLASSID, sRETSID));
-			add(new MetadataElement(CHILDSYSTEMNAME, sRETSNAME));
-			
-			// 1.7
-			add(new MetadataElement(CONDITIONALPARENTFIELD, sRETSNAME, RetsVersion.RETS_1_7));
-			add(new MetadataElement(CONDITIONALPARENTVALUE, sRETSNAME, RetsVersion.RETS_1_7));
-		}};
+  private MTable childTable;
+  private MTable parentTable;
 
-	private MTable childTable;
-	private MTable parentTable;
+  public MForeignKey() {
+    this(DEFAULT_PARSING);
+  }
 
-	public MForeignKey() {
-		this(DEFAULT_PARSING);
-	}
+  public MForeignKey(boolean strictParsing) {
+    super(strictParsing);
+  }
 
-	public MForeignKey(boolean strictParsing) {
-		super(strictParsing);
-	}
+  /**
+   * Add an attribute to the class static attributes.
+   *
+   * @param name     Attribute Name
+   * @param type     Attribute Type
+   * @param required TRUE, the attribute is required. FALSE otherwise.
+   */
+  public static void addAttribute(String name, AttrType<?> type, boolean required) {
+    MetadataElement element = new MetadataElement(name, type, required);
+    sAttributes.add(element);
+  }
 
-	/**
-	 * Add an attribute to the class static attributes.
-	 * @param name Attribute Name
-	 * @param type Attribute Type
-	 * @param required TRUE, the attribute is required. FALSE otherwise.
-	 */
-	public static void addAttribute(String name, AttrType<?> type, boolean required)
-	{
-		MetadataElement element = new MetadataElement(name, type, required);
-		sAttributes.add(element);
-	}
+  /**
+   * Update (or add) the attribute. This is intended for use where the
+   * metadata model is being changed or expanded.
+   *
+   * @param name     Attribute Name
+   * @param type     Attribute Type
+   * @param required TRUE, the attribute is required. FALSE otherwise.
+   */
+  public static void updateAttribute(String name, AttrType<?> type, boolean required) {
+    boolean found = false;
+    if (sAttributes == null) {
+      return;
+    }
 
-	/*
-	 * Add the attributes to the map. This must be done here to
-	 * make sure static initialization properly takes place.
-	 */
-	@Override
-	protected void addAttributesToMap(Map<String, AttrType<?>> attributeMap) 
-	{
-		for (MetadataElement element : sAttributes)
-		{
-			attributeMap.put(element.getName(), element.getType());
-		}
-	}
+    clearAttributeMapCache();
+    MetadataElement element = new MetadataElement(name, type, required);
 
-	/**
-	 * Returns whether or not the attribute is required.
-	 * @param name Name of the attribute.
-	 * @return TRUE if the attribute is required, FALSE otherwise.
-	 */
-	@Override
-	public boolean isAttributeRequired(String name)
-	{
-		for (MetadataElement element : MForeignKey.sAttributes)
-		{
-			if (element.getName().equals(name)) {
-				return element.isRequired();
-			}
-		}
-		
-		return false;
-	}
+    for (int i = 0; i < sAttributes.size(); i++) {
+      if (sAttributes.get(i).getName().equals(name)) {
+        found = true;
+        sAttributes.set(i, element);
+        break;
+      }
+    }
+    if (!found) {
+      sAttributes.add(element);
+    }
+  }
 
-	/**
-	 * Update (or add) the attribute. This is intended for use where the 
-	 * metadata model is being changed or expanded.
-	 * @param name Attribute Name
-	 * @param type Attribute Type
-	 * @param required TRUE, the attribute is required. FALSE otherwise.
-	 */
-	public static void updateAttribute(String name, AttrType<?> type, boolean required)
-	{
-		boolean found = false;
-		if (sAttributes == null) {
-			return;
-		}
-		
-		clearAttributeMapCache();
-		MetadataElement element = new MetadataElement(name, type, required);
-		
-		for (int i = 0; i < sAttributes.size(); i++)
-		{
-			if (sAttributes.get(i).getName().equals(name))
-			{
-				found = true;
-				sAttributes.set(i, element);
-				break;
-			}
-		}
-		if (!found)
-		{
-			sAttributes.add(element);
-		}
-	}
+  /*
+   * Add the attributes to the map. This must be done here to
+   * make sure static initialization properly takes place.
+   */
+  @Override
+  protected void addAttributesToMap(Map<String, AttrType<?>> attributeMap) {
+    for (MetadataElement element : sAttributes) {
+      attributeMap.put(element.getName(), element.getType());
+    }
+  }
 
-	public String getForeignKeyID() {
-		return getStringAttribute(FOREIGNKEYID);
-	}
+  /**
+   * Returns whether or not the attribute is required.
+   *
+   * @param name Name of the attribute.
+   * @return TRUE if the attribute is required, FALSE otherwise.
+   */
+  @Override
+  public boolean isAttributeRequired(String name) {
+    for (MetadataElement element : MForeignKey.sAttributes) {
+      if (element.getName().equals(name)) {
+        return element.isRequired();
+      }
+    }
 
-	public void setForeignKeyID(String foreignKeyId) {
-		String foreignKeyIdStr = sRETSID.render(foreignKeyId);
-		setAttribute(FOREIGNKEYID, foreignKeyIdStr);
-	}
+    return false;
+  }
 
-	public MTable getParentTable() {
-		return parentTable;
-	}
+  public String getForeignKeyID() {
+    return getStringAttribute(FOREIGNKEYID);
+  }
 
-	public void setParentTable(MTable parentTable) {
-		this.parentTable = parentTable;
-		boolean nullAll = true;
-		if (this.parentTable != null) {
-			MClass clazz = this.parentTable.getMClass();
-			if (clazz != null) {
-				MResource resource = clazz.getMResource();
-				if (resource != null) {
-					String resourceId = resource.getResourceID();
-					String className = clazz.getClassName();
-					String systemName = this.parentTable.getSystemName();
-					if (StringUtils.isNotBlank(resourceId) &&
-						StringUtils.isNotBlank(className) &&
-						StringUtils.isNotBlank(systemName)
-					) {
-						setParentResourceID(resourceId);
-						setParentClassID(className);
-						setParentSystemName(systemName);
-						nullAll = false;
-					}
-				}
-			}
-		}
-		if (nullAll) {
-			setParentResourceID(null);
-			setParentClassID(null);
-			setParentSystemName(null);
-		}
-	}
+  public void setForeignKeyID(String foreignKeyId) {
+    String foreignKeyIdStr = sRETSID.render(foreignKeyId);
+    setAttribute(FOREIGNKEYID, foreignKeyIdStr);
+  }
 
-	public String getParentResourceID() {
-		String resourceId = getStringAttribute(PARENTRESOURCEID);
-		return resourceId;
-	}
+  public MTable getParentTable() {
+    return parentTable;
+  }
 
-	public void setParentResourceID(String parentResourceId) {
-		String parentResourceIdStr = sRETSID.render(parentResourceId);
-		setAttribute(PARENTRESOURCEID, parentResourceIdStr);
-	}
+  public void setParentTable(MTable parentTable) {
+    this.parentTable = parentTable;
+    boolean nullAll = true;
+    if (this.parentTable != null) {
+      MClass clazz = this.parentTable.getMClass();
+      if (clazz != null) {
+        MResource resource = clazz.getMResource();
+        if (resource != null) {
+          String resourceId = resource.getResourceID();
+          String className = clazz.getClassName();
+          String systemName = this.parentTable.getSystemName();
+          if (StringUtils.isNotBlank(resourceId) &&
+            StringUtils.isNotBlank(className) &&
+            StringUtils.isNotBlank(systemName)
+          ) {
+            setParentResourceID(resourceId);
+            setParentClassID(className);
+            setParentSystemName(systemName);
+            nullAll = false;
+          }
+        }
+      }
+    }
+    if (nullAll) {
+      setParentResourceID(null);
+      setParentClassID(null);
+      setParentSystemName(null);
+    }
+  }
 
-	public String getParentClassID() {
-		String classId = getStringAttribute(PARENTCLASSID);
-		return classId;
-	}
+  public String getParentResourceID() {
+    String resourceId = getStringAttribute(PARENTRESOURCEID);
+    return resourceId;
+  }
 
-	public void setParentClassID(String parentClassId) {
-		String parentClassIdStr = sRETSID.render(parentClassId);
-		setAttribute(PARENTCLASSID, parentClassIdStr);
-	}
+  public void setParentResourceID(String parentResourceId) {
+    String parentResourceIdStr = sRETSID.render(parentResourceId);
+    setAttribute(PARENTRESOURCEID, parentResourceIdStr);
+  }
 
-	public String getParentSystemName() {
-		String systemName = getStringAttribute(PARENTSYSTEMNAME);
-		return systemName;
-	}
+  public String getParentClassID() {
+    String classId = getStringAttribute(PARENTCLASSID);
+    return classId;
+  }
 
-	public void setParentSystemName(String parentSystemName) {
-		String parentSystemNameStr = sRETSID.render(parentSystemName);
-		setAttribute(PARENTSYSTEMNAME, parentSystemNameStr);
-	}
+  public void setParentClassID(String parentClassId) {
+    String parentClassIdStr = sRETSID.render(parentClassId);
+    setAttribute(PARENTCLASSID, parentClassIdStr);
+  }
 
-	public MTable getChildTable() {
-		return childTable;
-	}
+  public String getParentSystemName() {
+    String systemName = getStringAttribute(PARENTSYSTEMNAME);
+    return systemName;
+  }
 
-	public void setChildTable(MTable childTable) {
-		this.childTable = childTable;
-		boolean nullAll = true;
-		if (this.childTable != null) {
-			MClass clazz = this.childTable.getMClass();
-			if (clazz != null) {
-				MResource resource = clazz.getMResource();
-				if (resource != null) {
-					String resourceId = resource.getResourceID();
-					String className = clazz.getClassName();
-					String systemName = this.childTable.getSystemName();
-					if (StringUtils.isNotBlank(resourceId) &&
-						StringUtils.isNotBlank(className) &&
-						StringUtils.isNotBlank(systemName)
-					) {
-						setChildResourceID(resourceId);
-						setChildClassID(className);
-						setChildSystemName(systemName);
-						nullAll = false;
-					}
-				}
-			}
-		}
-		if (nullAll) {
-			setChildResourceID(null);
-			setChildClassID(null);
-			setChildSystemName(null);
-		}
-	}
+  public void setParentSystemName(String parentSystemName) {
+    String parentSystemNameStr = sRETSID.render(parentSystemName);
+    setAttribute(PARENTSYSTEMNAME, parentSystemNameStr);
+  }
 
-	public String getChildResourceID() {
-		String childResourceId = getStringAttribute(CHILDRESOURCEID);
-		return childResourceId;
-	}
+  public MTable getChildTable() {
+    return childTable;
+  }
 
-	public void setChildResourceID(String childResourceId) {
-		String childResourceIdStr = sRETSID.render(childResourceId);
-		setAttribute(CHILDRESOURCEID, childResourceIdStr);
-	}
+  public void setChildTable(MTable childTable) {
+    this.childTable = childTable;
+    boolean nullAll = true;
+    if (this.childTable != null) {
+      MClass clazz = this.childTable.getMClass();
+      if (clazz != null) {
+        MResource resource = clazz.getMResource();
+        if (resource != null) {
+          String resourceId = resource.getResourceID();
+          String className = clazz.getClassName();
+          String systemName = this.childTable.getSystemName();
+          if (StringUtils.isNotBlank(resourceId) &&
+            StringUtils.isNotBlank(className) &&
+            StringUtils.isNotBlank(systemName)
+          ) {
+            setChildResourceID(resourceId);
+            setChildClassID(className);
+            setChildSystemName(systemName);
+            nullAll = false;
+          }
+        }
+      }
+    }
+    if (nullAll) {
+      setChildResourceID(null);
+      setChildClassID(null);
+      setChildSystemName(null);
+    }
+  }
 
-	public String getChildClassID() {
-		String classId = getStringAttribute(CHILDCLASSID);
-		return classId;
-	}
+  public String getChildResourceID() {
+    String childResourceId = getStringAttribute(CHILDRESOURCEID);
+    return childResourceId;
+  }
 
-	public void setChildClassID(String childClassId) {
-		String childClassIdStr = sRETSID.render(childClassId);
-		setAttribute(CHILDCLASSID, childClassIdStr);
-	}
+  public void setChildResourceID(String childResourceId) {
+    String childResourceIdStr = sRETSID.render(childResourceId);
+    setAttribute(CHILDRESOURCEID, childResourceIdStr);
+  }
 
-	public String getChildSystemName() {
-		String systemName = getStringAttribute(CHILDSYSTEMNAME);
-		return systemName;
-	}
+  public String getChildClassID() {
+    String classId = getStringAttribute(CHILDCLASSID);
+    return classId;
+  }
 
-	public void setChildSystemName(String childSystemName) {
-		String childSystemNameStr = sRETSNAME.render(childSystemName);
-		setAttribute(CHILDSYSTEMNAME, childSystemNameStr);
-	}
+  public void setChildClassID(String childClassId) {
+    String childClassIdStr = sRETSID.render(childClassId);
+    setAttribute(CHILDCLASSID, childClassIdStr);
+  }
 
-	public String getConditionalParentField() {
-		return getStringAttribute(CONDITIONALPARENTFIELD);
-	}
+  public String getChildSystemName() {
+    String systemName = getStringAttribute(CHILDSYSTEMNAME);
+    return systemName;
+  }
 
-	public void setConditionalParentField(String conditionalParentField) {
-		String conditionalParentFieldStr = sRETSNAME.render(conditionalParentField);
-		setAttribute(CONDITIONALPARENTFIELD, conditionalParentFieldStr);
-	}
+  public void setChildSystemName(String childSystemName) {
+    String childSystemNameStr = sRETSNAME.render(childSystemName);
+    setAttribute(CHILDSYSTEMNAME, childSystemNameStr);
+  }
 
-	public String getConditionalParentValue() {
-		return getStringAttribute(CONDITIONALPARENTVALUE);
-	}
+  public String getConditionalParentField() {
+    return getStringAttribute(CONDITIONALPARENTFIELD);
+  }
 
-	public void setConditionalParentValue(String conditionalParentValue) {
-		String conditionalParentValueStr = sRETSNAME.render(conditionalParentValue);
-		setAttribute(CONDITIONALPARENTVALUE, conditionalParentValueStr);
-	}
+  public void setConditionalParentField(String conditionalParentField) {
+    String conditionalParentFieldStr = sRETSNAME.render(conditionalParentField);
+    setAttribute(CONDITIONALPARENTFIELD, conditionalParentFieldStr);
+  }
 
-	public MSystem getMSystem() {
-		MSystem system = (MSystem)getParent();
-		return system;
-	}
+  public String getConditionalParentValue() {
+    return getStringAttribute(CONDITIONALPARENTVALUE);
+  }
 
-	public void setMSystem(MSystem system) {
-		setParent(system);
-	}
+  public void setConditionalParentValue(String conditionalParentValue) {
+    String conditionalParentValueStr = sRETSNAME.render(conditionalParentValue);
+    setAttribute(CONDITIONALPARENTVALUE, conditionalParentValueStr);
+  }
 
-	@Override
-	public MetadataType[] getChildTypes() {
-		return sNO_CHILDREN;
-	}
+  public MSystem getMSystem() {
+    MSystem system = (MSystem) getParent();
+    return system;
+  }
 
-	@Override
-	protected String getIdAttr() {
-		return FOREIGNKEYID;
-	}
+  public void setMSystem(MSystem system) {
+    setParent(system);
+  }
 
-	@Override
-	public final String getMetadataTypeName() {
-		return METADATATYPENAME;
-	}
+  @Override
+  public MetadataType[] getChildTypes() {
+    return sNO_CHILDREN;
+  }
 
-	@Override
-	public final MetadataType getMetadataType() {
-		return MetadataType.FOREIGN_KEYS;
-	}
+  @Override
+  protected String getIdAttr() {
+    return FOREIGNKEYID;
+  }
 
-	@Override
-	public String getLevel() {
-		return "";
-	}
+  @Override
+  public final String getMetadataTypeName() {
+    return METADATATYPENAME;
+  }
+
+  @Override
+  public final MetadataType getMetadataType() {
+    return MetadataType.FOREIGN_KEYS;
+  }
+
+  @Override
+  public String getLevel() {
+    return "";
+  }
 }

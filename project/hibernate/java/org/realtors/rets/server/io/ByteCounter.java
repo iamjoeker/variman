@@ -10,17 +10,17 @@ package org.realtors.rets.server.io;
 /**
  * A byte counter counts the number of bytes and makes the count available via a
  * getter method.
- * 
+ *
  * @author Danny
  * @since 0.40.15
  */
 public interface ByteCounter {
 
-    /**
-     * Returns the number of bytes counted.
-     * 
-     * @return The number of bytes counted.
-     */
-    public long getByteCount();
+  /**
+   * Returns the number of bytes counted.
+   *
+   * @return The number of bytes counted.
+   */
+  public long getByteCount();
 
 }

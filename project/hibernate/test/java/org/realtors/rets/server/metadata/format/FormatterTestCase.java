@@ -16,111 +16,99 @@ import org.realtors.rets.client.RetsVersion;
 import org.realtors.rets.server.LinesEqualTestCase;
 import org.realtors.rets.server.protocol.TableGroupFilter;
 
-public abstract class FormatterTestCase extends LinesEqualTestCase
-{
-    protected Date getDate()
-    {
-        return DATE_OBJECT;
-    }
+public abstract class FormatterTestCase extends LinesEqualTestCase {
+  protected static final String VERSION = "1.00.00001";
+  protected static final String DATE = "2003-01-01T00:01:00Z";
+  protected static final String VERSION_DATE = "\t" + VERSION + "\t" + DATE;
+  protected static final String EOL = "\n";
+  protected static final Date DATE_OBJECT;
+  protected static final List EMPTY_LIST = Collections.EMPTY_LIST;
 
-    protected String format(MetadataFormatter formatter, Collection data,
-                            String[] levels, boolean recursive)
-    {
-        TableGroupFilter groupFilter = getGroupFilter();
-        Set groups = getGroups();
-        return format(formatter, data, levels, recursive, groupFilter, groups);
-    }
+  static {
+    TimeZone gmt = TimeZone.getTimeZone("GMT");
+    GregorianCalendar calendar = new GregorianCalendar(gmt);
+    calendar.set(2003, 0, 01, 0, 1, 0);
+    DATE_OBJECT = calendar.getTime();
+  }
 
-    protected String format(MetadataFormatter formatter, Collection data,
-                            String[] levels, boolean recursive,
-                            TableGroupFilter groupFilter, Set groups)
-    {
-        FormatterLookup lookup = new TestFormatterLookup();
-        StringWriter formatted = new StringWriter();
-        PrintWriter writer = new PrintWriter(formatted);
-        MutableFormatterContext context =
-            new MutableFormatterContext("1.00.00001", DATE_OBJECT, recursive,
-                                        writer, lookup, RetsVersion.RETS_1_7_2);
-        context.setRetsVersion(RetsVersion.RETS_1_7_2);
-        context.setTableFilter(groupFilter, groups);
-        formatter.format(context, data, levels);
-        return formatted.toString();
-    }
+  protected Date getDate() {
+    return DATE_OBJECT;
+  }
 
-    protected abstract List getData();
+  protected String format(MetadataFormatter formatter, Collection data,
+                          String[] levels, boolean recursive) {
+    TableGroupFilter groupFilter = getGroupFilter();
+    Set groups = getGroups();
+    return format(formatter, data, levels, recursive, groupFilter, groups);
+  }
 
-    protected Set getGroups()
-    {
-        return Collections.EMPTY_SET;
-    }
+  protected String format(MetadataFormatter formatter, Collection data,
+                          String[] levels, boolean recursive,
+                          TableGroupFilter groupFilter, Set groups) {
+    FormatterLookup lookup = new TestFormatterLookup();
+    StringWriter formatted = new StringWriter();
+    PrintWriter writer = new PrintWriter(formatted);
+    MutableFormatterContext context =
+      new MutableFormatterContext("1.00.00001", DATE_OBJECT, recursive,
+        writer, lookup, RetsVersion.RETS_1_7_2);
+    context.setRetsVersion(RetsVersion.RETS_1_7_2);
+    context.setTableFilter(groupFilter, groups);
+    formatter.format(context, data, levels);
+    return formatted.toString();
+  }
 
-    protected TableGroupFilter getGroupFilter()
-    {
-        return null;
-    }
+  protected abstract List getData();
 
-    protected abstract String[] getLevels();
+  protected Set getGroups() {
+    return Collections.EMPTY_SET;
+  }
 
-    protected abstract MetadataFormatter getCompactFormatter();
+  protected TableGroupFilter getGroupFilter() {
+    return null;
+  }
 
-    protected abstract String getExpectedCompact();
+  protected abstract String[] getLevels();
 
-    protected abstract String getExpectedCompactRecursive();
+  protected abstract MetadataFormatter getCompactFormatter();
 
-    public void testCompactFormat()
-    {
-        String formatted = format(getCompactFormatter(), getData(),
-                                  getLevels(), FormatterContext.NOT_RECURSIVE);
-        assertLinesEqual(getExpectedCompact(), formatted);
-    }
+  protected abstract String getExpectedCompact();
 
-    public void testCompactFormatRecursive()
-    {
-        String formatted = format(getCompactFormatter(), getData(),
-                                  getLevels(), FormatterContext.RECURSIVE);
-        assertLinesEqual(getExpectedCompactRecursive(), formatted);
-    }
+  protected abstract String getExpectedCompactRecursive();
 
-    public void testEmptyCompactFormat()
-    {
-        String formatted = format(getCompactFormatter(), EMPTY_LIST,
-                                  getLevels(), FormatterContext.NOT_RECURSIVE);
-        
-        assertLinesEqual("", formatted);
-    }
+  public void testCompactFormat() {
+    String formatted = format(getCompactFormatter(), getData(),
+      getLevels(), FormatterContext.NOT_RECURSIVE);
+    assertLinesEqual(getExpectedCompact(), formatted);
+  }
 
-    protected abstract MetadataFormatter getStandardFormatter();
+  public void testCompactFormatRecursive() {
+    String formatted = format(getCompactFormatter(), getData(),
+      getLevels(), FormatterContext.RECURSIVE);
+    assertLinesEqual(getExpectedCompactRecursive(), formatted);
+  }
 
-    protected abstract String getExpectedStandard();
+  public void testEmptyCompactFormat() {
+    String formatted = format(getCompactFormatter(), EMPTY_LIST,
+      getLevels(), FormatterContext.NOT_RECURSIVE);
 
-    protected abstract String getExpectedStandardRecursive();
+    assertLinesEqual("", formatted);
+  }
 
-    public void testStandardFormat()
-    {
-        String formatted = format(getStandardFormatter(), getData(),
-                                  getLevels(), FormatterContext.NOT_RECURSIVE);
-        assertLinesEqual(getExpectedStandard(), formatted);
-    }
+  protected abstract MetadataFormatter getStandardFormatter();
 
-    public void testStandardFormatRecursive()
-    {
-        String formatted = format(getStandardFormatter(), getData(),
-                                  getLevels(), FormatterContext.RECURSIVE);
-        assertLinesEqual(getExpectedStandardRecursive(), formatted);
-    }
+  protected abstract String getExpectedStandard();
 
-    protected static final String VERSION = "1.00.00001";
-    protected static final String DATE = "2003-01-01T00:01:00Z";
-    protected static final String VERSION_DATE = "\t" + VERSION +  "\t" + DATE;
-    protected static final String EOL = "\n";
-    protected static final Date DATE_OBJECT;
-    protected static final List EMPTY_LIST = Collections.EMPTY_LIST;
+  protected abstract String getExpectedStandardRecursive();
 
-    static
-    {
-        TimeZone gmt = TimeZone.getTimeZone("GMT");
-        GregorianCalendar calendar = new GregorianCalendar(gmt);
-        calendar.set(2003, 0, 01, 0, 1, 0);
-        DATE_OBJECT = calendar.getTime();
-    }
+  public void testStandardFormat() {
+    String formatted = format(getStandardFormatter(), getData(),
+      getLevels(), FormatterContext.NOT_RECURSIVE);
+    assertLinesEqual(getExpectedStandard(), formatted);
+  }
+
+  public void testStandardFormatRecursive() {
+    String formatted = format(getStandardFormatter(), getData(),
+      getLevels(), FormatterContext.RECURSIVE);
+    assertLinesEqual(getExpectedStandardRecursive(), formatted);
+  }
 }

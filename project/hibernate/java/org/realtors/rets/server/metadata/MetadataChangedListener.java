@@ -15,9 +15,9 @@ import java.util.EventListener;
  */
 public interface MetadataChangedListener extends EventListener {
 
-    /**
-     * Called when the metadata has changed.
-     */
-    public void metadataChanged();
+  /**
+   * Called when the metadata has changed.
+   */
+  public void metadataChanged();
 
 }

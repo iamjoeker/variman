@@ -11,131 +11,111 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 /**
  * @hibernate.class table="rets_group"
  */
-public class Group implements Serializable, Comparable
-{
-    public Group(String name)
-    {
-        mName = name;
-    }
+public class Group implements Serializable, Comparable {
+  private Long mId;
+  private String mName;
+  private String mDescription;
+  private SortedSet mUsers;
 
-    protected Group()
-    {
-        // Empty
-    }
+  public Group(String name) {
+    mName = name;
+  }
 
-    /**
-     * Returns the group ID.
-     *
-     * @return the group ID.
-     *
-     * @hibernate.id generator-class="native"
-     */
-    protected Long getId()
-    {
-        return mId;
-    }
+  protected Group() {
+    // Empty
+  }
 
-    protected void setId(Long id)
-    {
-        mId = id;
-    }
+  /**
+   * Returns the group ID.
+   *
+   * @return the group ID.
+   * @hibernate.id generator-class="native"
+   */
+  protected Long getId() {
+    return mId;
+  }
 
-    /**
-     * Returns the group name.
-     *
-     * @return the group name.
-     *
-     * @hibernate.property length="32"
-     *   unique="true"
-     *   not-null="true"
-     */
-    public String getName()
-    {
-        return mName;
-    }
+  protected void setId(Long id) {
+    mId = id;
+  }
 
-    protected void setName(String name)
-    {
-        mName = name;
-    }
+  /**
+   * Returns the group name.
+   *
+   * @return the group name.
+   * @hibernate.property length="32"
+   * unique="true"
+   * not-null="true"
+   */
+  public String getName() {
+    return mName;
+  }
 
-    /**
-     * Returns the description.
-     *
-     * @return the description.
-     *
-     * @hibernate.property length="80"
-     */
-    public String getDescription()
-    {
-        return mDescription;
-    }
+  protected void setName(String name) {
+    mName = name;
+  }
 
-    public void setDescription(String description)
-    {
-        mDescription = description;
-    }
+  /**
+   * Returns the description.
+   *
+   * @return the description.
+   * @hibernate.property length="80"
+   */
+  public String getDescription() {
+    return mDescription;
+  }
 
-    /**
-     * @hibernate.set table="rets_user_groups" lazy="true"
-     *   sort="natural" inverse="true"
-     * @hibernate.key column="group_id"
-     * @hibernate.many-to-many column="user_id"
-     *   class="org.realtors.rets.server.User"
-     */
-    protected SortedSet getUsers()
-    {
-        return mUsers;
-    }
+  public void setDescription(String description) {
+    mDescription = description;
+  }
 
-    protected void setUsers(SortedSet users)
-    {
-        mUsers = users;
-    }
+  /**
+   * @hibernate.set table="rets_user_groups" lazy="true"
+   * sort="natural" inverse="true"
+   * @hibernate.key column="group_id"
+   * @hibernate.many-to-many column="user_id"
+   * class="org.realtors.rets.server.User"
+   */
+  protected SortedSet getUsers() {
+    return mUsers;
+  }
 
-    public String toString()
-    {
-        return mName;
-    }
+  protected void setUsers(SortedSet users) {
+    mUsers = users;
+  }
 
-    public String dump()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append("id", mId)
-            .append("name", mName)
-            .append("description", mDescription)
-            .toString();
-    }
+  public String toString() {
+    return mName;
+  }
 
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof Group))
-        {
-            return false;
-        }
-        Group rhs = (Group) obj;
-        return new EqualsBuilder()
-            .append(mName, rhs.mName)
-            .isEquals();
-    }
+  public String dump() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append("id", mId)
+      .append("name", mName)
+      .append("description", mDescription)
+      .toString();
+  }
 
-    public int hashCode()
-    {
-        return new HashCodeBuilder()
-            .append(mName)
-            .toHashCode();
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Group)) {
+      return false;
     }
+    Group rhs = (Group) obj;
+    return new EqualsBuilder()
+      .append(mName, rhs.mName)
+      .isEquals();
+  }
 
-    public int compareTo(Object obj)
-    {
-        Group rhs = (Group) obj;
-        return new CompareToBuilder()
-            .append(mName, rhs.mName)
-            .toComparison();
-    }
+  public int hashCode() {
+    return new HashCodeBuilder()
+      .append(mName)
+      .toHashCode();
+  }
 
-    private Long mId;
-    private String mName;
-    private String mDescription;
-    private SortedSet mUsers;
+  public int compareTo(Object obj) {
+    Group rhs = (Group) obj;
+    return new CompareToBuilder()
+      .append(mName, rhs.mName)
+      .toComparison();
+  }
 }

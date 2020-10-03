@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE web-app
-          PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-          "http://java.sun.com/dtd/web-app_2_3.dtd">
+  PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+  "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
   <display-name>CRT RETS Server</display-name>
   <description>CRT RETS Server</description>
@@ -29,7 +29,7 @@
     <filter-name>accounting-filter</filter-name>
     <url-pattern>/rets/*</url-pattern>
   </filter-mapping>
-    
+
   <servlet>
     <servlet-name>stop-servlet</servlet-name>
     <servlet-class>org.realtors.rets.server.webapp.StopServlet</servlet-class>
@@ -76,29 +76,29 @@
     <session-timeout>30</session-timeout>
   </session-config>
 
-<!--
-  <security-constraint>
-    <web-resource-collection>
-      <web-resource-name>RETS Server</web-resource-name>
-      <url-pattern>/rets/*</url-pattern>
-      <http-method>DELETE</http-method>
-      <http-method>GET</http-method>
-      <http-method>POST</http-method>
-      <http-method>PUT</http-method>
-    </web-resource-collection>
-    <auth-constraint>
+  <!--
+    <security-constraint>
+      <web-resource-collection>
+        <web-resource-name>RETS Server</web-resource-name>
+        <url-pattern>/rets/*</url-pattern>
+        <http-method>DELETE</http-method>
+        <http-method>GET</http-method>
+        <http-method>POST</http-method>
+        <http-method>PUT</http-method>
+      </web-resource-collection>
+      <auth-constraint>
+        <role-name>rets-user</role-name>
+      </auth-constraint>
+    </security-constraint>
+
+    <login-config>
+      <auth-method>DIGEST</auth-method>
+      <realm-name>RETS Server</realm-name>
+    </login-config>
+
+    <security-role>
       <role-name>rets-user</role-name>
-    </auth-constraint>
-  </security-constraint>
-
-  <login-config>
-    <auth-method>DIGEST</auth-method>
-    <realm-name>RETS Server</realm-name>
-  </login-config>
-
-  <security-role>
-    <role-name>rets-user</role-name>
-  </security-role>
--->
+    </security-role>
+  -->
 
 </web-app>

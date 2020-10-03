@@ -13,31 +13,24 @@ package org.realtors.rets.server;
 import org.apache.log4j.spi.Filter;
 import org.apache.log4j.spi.LoggingEvent;
 
-public class MdcFilter extends Filter
-{
-    public int decide(LoggingEvent event)
-    {
-        String value = (String) event.getMDC(mMdcName);
-        if (mMdcValue.equals(value))
-        {
-            return Filter.ACCEPT;
-        }
-        else
-        {
-            return Filter.DENY;
-        }
-    }
+public class MdcFilter extends Filter {
+  private String mMdcName;
+  private String mMdcValue;
 
-    public void setMdcName(String mdcName)
-    {
-        mMdcName = mdcName;
+  public int decide(LoggingEvent event) {
+    String value = (String) event.getMDC(mMdcName);
+    if (mMdcValue.equals(value)) {
+      return Filter.ACCEPT;
+    } else {
+      return Filter.DENY;
     }
+  }
 
-    public void setMdcValue(String mdcValue)
-    {
-        mMdcValue = mdcValue;
-    }
+  public void setMdcName(String mdcName) {
+    mMdcName = mdcName;
+  }
 
-    private String mMdcName;
-    private String mMdcValue;
+  public void setMdcValue(String mdcValue) {
+    mMdcValue = mdcValue;
+  }
 }

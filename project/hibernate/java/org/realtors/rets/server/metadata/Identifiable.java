@@ -8,8 +8,8 @@
 
 package org.realtors.rets.server.metadata;
 
-public interface Identifiable
-{
-    public void setId(Long id);
-    public Long getId();
+public interface Identifiable {
+  public Long getId();
+
+  public void setId(Long id);
 }

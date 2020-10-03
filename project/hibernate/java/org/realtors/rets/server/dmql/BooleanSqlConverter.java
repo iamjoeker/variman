@@ -17,42 +17,35 @@ import org.realtors.rets.server.Util;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
-public class BooleanSqlConverter implements SqlConverter
-{
-    public BooleanSqlConverter(String string)
-    {
-        mString = string;
-    }
+public class BooleanSqlConverter implements SqlConverter {
+  private String mString;
 
-    public void toSql(PrintWriter out)
-    {
-        if (mString.equals("0"))
-            out.print("'0'");
-        else
-        if (mString.equals("1"))
-            out.print("'1'");
-        else
-            out.print(mString); // Shouldn't happen and will cause failure.
-    }
+  public BooleanSqlConverter(String string) {
+    mString = string;
+  }
 
-    public String toString()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append(mString)
-            .toString();
-    }
+  public void toSql(PrintWriter out) {
+    if (mString.equals("0"))
+      out.print("'0'");
+    else if (mString.equals("1"))
+      out.print("'1'");
+    else
+      out.print(mString); // Shouldn't happen and will cause failure.
+  }
 
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof BooleanSqlConverter))
-        {
-            return false;
-        }
-        BooleanSqlConverter rhs = (BooleanSqlConverter) obj;
-        return new EqualsBuilder()
-            .append(mString, rhs.mString)
-            .isEquals();
-    }
+  public String toString() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append(mString)
+      .toString();
+  }
 
-    private String mString;
+  public boolean equals(Object obj) {
+    if (!(obj instanceof BooleanSqlConverter)) {
+      return false;
+    }
+    BooleanSqlConverter rhs = (BooleanSqlConverter) obj;
+    return new EqualsBuilder()
+      .append(mString, rhs.mString)
+      .isEquals();
+  }
 }

@@ -3,15 +3,14 @@
 # that.  Otherwise, we'll guess it off of where we were called from.
 
 if [ x$IMPORT_HOME_DIR = 'x' ]; then
-    IMPORT_HOME_DIR=`dirname $0`/..
+  IMPORT_HOME_DIR=$(dirname $0)/..
 fi
 
 IMPORT_LIB_DIR=$IMPORT_HOME_DIR/lib
 CLASSPATH=$IMPORT_HOME_DIR/classes
 
-for i in $IMPORT_LIB_DIR/*.jar
-do
-    CLASSPATH=$i:$CLASSPATH
+for i in $IMPORT_LIB_DIR/*.jar; do
+  CLASSPATH=$i:$CLASSPATH
 done
 
 # Uncomment to allow remote debugging

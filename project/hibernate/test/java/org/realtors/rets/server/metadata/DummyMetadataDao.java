@@ -14,30 +14,26 @@ import org.realtors.rets.common.metadata.types.MSystem;
 
 /**
  * An implementation of the {@link MetadataDao} interface used for testing.
- * 
+ *
  * @author Mark Klein
  */
 public class DummyMetadataDao implements MetadataDao {
 
-    private static Metadata mMetadata;
-    
-    static
-    {
-        mMetadata = new Metadata(new MSystem());
-    }
+  private static Metadata mMetadata;
 
-    public Metadata getMetadata() 
-    {
-        return mMetadata;
-    }
+  static {
+    mMetadata = new Metadata(new MSystem());
+  }
 
-    public void saveMetadata(Metadata metadata) 
-    {
-        mMetadata = metadata;
-    }
+  public Metadata getMetadata() {
+    return mMetadata;
+  }
 
-    public Date getChangedDate() 
-    {
-        return new Date();
-    }
+  public void saveMetadata(Metadata metadata) {
+    mMetadata = metadata;
+  }
+
+  public Date getChangedDate() {
+    return new Date();
+  }
 }

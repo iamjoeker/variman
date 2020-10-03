@@ -17,151 +17,125 @@ import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 
-public abstract class PasswordMethod implements Serializable
-{
-    public abstract String hash(String username, String plainTextPassword);
+public abstract class PasswordMethod implements Serializable {
+  public static final String PLAIN_TEXT = "";
+  /**
+   * Store the password as A1 from HTTP Digest Authentication. Use the
+   * option to set the realm to use in the hash.
+   */
+  public static final String DIGEST_A1 = "A1";
+  /**
+   * The realm to use for A1 hashed password generation: "RETS Server".
+   */
+  public static final String RETS_REALM = "RETS Server";
+  private static final Logger LOG =
+    Logger.getLogger(PasswordMethod.class);
+  private static Map sCachedMethods;
+  private static Map sRegisteredMethods;
+  private static String sDefaultMethod;
+  private static String sDefaultOptions;
 
-    public abstract boolean verifyPassword(String expectedPassword,
-                                           String passwordToVerify);
+  static {
+    sCachedMethods = new HashMap();
+    sRegisteredMethods = new HashMap();
+    sDefaultMethod = PLAIN_TEXT;
+    sDefaultOptions = "";
+    registerMethod("", PlainTextMethod.class);
+    registerMethod("A1", DigestA1Method.class);
+  }
 
-    protected abstract boolean parseOptions(String options);
+  protected String mMethod;
+  protected String mOptions;
 
-    protected abstract PasswordMethod deepCopy();
-
-    public String getMethod()
-    {
-        return mMethod;
+  public static String makeId(String method, String options) {
+    StringBuffer buffer = new StringBuffer(method);
+    if (!options.equals("")) {
+      buffer.append(":").append(options);
     }
+    return buffer.toString();
+  }
 
-    public String getOptions()
-    {
-        return mOptions;
-    }
+  public static PasswordMethod getInstance(String method) {
+    return getInstance(method, "");
+  }
 
-    public String getId()
-    {
-        return makeId(mMethod, mOptions);
-    }
-
-    public String toString()
-    {
-        return getId();
-    }
-
-    public static String makeId(String method, String options)
-    {
-        StringBuffer buffer = new StringBuffer(method);
-        if (!options.equals(""))
-        {
-            buffer.append(":").append(options);
+  public static synchronized PasswordMethod getInstance(String method,
+                                                        String options) {
+    String id = makeId(method, options);
+    PasswordMethod passwordMethod =
+      (PasswordMethod) sCachedMethods.get(id);
+    if (passwordMethod == null) {
+      try {
+        Class clazz = (Class) sRegisteredMethods.get(method);
+        LOG.debug("Instantiating " + clazz.getName());
+        passwordMethod = (PasswordMethod) clazz.newInstance();
+        passwordMethod.mMethod = method;
+        passwordMethod.mOptions = options;
+        if (passwordMethod.parseOptions(options)) {
+          LOG.debug("Adding id [" + id + "] to cache");
+          sCachedMethods.put(id, passwordMethod);
+        } else {
+          LOG.debug("Parsing options [" + options + "] failed for " +
+            "method: " + method);
+          passwordMethod = null;
         }
-        return buffer.toString();
+      } catch (InstantiationException e) {
+        LOG.warn("Could not instantiate", e);
+      } catch (IllegalAccessException e) {
+        LOG.warn("Could not instantiate", e);
+      }
     }
 
-    public static PasswordMethod getInstance(String method)
-    {
-        return getInstance(method, "");
-    }
+    return passwordMethod;
+  }
 
-    public static synchronized PasswordMethod getInstance(String method,
-                                                          String options)
-    {
-        String id = makeId(method, options);
-        PasswordMethod passwordMethod =
-            (PasswordMethod) sCachedMethods.get(id);
-        if (passwordMethod == null)
-        {
-            try
-            {
-                Class clazz = (Class) sRegisteredMethods.get(method);
-                LOG.debug("Instantiating " + clazz.getName());
-                passwordMethod = (PasswordMethod) clazz.newInstance();
-                passwordMethod.mMethod = method;
-                passwordMethod.mOptions = options;
-                if (passwordMethod.parseOptions(options))
-                {
-                    LOG.debug("Adding id [" + id + "] to cache");
-                    sCachedMethods.put(id, passwordMethod);
-                }
-                else
-                {
-                    LOG.debug("Parsing options [" + options + "] failed for " +
-                              "method: " + method);
-                    passwordMethod = null;
-                }
-            }
-            catch (InstantiationException e)
-            {
-                LOG.warn("Could not instantiate", e);
-            }
-            catch (IllegalAccessException e)
-            {
-                LOG.warn("Could not instantiate", e);
-            }
-        }
+  public static synchronized void registerMethod(String method, Class clazz) {
+    sRegisteredMethods.put(method, clazz);
+  }
 
-        return passwordMethod;
-    }
+  public static synchronized void setDefaultMethod(String method,
+                                                   String options) {
+    sDefaultMethod = method;
+    sDefaultOptions = options;
+    LOG.debug("Set default method to <" + method + ">, options = <" +
+      options + ">");
+  }
 
-    public static synchronized void registerMethod(String method, Class clazz)
-    {
-        sRegisteredMethods.put(method, clazz);
-    }
+  public static PasswordMethod getDefaultMethod() {
+    return getInstance(sDefaultMethod, sDefaultOptions);
+  }
 
-    public static void setDefaultMethod(String method)
-    {
-        setDefaultMethod(method, "");
-    }
+  public static void setDefaultMethod(String method) {
+    setDefaultMethod(method, "");
+  }
 
-    public static synchronized void setDefaultMethod(String method,
-                                                     String options)
-    {
-        sDefaultMethod = method;
-        sDefaultOptions = options;
-        LOG.debug("Set default method to <" + method + ">, options = <" + 
-                  options + ">");
-    }
+  public static synchronized void initMethods() {
+    // Do nothing... all work is done once in static block. This method
+    // just insures the static block gets loaded.
+  }
 
-    public static PasswordMethod getDefaultMethod()
-    {
-        return getInstance(sDefaultMethod, sDefaultOptions);
-    }
+  public abstract String hash(String username, String plainTextPassword);
 
-    public static synchronized void initMethods()
-    {
-        // Do nothing... all work is done once in static block. This method
-        // just insures the static block gets loaded.
-    }
+  public abstract boolean verifyPassword(String expectedPassword,
+                                         String passwordToVerify);
 
-    public static final String PLAIN_TEXT = "";
+  protected abstract boolean parseOptions(String options);
 
-    /**
-     * Store the password as A1 from HTTP Digest Authentication. Use the
-     * option to set the realm to use in the hash.
-      */
-    public static final String DIGEST_A1 = "A1";
+  protected abstract PasswordMethod deepCopy();
 
-    /**
-     * The realm to use for A1 hashed password generation: "RETS Server".
-     */
-    public static final String RETS_REALM = "RETS Server";
+  public String getMethod() {
+    return mMethod;
+  }
 
-    private static final Logger LOG =
-        Logger.getLogger(PasswordMethod.class);
-    private static Map sCachedMethods;
-    private static Map sRegisteredMethods;
-    private static String sDefaultMethod;
-    private static String sDefaultOptions;
-    protected String mMethod;
-    protected String mOptions;
+  public String getOptions() {
+    return mOptions;
+  }
 
-    static
-    {
-        sCachedMethods = new HashMap();
-        sRegisteredMethods = new HashMap();
-        sDefaultMethod = PLAIN_TEXT;
-        sDefaultOptions = "";
-        registerMethod("", PlainTextMethod.class);
-        registerMethod("A1", DigestA1Method.class);
-    }
+  public String getId() {
+    return makeId(mMethod, mOptions);
+  }
+
+  public String toString() {
+    return getId();
+  }
 }

@@ -9,17 +9,13 @@ import junit.framework.TestCase;
 /**
  * @author kgarner
  */
-public class TestHibernateConfigSerializer extends TestCase
-{
-    public void testFromPropertiesProperties()
-    {
-    }
-    
-    public void testFromPropertiesReader()
-    {
-    }
-    
-    public void testToProperties()
-    {
-    }
+public class TestHibernateConfigSerializer extends TestCase {
+  public void testFromPropertiesProperties() {
+  }
+
+  public void testFromPropertiesReader() {
+  }
+
+  public void testToProperties() {
+  }
 }

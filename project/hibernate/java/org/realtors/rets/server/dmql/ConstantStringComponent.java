@@ -13,39 +13,32 @@ package org.realtors.rets.server.dmql;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
 public class ConstantStringComponent extends Object
-    implements DmqlStringComponent
-{
-    public ConstantStringComponent(String constant)
-    {
-        mConstant = constant;
-    }
+  implements DmqlStringComponent {
+  protected String mConstant;
 
-    public String toString()
-    {
-        return "'" + mConstant + "'";
-    }
+  public ConstantStringComponent(String constant) {
+    mConstant = constant;
+  }
 
-    public String toSql()
-    {
-        return mConstant;
-    }
+  public String toString() {
+    return "'" + mConstant + "'";
+  }
 
-    public boolean conatinsWildcards()
-    {
-        return false;
-    }
+  public String toSql() {
+    return mConstant;
+  }
 
-    public boolean equals(Object o)
-    {
-        if (!(o instanceof ConstantStringComponent))
-        {
-            return false;
-        }
-        ConstantStringComponent rhs = (ConstantStringComponent) o;
-        return new EqualsBuilder()
-            .append(mConstant, rhs.mConstant)
-            .isEquals();
-    }
+  public boolean conatinsWildcards() {
+    return false;
+  }
 
-    protected String mConstant;
+  public boolean equals(Object o) {
+    if (!(o instanceof ConstantStringComponent)) {
+      return false;
+    }
+    ConstantStringComponent rhs = (ConstantStringComponent) o;
+    return new EqualsBuilder()
+      .append(mConstant, rhs.mConstant)
+      .isEquals();
+  }
 }

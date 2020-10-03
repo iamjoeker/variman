@@ -3,21 +3,21 @@
 
 <log4j:configuration xmlns:log4j='http://jakarta.apache.org/log4j/'>
   <appender name="stdout" class="org.apache.log4j.RollingFileAppender">
-    <param name="File" value="${variman.home}/logs/variman_admin.txt"/>
-    <param name="MaxBackupIndex" value="5"/>
-    <param name="MaxFileSize" value="1MB"/>
+    <param name="File" value="${variman.home}/logs/variman_admin.txt" />
+    <param name="MaxBackupIndex" value="5" />
+    <param name="MaxFileSize" value="1MB" />
     <layout class="org.apache.log4j.PatternLayout">
       <param name="ConversionPattern"
-             value="%d{DATE} %-5p [%X{addr} %X{user}] %c%n-> %m%n"/>
+             value="%d{DATE} %-5p [%X{addr} %X{user}] %c%n-> %m%n" />
     </layout>
   </appender>
 
   <logger name="org.realtors.rets.server">
-    <level value="info"/>
+    <level value="info" />
   </logger>
 
   <root>
-    <level value="warn"/>
-    <appender-ref ref="stdout"/>
+    <level value="warn" />
+    <appender-ref ref="stdout" />
   </root>
 </log4j:configuration>

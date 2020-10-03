@@ -10,9 +10,8 @@
  */
 package org.realtors.rets.server.dmql;
 
-public interface DmqlStringComponent
-{
-    boolean conatinsWildcards();
+public interface DmqlStringComponent {
+  boolean conatinsWildcards();
 
-    String toSql();
+  String toSql();
 }

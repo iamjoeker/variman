@@ -16,13 +16,13 @@ import org.realtors.rets.common.metadata.MetaParseException;
  * so, I did.
  */
 public abstract class AttrTypeTest extends MetadataTestCase {
-	protected void assertParseException(AttrType attrib, String input) throws Exception {
-		attrib.parse(input,false);
-		try {
-			attrib.parse(input,true);
-			fail("Expected MetaParseException, got no exception for input " + '"' + input + '"');
-		} catch (MetaParseException e) {
-			// "success"
-		}
-	}
+  protected void assertParseException(AttrType attrib, String input) throws Exception {
+    attrib.parse(input, false);
+    try {
+      attrib.parse(input, true);
+      fail("Expected MetaParseException, got no exception for input " + '"' + input + '"');
+    } catch (MetaParseException e) {
+      // "success"
+    }
+  }
 }

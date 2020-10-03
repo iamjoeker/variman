@@ -17,42 +17,36 @@ import org.realtors.rets.server.Util;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
-public class GreaterThanClause implements SqlConverter
-{
-    public GreaterThanClause(String field, SqlConverter sqlConverter)
-    {
-        mField = field;
-        mSqlConverter = sqlConverter;
-    }
+public class GreaterThanClause implements SqlConverter {
+  private String mField;
+  private SqlConverter mSqlConverter;
 
-    public void toSql(PrintWriter out)
-    {
-        out.print(mField);
-        out.print(" >= ");
-        mSqlConverter.toSql(out);
-    }
+  public GreaterThanClause(String field, SqlConverter sqlConverter) {
+    mField = field;
+    mSqlConverter = sqlConverter;
+  }
 
-    public String toString()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append("field", mField)
-            .append("sqlConverter", mSqlConverter)
-            .toString();
-    }
+  public void toSql(PrintWriter out) {
+    out.print(mField);
+    out.print(" >= ");
+    mSqlConverter.toSql(out);
+  }
 
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof GreaterThanClause))
-        {
-            return false;
-        }
-        GreaterThanClause rhs = (GreaterThanClause) obj;
-        return new EqualsBuilder()
-            .append(mField, rhs.mField)
-            .append(mSqlConverter, rhs.mSqlConverter)
-            .isEquals();
-    }
+  public String toString() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append("field", mField)
+      .append("sqlConverter", mSqlConverter)
+      .toString();
+  }
 
-    private String mField;
-    private SqlConverter mSqlConverter;
+  public boolean equals(Object obj) {
+    if (!(obj instanceof GreaterThanClause)) {
+      return false;
+    }
+    GreaterThanClause rhs = (GreaterThanClause) obj;
+    return new EqualsBuilder()
+      .append(mField, rhs.mField)
+      .append(mSqlConverter, rhs.mSqlConverter)
+      .isEquals();
+  }
 }

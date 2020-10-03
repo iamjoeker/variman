@@ -14,16 +14,15 @@ import org.hibernate.SessionFactory;
 import org.realtors.rets.server.RetsServerException;
 import org.realtors.rets.server.metadata.MetadataManager;
 
-public interface SearchTransaction
-{
-    // TODO - it would be better to make this totally stateless,
-    // and just pass all inputs into the execute method as a request object
-    public void setParameters(SearchParameters parameters)
-        throws RetsServerException;
-    
-    public void setExecuteQuery(boolean executeQuery);
+public interface SearchTransaction {
+  // TODO - it would be better to make this totally stateless,
+  // and just pass all inputs into the execute method as a request object
+  public void setParameters(SearchParameters parameters)
+    throws RetsServerException;
 
-    public SearchTransactionStatistics execute(PrintWriter out,
-            MetadataManager manager, SessionFactory sessions)
-        throws RetsServerException;
+  public void setExecuteQuery(boolean executeQuery);
+
+  public SearchTransactionStatistics execute(PrintWriter out,
+                                             MetadataManager manager, SessionFactory sessions)
+    throws RetsServerException;
 }

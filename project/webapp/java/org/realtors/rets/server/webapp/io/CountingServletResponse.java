@@ -26,68 +26,68 @@ import org.realtors.rets.server.io.CountingPrintWriter;
  * {@link CountingHttpServletResponse} for that. If an HTTP servlet response
  * were wrapped by this class then it would not appear to be an HTTP servlet
  * response but a plain-old servlet response.
- * 
+ *
  * @author Danny
  * @see CountingHttpServletResponse
  * @since 0.40.15
  */
 public class CountingServletResponse extends ServletResponseWrapper implements ByteCounter {
 
-    // State Variables -------------------------------------------------------
-    private CountingServletOutputStream countingServletOutputStream;
-    private CountingPrintWriter countingPrintWriter;
+  // State Variables -------------------------------------------------------
+  private CountingServletOutputStream countingServletOutputStream;
+  private CountingPrintWriter countingPrintWriter;
 
-    /**
-     * Constructs a new CountingServletResponse.
-     * 
-     * @param response The servlet response on which to count response bytes.
-     *            Must not be {@code null}. Should not be a
-     *            {@link HttpServletResponse}. Use the
-     *            {@link CountingHttpServletResponse} instead.
-     * @see CountingHttpServletResponse
-     */
-    public CountingServletResponse(ServletResponse response) {
-        super(response);
-    }
+  /**
+   * Constructs a new CountingServletResponse.
+   *
+   * @param response The servlet response on which to count response bytes.
+   *                 Must not be {@code null}. Should not be a
+   *                 {@link HttpServletResponse}. Use the
+   *                 {@link CountingHttpServletResponse} instead.
+   * @see CountingHttpServletResponse
+   */
+  public CountingServletResponse(ServletResponse response) {
+    super(response);
+  }
 
-    /*- (non-Javadoc)
-     * @see javax.servlet.ServletResponseWrapper#getOutputStream()
-     */
-    @Override
-    public ServletOutputStream getOutputStream() throws IOException {
-        if (this.countingServletOutputStream == null) {
-            ServletOutputStream servletOutputStream = super.getOutputStream();
-            this.countingServletOutputStream = new CountingServletOutputStream(servletOutputStream);
-        }
-        return this.countingServletOutputStream;
+  /*- (non-Javadoc)
+   * @see javax.servlet.ServletResponseWrapper#getOutputStream()
+   */
+  @Override
+  public ServletOutputStream getOutputStream() throws IOException {
+    if (this.countingServletOutputStream == null) {
+      ServletOutputStream servletOutputStream = super.getOutputStream();
+      this.countingServletOutputStream = new CountingServletOutputStream(servletOutputStream);
     }
+    return this.countingServletOutputStream;
+  }
 
-    /*- (non-Javadoc)
-     * @see javax.servlet.ServletResponseWrapper#getWriter()
-     */
-    @Override
-    public PrintWriter getWriter() throws IOException {
-        if (this.countingPrintWriter == null) {
-            PrintWriter printWriter = super.getWriter();
-            this.countingPrintWriter = new CountingPrintWriter(printWriter, false);
-        }
-        return this.countingPrintWriter;
+  /*- (non-Javadoc)
+   * @see javax.servlet.ServletResponseWrapper#getWriter()
+   */
+  @Override
+  public PrintWriter getWriter() throws IOException {
+    if (this.countingPrintWriter == null) {
+      PrintWriter printWriter = super.getWriter();
+      this.countingPrintWriter = new CountingPrintWriter(printWriter, false);
     }
+    return this.countingPrintWriter;
+  }
 
-    /**
-     * Returns the number of bytes written to either the servlet output stream
-     * or the print writer.
-     * 
-     * @return The number of bytes written to the response.
-     */
-    public long getByteCount() {
-        long count = 0L;
-        if (this.countingServletOutputStream != null) {
-            count = this.countingServletOutputStream.getByteCount();
-        } else if (this.countingPrintWriter != null) {
-            count = this.countingPrintWriter.getByteCount();
-        }
-        return count;
+  /**
+   * Returns the number of bytes written to either the servlet output stream
+   * or the print writer.
+   *
+   * @return The number of bytes written to the response.
+   */
+  public long getByteCount() {
+    long count = 0L;
+    if (this.countingServletOutputStream != null) {
+      count = this.countingServletOutputStream.getByteCount();
+    } else if (this.countingPrintWriter != null) {
+      count = this.countingPrintWriter.getByteCount();
     }
+    return count;
+  }
 
 }

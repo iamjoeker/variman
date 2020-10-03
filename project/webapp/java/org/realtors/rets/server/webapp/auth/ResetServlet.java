@@ -23,14 +23,12 @@ import org.realtors.rets.server.webapp.RetsServletResponse;
  * @web.servlet name="reset-servlet"
  * @web.servlet-mapping url-pattern="/reset"
  */
-public class ResetServlet extends RetsServlet
-{
-    protected void doRets(RetsServletRequest req, RetsServletResponse resp)
-            throws RetsServerException, IOException
-    {
-        String header =
-            new DigestAuthenticateResponse("RETS Server").getHeader();
-        resp.setHeader("WWW-Authenticate", header);
-        resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-    }
+public class ResetServlet extends RetsServlet {
+  protected void doRets(RetsServletRequest req, RetsServletResponse resp)
+    throws RetsServerException, IOException {
+    String header =
+      new DigestAuthenticateResponse("RETS Server").getHeader();
+    resp.setHeader("WWW-Authenticate", header);
+    resp.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+  }
 }

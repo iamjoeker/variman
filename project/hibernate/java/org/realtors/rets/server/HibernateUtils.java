@@ -13,57 +13,44 @@ import org.hibernate.Session;
 
 import org.apache.log4j.Logger;
 
-public class HibernateUtils
-{
-    public static Long save(Object object)
-        throws HibernateException, RetsServerException
-    {
-        SessionHelper helper = RetsServer.createSessionHelper();
-        try
-        {
-            Session session = helper.beginTransaction();
-            Long id = (Long) session.save(object);
-            helper.commit();
-            return id;
-        }
-        finally
-        {
-            helper.close(LOG);
-        }
-    }
+public class HibernateUtils {
+  private static final Logger LOG =
+    Logger.getLogger(HibernateUtils.class);
 
-    public static void update(Object object)
-        throws HibernateException, RetsServerException
-    {
-        SessionHelper helper = RetsServer.createSessionHelper();
-        try
-        {
-            Session session = helper.beginTransaction();
-            session.update(object);
-            helper.commit();
-        }
-        finally
-        {
-            helper.close(LOG);
-        }
+  public static Long save(Object object)
+    throws HibernateException, RetsServerException {
+    SessionHelper helper = RetsServer.createSessionHelper();
+    try {
+      Session session = helper.beginTransaction();
+      Long id = (Long) session.save(object);
+      helper.commit();
+      return id;
+    } finally {
+      helper.close(LOG);
     }
+  }
 
-    public static void delete(Object object)
-        throws HibernateException, RetsServerException
-    {
-        SessionHelper helper = RetsServer.createSessionHelper();
-        try
-        {
-            Session session = helper.beginTransaction();
-            session.delete(object);
-            helper.commit();
-        }
-        finally
-        {
-            helper.close(LOG);
-        }
+  public static void update(Object object)
+    throws HibernateException, RetsServerException {
+    SessionHelper helper = RetsServer.createSessionHelper();
+    try {
+      Session session = helper.beginTransaction();
+      session.update(object);
+      helper.commit();
+    } finally {
+      helper.close(LOG);
     }
+  }
 
-    private static final Logger LOG =
-        Logger.getLogger(HibernateUtils.class);
+  public static void delete(Object object)
+    throws HibernateException, RetsServerException {
+    SessionHelper helper = RetsServer.createSessionHelper();
+    try {
+      Session session = helper.beginTransaction();
+      session.delete(object);
+      helper.commit();
+    } finally {
+      helper.close(LOG);
+    }
+  }
 }

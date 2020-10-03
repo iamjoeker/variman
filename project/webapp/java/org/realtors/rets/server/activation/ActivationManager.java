@@ -6,10 +6,11 @@ package org.realtors.rets.server.activation;
  */
 public interface ActivationManager {
 
-    /**
-     * Checks if Variman has been activated.
-     * @return True if activated has been successfully completed.
-     * @param host
-     */
-    boolean isActivated(String host);
+  /**
+   * Checks if Variman has been activated.
+   *
+   * @param host
+   * @return True if activated has been successfully completed.
+   */
+  boolean isActivated(String host);
 }

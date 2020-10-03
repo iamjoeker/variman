@@ -1,11 +1,13 @@
 <section id="install">
   <title>Installation</title>
   <para>
-    There are a number of installation options for &name;.  The
+    There are a number of installation options for &name;. The
     easiest method is to us one of the standalone versions that use an
-    embedded version of Apache Tomcat <xref linkend="bib-tomcat"/>.
-    The only other requirements to run this version is Java <xref
-    linkend="bib-java"/> 5.0 or higher and a relational database.  However, &name;
+    embedded version of Apache Tomcat<xref linkend="bib-tomcat" />.
+    The only other requirements to run this version is Java
+    <xref
+      linkend="bib-java" />
+    5.0 or higher and a relational database. However, &name;
     is developed as a Java web application, so you can use your own
     application server, such as WebLogic, WebSphere, or Resin, if you
     already have licenses for one.
@@ -15,12 +17,12 @@
     <title>Windows Installation</title>
     <para>
       If you are running on Windows, a normal Windows installer is
-      provided that installs into the Program Files directory.  You
-      need to have Java installed prior to installing &name;.  The
+      provided that installs into the Program Files directory. You
+      need to have Java installed prior to installing &name;. The
       installer also adds items into the Start Menu and a Windows
-      Service.  The Service can be used to start and stop the server,
-      like any other Windows Service.  Before running &name;, you
-      should first configure it.  There are a number of items that
+      Service. The Service can be used to start and stop the server,
+      like any other Windows Service. Before running &name;, you
+      should first configure it. There are a number of items that
       must be setup.
     </para>
   </section>
@@ -29,8 +31,8 @@
     <title>Non-Windows Installation</title>
     <para>
       For other platforms, such as Linux and Mac OS X, a gzipped tar
-      file is provided.  This archive does not contain any support for
-      init scripts or startup items.  The &name; server is distributed
+      file is provided. This archive does not contain any support for
+      init scripts or startup items. The &name; server is distributed
       as an executable Jar file.
     </para>
   </section>
@@ -39,9 +41,9 @@
     <title>Web Application Installation</title>
     <para>
       A version of &name; without Tomcat is available as a zip file or
-      gzipped tar file.  This distribution includes only the web
-      application and the administration tool.  An application server
-      is required to run the web application.  However, only Java
+      gzipped tar file. This distribution includes only the web
+      application and the administration tool. An application server
+      is required to run the web application. However, only Java
       Servlets are used, so you do not need any other J2EE technology,
       like EJB.
     </para>
@@ -54,9 +56,9 @@
   </section>
 </section>
 
-<!--
-Local Variables:
-mode: xml
-sgml-parent-document: ("manual.xml" "" "section")
-End:
--->
+  <!--
+  Local Variables:
+  mode: xml
+  sgml-parent-document: ("manual.xml" "" "section")
+  End:
+  -->

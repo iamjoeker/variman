@@ -9,9 +9,8 @@ import java.io.InputStream;
  * Time: 3:34:29 PM
  * To change this template use File | Settings | File Templates.
  */
-public interface ObjectStream
-{
-    public InputStream getInputStream();
+public interface ObjectStream {
+  public InputStream getInputStream();
 
-    public String getMimeType();
+  public String getMimeType();
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE form-validation PUBLIC
-          "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN"
-          "http://jakarta.apache.org/commons/dtds/validator_1_0.dtd">
+  "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.0//EN"
+  "http://jakarta.apache.org/commons/dtds/validator_1_0.dtd">
 <!--
 
    This file contains the default Struts Validator pluggable validator
@@ -42,19 +42,19 @@
 
 <form-validation>
 
-   <global>
+  <global>
 
-      <validator name="required"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="required"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateRequired"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-                  msg="errors.required">
+               msg="errors.required">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateRequired(form) {
                 var isValid = true;
                 var focusField = null;
@@ -63,14 +63,14 @@
                 oRequired = new required();
                 for (x in oRequired) {
                 	var field = form[oRequired[x][0]];
-                	
+
                     if (field.type == 'text' ||
                         field.type == 'textarea' ||
                         field.type == 'file' ||
                         field.type == 'select-one' ||
                         field.type == 'radio' ||
                         field.type == 'password') {
-                        
+
                         var value = '';
 						// get field's value
 						if (field.type == "select-one") {
@@ -81,9 +81,9 @@
 						} else {
 							value = field.value;
 						}
-                        
+
                         if (trim(value).length == 0) {
-                        
+
 	                        if (i == 0) {
 	                            focusField = field;
 	                        }
@@ -98,41 +98,41 @@
                 }
                 return isValid;
             }
-            
+
             // Trim whitespace from left and right sides of s.
             function trim(s) {
                 return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
             }
-            
+
             ]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
-      <validator name="requiredif"
-                 classname="org.apache.struts.validator.FieldChecks"
-                 method="validateRequiredIf"
-                 methodParams="java.lang.Object,
+    <validator name="requiredif"
+               classname="org.apache.struts.validator.FieldChecks"
+               method="validateRequiredIf"
+               methodParams="java.lang.Object,
                                org.apache.commons.validator.ValidatorAction,
                                org.apache.commons.validator.Field,
                                org.apache.struts.action.ActionErrors,
                                org.apache.commons.validator.Validator,
                                javax.servlet.http.HttpServletRequest"
-                 msg="errors.required">
-      </validator>
+               msg="errors.required">
+    </validator>
 
-      <validator name="minlength"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="minlength"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateMinLength"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends=""
-                  msg="errors.minlength">
+               depends=""
+               msg="errors.minlength">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateMinLength(form) {
                 var isValid = true;
                 var focusField = null;
@@ -141,10 +141,10 @@
                 oMinLength = new minlength();
                 for (x in oMinLength) {
                     var field = form[oMinLength[x][0]];
-                    
+
                     if (field.type == 'text' ||
                         field.type == 'textarea') {
-                        
+
                         var iMin = parseInt(oMinLength[x][2]("minlength"));
                         if ((trim(field.value).length > 0) && (field.value.length < iMin)) {
                             if (i == 0) {
@@ -161,23 +161,23 @@
                 }
                 return isValid;
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
 
-      <validator name="maxlength"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="maxlength"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateMaxLength"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends=""
-                  msg="errors.maxlength">
+               depends=""
+               msg="errors.maxlength">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateMaxLength(form) {
                 var isValid = true;
                 var focusField = null;
@@ -186,10 +186,10 @@
                 oMaxLength = new maxlength();
                 for (x in oMaxLength) {
                     var field = form[oMaxLength[x][0]];
-                    
+
                     if (field.type == 'text' ||
                         field.type == 'textarea') {
-                        
+
                         var iMax = parseInt(oMaxLength[x][2]("maxlength"));
                         if (field.value.length > iMax) {
                             if (i == 0) {
@@ -206,23 +206,23 @@
                 }
                 return isValid;
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
 
-      <validator name="mask"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="mask"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateMask"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends=""
-                  msg="errors.invalid">
+               depends=""
+               msg="errors.invalid">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateMask(form) {
                 var isValid = true;
                 var focusField = null;
@@ -231,11 +231,11 @@
                 oMasked = new mask();
                 for (x in oMasked) {
                     var field = form[oMasked[x][0]];
-                    
-                    if ((field.type == 'text' || 
-                         field.type == 'textarea') && 
+
+                    if ((field.type == 'text' ||
+                         field.type == 'textarea') &&
                          (field.value.length > 0)) {
-                        
+
                         if (!matchPattern(field.value, oMasked[x][2]("mask"))) {
                             if (i == 0) {
                                 focusField = field;
@@ -245,7 +245,7 @@
                         }
                     }
                 }
-                
+
                 if (fields.length > 0) {
                    focusField.focus();
                    alert(fields.join('\n'));
@@ -256,24 +256,24 @@
             function matchPattern(value, mask) {
                return mask.exec(value);
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
 
-      <validator name="byte"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="byte"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateByte"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends=""
-                  msg="errors.byte"
-       jsFunctionName="ByteValidations">
+               depends=""
+               msg="errors.byte"
+               jsFunctionName="ByteValidations">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateByte(form) {
                 var bValid = true;
                 var focusField = null;
@@ -282,7 +282,7 @@
                 oByte = new ByteValidations();
                 for (x in oByte) {
                 	var field = form[oByte[x][0]];
-                	
+
                     if (field.type == 'text' ||
                         field.type == 'textarea' ||
                         field.type == 'select-one' ||
@@ -298,7 +298,7 @@
 						} else {
 							value = field.value;
 						}
-                        
+
                         if (value.length > 0) {
                             if (!isAllDigits(value)) {
                                 bValid = false;
@@ -319,7 +319,7 @@
 	                            }
                             }
 						}
-						
+
                     }
                 }
                 if (fields.length > 0) {
@@ -328,24 +328,24 @@
                 }
                 return bValid;
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
 
-      <validator name="short"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="short"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateShort"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends=""
-                  msg="errors.short"
-       jsFunctionName="ShortValidations">
+               depends=""
+               msg="errors.short"
+               jsFunctionName="ShortValidations">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateShort(form) {
                 var bValid = true;
                 var focusField = null;
@@ -354,12 +354,12 @@
                 oShort = new ShortValidations();
                 for (x in oShort) {
                 	var field = form[oShort[x][0]];
-                	
+
                     if (field.type == 'text' ||
                         field.type == 'textarea' ||
                         field.type == 'select-one' ||
                         field.type == 'radio') {
-                        
+
                         var value = '';
 						// get field's value
 						if (field.type == "select-one") {
@@ -370,7 +370,7 @@
 						} else {
 							value = field.value;
 						}
-                        
+
                         if (value.length > 0) {
                             if (!isAllDigits(value)) {
                                 bValid = false;
@@ -380,7 +380,7 @@
                                 fields[i++] = oShort[x][1];
 
                             } else {
-                        
+
 	                            var iValue = parseInt(value);
 	                            if (isNaN(iValue) || !(iValue >= -32768 && iValue <= 32767)) {
 	                                if (i == 0) {
@@ -399,24 +399,24 @@
                 }
                 return bValid;
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
 
-      <validator name="integer"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="integer"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateInteger"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends=""
-                  msg="errors.integer"
-       jsFunctionName="IntegerValidations">
+               depends=""
+               msg="errors.integer"
+               jsFunctionName="IntegerValidations">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateInteger(form) {
                 var bValid = true;
                 var focusField = null;
@@ -430,7 +430,7 @@
                         field.type == 'textarea' ||
                         field.type == 'select-one' ||
                         field.type == 'radio') {
-                        
+
                         var value = '';
 						// get field's value
 						if (field.type == "select-one") {
@@ -441,16 +441,16 @@
 						} else {
 							value = field.value;
 						}
-                        
+
                         if (value.length > 0) {
-                        
+
                             if (!isAllDigits(value)) {
                                 bValid = false;
                                 if (i == 0) {
 	                                focusField = field;
 	                            }
 						        fields[i++] = oInteger[x][1];
-						        
+
                             } else {
 	                            var iValue = parseInt(value);
 	                            if (isNaN(iValue) || !(iValue >= -2147483648 && iValue <= 2147483647)) {
@@ -484,42 +484,42 @@
                 } else if (argvalue.charAt(0) == "-") {
                     startFrom = 1;
                 }
-                
+
                 for (var n = startFrom; n < argvalue.length; n++) {
                     if (validChars.indexOf(argvalue.substring(n, n+1)) == -1) return false;
                 }
                 return true;
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
 
-      <validator name="long"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="long"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateLong"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends=""
-                  msg="errors.long"/>
+               depends=""
+               msg="errors.long" />
 
 
-      <validator name="float"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="float"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateFloat"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends=""
-                  msg="errors.float"
-       jsFunctionName="FloatValidations">
+               depends=""
+               msg="errors.float"
+               jsFunctionName="FloatValidations">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateFloat(form) {
                 var bValid = true;
                 var focusField = null;
@@ -528,12 +528,12 @@
                 oFloat = new FloatValidations();
                 for (x in oFloat) {
                 	var field = form[oFloat[x][0]];
-                	
+
                     if (field.type == 'text' ||
                         field.type == 'textarea' ||
                         field.type == 'select-one' ||
                         field.type == 'radio') {
-                        
+
                     	var value = '';
 						// get field's value
 						if (field.type == "select-one") {
@@ -544,7 +544,7 @@
 						} else {
 							value = field.value;
 						}
-                        
+
                         if (value.length > 0) {
                             // remove '.' before checking digits
                             var tempArray = value.split('.');
@@ -576,36 +576,36 @@
                 }
                 return bValid;
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
 
-      <validator name="double"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="double"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateDouble"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends=""
-                  msg="errors.double"/>
+               depends=""
+               msg="errors.double" />
 
 
-      <validator name="date"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="date"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateDate"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends=""
-                  msg="errors.date"
-       jsFunctionName="DateValidations">
+               depends=""
+               msg="errors.date"
+               jsFunctionName="DateValidations">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateDate(form) {
                var bValid = true;
                var focusField = null;
@@ -751,42 +751,42 @@
                 }
                 return true;
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
-<!-- range is deprecated use intRange instead -->
-      <validator name="range"
-            classname="org.apache.struts.validator.FieldChecks"
+    <!-- range is deprecated use intRange instead -->
+    <validator name="range"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateIntRange"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends="integer"
-                  msg="errors.range">
+               depends="integer"
+               msg="errors.range">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateRange(form) {
                 return validateIntRange(form);
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
-      <validator name="intRange"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="intRange"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateIntRange"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends="integer"
-                  msg="errors.range">
+               depends="integer"
+               msg="errors.range">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateIntRange(form) {
                 var isValid = true;
                 var focusField = null;
@@ -795,11 +795,11 @@
                 oRange = new intRange();
                 for (x in oRange) {
                     var field = form[oRange[x][0]];
-                    
+
                     if ((field.type == 'text' ||
                          field.type == 'textarea') &&
                         (field.value.length > 0)) {
-                        
+
                         var iMin = parseInt(oRange[x][2]("min"));
                         var iMax = parseInt(oRange[x][2]("max"));
                         var iValue = parseInt(field.value);
@@ -818,22 +818,22 @@
                 }
                 return isValid;
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
-      <validator name="floatRange"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="floatRange"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateFloatRange"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends="float"
-                  msg="errors.range">
+               depends="float"
+               msg="errors.range">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateFloatRange(form) {
                 var isValid = true;
                 var focusField = null;
@@ -842,11 +842,11 @@
                 oRange = new floatRange();
                 for (x in oRange) {
                     var field = form[oRange[x][0]];
-                    
+
                     if ((field.type == 'text' ||
                          field.type == 'textarea') &&
                         (field.value.length > 0)) {
-                        
+
                         var fMin = parseFloat(oRange[x][2]("min"));
                         var fMax = parseFloat(oRange[x][2]("max"));
                         var fValue = parseFloat(field.value);
@@ -865,22 +865,22 @@
                 }
                 return isValid;
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
-      <validator name="creditCard"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="creditCard"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateCreditCard"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends=""
-                  msg="errors.creditcard">
+               depends=""
+               msg="errors.creditcard">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateCreditCard(form) {
                 var bValid = true;
                 var focusField = null;
@@ -942,23 +942,23 @@
                 }
                 return true;
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
 
-      <validator name="email"
-            classname="org.apache.struts.validator.FieldChecks"
+    <validator name="email"
+               classname="org.apache.struts.validator.FieldChecks"
                method="validateEmail"
-         methodParams="java.lang.Object,
+               methodParams="java.lang.Object,
                        org.apache.commons.validator.ValidatorAction,
                        org.apache.commons.validator.Field,
                        org.apache.struts.action.ActionErrors,
                        javax.servlet.http.HttpServletRequest"
-              depends=""
-                  msg="errors.email">
+               depends=""
+               msg="errors.email">
 
-         <javascript><![CDATA[
+      <javascript><![CDATA[
             function validateEmail(form) {
                 var bValid = true;
                 var focusField = null;
@@ -1036,9 +1036,9 @@
                }
                return true;
             }]]>
-         </javascript>
+      </javascript>
 
-      </validator>
+    </validator>
 
     <validator name="identical"
                classname="org.realtors.rets.server.webapp.cct.CCTValidators"
@@ -1049,8 +1049,8 @@
                org.apache.struts.action.ActionErrors,
                javax.servlet.http.HttpServletRequest"
                depends="required"
-               msg="errors.identical"/>
+               msg="errors.identical" />
 
-   </global>
+  </global>
 
 </form-validation>

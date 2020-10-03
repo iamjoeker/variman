@@ -17,19 +17,19 @@ import org.realtors.rets.common.metadata.Metadata;
  */
 public interface MetadataDao {
 
-    /**
-     * @return The RETS metadata.
-     */
-    public Metadata getMetadata();
+  /**
+   * @return The RETS metadata.
+   */
+  public Metadata getMetadata();
 
-    /**
-     * @param metadata The RETS metadata to save.
-     */
-    public void saveMetadata(Metadata metadata);
+  /**
+   * @param metadata The RETS metadata to save.
+   */
+  public void saveMetadata(Metadata metadata);
 
-    /**
-     * @return The datetime the metadata was last changed.
-     */
-    public Date getChangedDate();
+  /**
+   * @return The datetime the metadata was last changed.
+   */
+  public Date getChangedDate();
 
 }

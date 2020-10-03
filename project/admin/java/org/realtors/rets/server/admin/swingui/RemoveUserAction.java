@@ -16,48 +16,40 @@ import org.realtors.rets.server.UserUtils;
  * Time: 10:43:20 AM
  * To change this template use File | Settings | File Templates.
  */
-public class RemoveUserAction extends AbstractAction
-{
-    public RemoveUserAction(UsersPanel usersPanel)
-    {
-        super("Remove User...");
-        mUsersPanel = usersPanel;
-    }
-    
-    public void actionPerformed(ActionEvent event)
-    {
-        try
-        {
-            User user = mUsersPanel.getSelectedUser();
-            if (user == null)
-            {
-                LOG.warn("Remove user on null user");
-                return;
-            }
+public class RemoveUserAction extends AbstractAction {
+  private static final Logger LOG =
+    Logger.getLogger(RemoveUserAction.class);
+  private UsersPanel mUsersPanel;
 
-            AdminFrame frame = SwingUtils.getAdminFrame();
-            int response = JOptionPane.showConfirmDialog(
-                frame,
-                "Are you sure you want to delete " + user.getName() + "?",
-                "Confirm Delete", JOptionPane.YES_NO_OPTION);
-            if (response != JOptionPane.YES_OPTION)
-            {
-                return;
-            }
+  public RemoveUserAction(UsersPanel usersPanel) {
+    super("Remove User...");
+    mUsersPanel = usersPanel;
+  }
 
-            UserUtils.delete(user);
-            LOG.debug("User deleted: " + user);
-            frame.setStatusText("User " + user.getName() + " removed.");
-            frame.refreshUsers();
-        }
-        catch (Exception e)
-        {
-            LOG.error("Caught", e);
-        }
+  public void actionPerformed(ActionEvent event) {
+    try {
+      User user = mUsersPanel.getSelectedUser();
+      if (user == null) {
+        LOG.warn("Remove user on null user");
+        return;
+      }
 
+      AdminFrame frame = SwingUtils.getAdminFrame();
+      int response = JOptionPane.showConfirmDialog(
+        frame,
+        "Are you sure you want to delete " + user.getName() + "?",
+        "Confirm Delete", JOptionPane.YES_NO_OPTION);
+      if (response != JOptionPane.YES_OPTION) {
+        return;
+      }
+
+      UserUtils.delete(user);
+      LOG.debug("User deleted: " + user);
+      frame.setStatusText("User " + user.getName() + " removed.");
+      frame.refreshUsers();
+    } catch (Exception e) {
+      LOG.error("Caught", e);
     }
 
-    private static final Logger LOG =
-        Logger.getLogger(RemoveUserAction.class);
-    private UsersPanel mUsersPanel;
+  }
 }

@@ -16,18 +16,13 @@ import org.realtors.rets.server.RetsServerException;
 import org.realtors.rets.server.User;
 import org.realtors.rets.server.UserUtils;
 
-public class HibernateUserMap implements UserMap
-{
-    public User findUser(String username)
-        throws RetsServerException
-    {
-        try
-        {
-            return UserUtils.findByUsername(username);
-        }
-        catch (HibernateException e)
-        {
-            throw new RetsServerException(e);
-        }
+public class HibernateUserMap implements UserMap {
+  public User findUser(String username)
+    throws RetsServerException {
+    try {
+      return UserUtils.findByUsername(username);
+    } catch (HibernateException e) {
+      throw new RetsServerException(e);
     }
+  }
 }

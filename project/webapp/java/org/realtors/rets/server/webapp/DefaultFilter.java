@@ -16,22 +16,18 @@ import javax.servlet.ServletResponse;
  * of "/" means the default servlet, for servlet mappings.
  *
  * @web.filter name="default-filter"
- *   description="Default filter"
+ * description="Default filter"
  */
-public class DefaultFilter implements Filter
-{
-    public void init(FilterConfig filterConfig) throws ServletException
-    {
-    }
+public class DefaultFilter implements Filter {
+  public void init(FilterConfig filterConfig) throws ServletException {
+  }
 
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
-        throws IOException, ServletException
-    {
-        servletRequest.getRequestDispatcher("/index.html")
-            .forward(servletRequest, servletResponse);
-   }
+  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+    throws IOException, ServletException {
+    servletRequest.getRequestDispatcher("/index.html")
+      .forward(servletRequest, servletResponse);
+  }
 
-    public void destroy()
-    {
-    }
+  public void destroy() {
+  }
 }

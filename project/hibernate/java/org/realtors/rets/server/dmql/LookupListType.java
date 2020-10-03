@@ -10,83 +10,66 @@
  */
 package org.realtors.rets.server.dmql;
 
-public abstract class LookupListType
-{
-    public static final LookupListType AND = new And();
-    public static final LookupListType OR = new Or();
-    public static final LookupListType NOT = new Not();
+public abstract class LookupListType {
+  public static final LookupListType AND = new And();
+  public static final LookupListType OR = new Or();
+  public static final LookupListType NOT = new Not();
 
-    public String getLookupMultiPrefix()
-    {
-        return "";
+  public String getLookupMultiPrefix() {
+    return "";
+  }
+
+  public String getLookupPrefix() {
+    return "";
+  }
+
+  public String getLookupSuffix() {
+    return "";
+  }
+
+  public String getSqlOperator() {
+    return "";
+  }
+
+  private static class And extends LookupListType {
+    public String getSqlOperator() {
+      return " AND ";
     }
 
-    public String getLookupPrefix()
-    {
-        return "";
+    public String toString() {
+      return "and";
+    }
+  }
+
+  private static class Or extends LookupListType {
+    public String getSqlOperator() {
+      return " OR ";
     }
 
-    public String getLookupSuffix()
-    {
-        return "";
+    public String toString() {
+      return "or";
+    }
+  }
+
+  private static class Not extends LookupListType {
+    public String getLookupMultiPrefix() {
+      return "NOT ";
     }
 
-    public String getSqlOperator()
-    {
-        return "";
+    public String getLookupPrefix() {
+      return "NOT (";
     }
 
-    private static class And extends LookupListType
-    {
-        public String getSqlOperator()
-        {
-            return " AND ";
-        }
-
-        public String toString()
-        {
-            return "and";
-        }
+    public String getLookupSuffix() {
+      return ")";
     }
 
-    private static class Or extends LookupListType
-    {
-        public String getSqlOperator()
-        {
-            return " OR ";
-        }
-
-        public String toString()
-        {
-            return "or";
-        }
+    public String getSqlOperator() {
+      return " OR ";
     }
 
-    private static class Not extends LookupListType
-    {
-        public String getLookupMultiPrefix()
-        {
-            return "NOT ";
-        }
-
-        public String getLookupPrefix()
-        {
-            return "NOT (";
-        }
-
-        public String getLookupSuffix()
-        {
-            return ")";
-        }
-
-        public String getSqlOperator()
-        {
-            return " OR ";
-        }
-
-        public String toString()
-        {
-            return "not";
-        }
+    public String toString() {
+      return "not";
     }
+  }
 }

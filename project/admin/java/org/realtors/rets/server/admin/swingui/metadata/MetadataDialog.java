@@ -3,27 +3,22 @@ package org.realtors.rets.server.admin.swingui.metadata;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
-public class MetadataDialog extends JDialog
-{
-    public MetadataDialog(JFrame frame)
-    {
-        super(frame);
-    }
-    
-    public int getResponse()
-    {
-        return mResponse;
-    }
+public class MetadataDialog extends JDialog {
+  protected static final String sBoolean[] = {"False",
+    "True"
+  };
+  protected static final int TEXT_WIDTH = 20;
+  private int mResponse;
 
-    public void setResponse(int response)
-    {
-        mResponse = response;
-    }
+  public MetadataDialog(JFrame frame) {
+    super(frame);
+  }
 
-    protected static final String sBoolean [] = {   "False",
-                                                    "True"
-                                                  };
+  public int getResponse() {
+    return mResponse;
+  }
 
-    private int                 mResponse;
-    protected static final int  TEXT_WIDTH = 20;
+  public void setResponse(int response) {
+    mResponse = response;
+  }
 }

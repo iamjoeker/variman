@@ -15,54 +15,47 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 
 import org.realtors.rets.server.Util;
 
-public class EmptyClause implements SqlConverter
-{
-    public EmptyClause(String field)
-    {
-        this(field, null);
-    }
+public class EmptyClause implements SqlConverter {
+  private String mField;
+  private DmqlFieldType mDmqlFieldType;
 
-    public EmptyClause(String field, DmqlFieldType dmqlFieldType)
-    {
-        mField = field;
-        mDmqlFieldType = dmqlFieldType;
-    }
+  public EmptyClause(String field) {
+    this(field, null);
+  }
 
-    public void toSql(PrintWriter out)
-    {
-        if (mDmqlFieldType == DmqlFieldType.CHARACTER) {
-            out.print("(");
-            out.print(mField);
-            out.print(" is null or ");
-            out.print(mField);
-            out.print(" = '') ");
-        } else {
-            out.print(mField);
-            out.print(" is null ");
-        }
-    }
+  public EmptyClause(String field, DmqlFieldType dmqlFieldType) {
+    mField = field;
+    mDmqlFieldType = dmqlFieldType;
+  }
 
-    public String toString()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append(mField)
-            .append(mDmqlFieldType)
-            .toString();
+  public void toSql(PrintWriter out) {
+    if (mDmqlFieldType == DmqlFieldType.CHARACTER) {
+      out.print("(");
+      out.print(mField);
+      out.print(" is null or ");
+      out.print(mField);
+      out.print(" = '') ");
+    } else {
+      out.print(mField);
+      out.print(" is null ");
     }
+  }
 
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof EmptyClause))
-        {
-            return false;
-        }
-        EmptyClause rhs = (EmptyClause) obj;
-        return new EqualsBuilder()
-            .append(mField, rhs.mField)
-            .append(mDmqlFieldType, rhs.mDmqlFieldType)
-            .isEquals();
+  public String toString() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append(mField)
+      .append(mDmqlFieldType)
+      .toString();
+  }
+
+  public boolean equals(Object obj) {
+    if (!(obj instanceof EmptyClause)) {
+      return false;
     }
-
-    private String mField;
-    private DmqlFieldType mDmqlFieldType;
+    EmptyClause rhs = (EmptyClause) obj;
+    return new EqualsBuilder()
+      .append(mField, rhs.mField)
+      .append(mDmqlFieldType, rhs.mDmqlFieldType)
+      .isEquals();
+  }
 }

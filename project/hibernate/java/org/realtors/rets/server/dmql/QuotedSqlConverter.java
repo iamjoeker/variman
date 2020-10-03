@@ -17,38 +17,32 @@ import org.realtors.rets.server.Util;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class QuotedSqlConverter implements SqlConverter
-{
-    public QuotedSqlConverter(String value)
-    {
-        mValue = value;
-    }
+public class QuotedSqlConverter implements SqlConverter {
+  private String mValue;
 
-    public void toSql(PrintWriter out)
-    {
-        out.print("'");
-        out.print(mValue);
-        out.print("'");
-    }
+  public QuotedSqlConverter(String value) {
+    mValue = value;
+  }
 
-    public String toString()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append(mValue)
-            .toString();
-    }
+  public void toSql(PrintWriter out) {
+    out.print("'");
+    out.print(mValue);
+    out.print("'");
+  }
 
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof QuotedSqlConverter))
-        {
-            return false;
-        }
-        QuotedSqlConverter rhs = (QuotedSqlConverter) obj;
-        return new EqualsBuilder()
-            .append(mValue, rhs.mValue)
-            .isEquals();
-    }
+  public String toString() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append(mValue)
+      .toString();
+  }
 
-    private String mValue;
+  public boolean equals(Object obj) {
+    if (!(obj instanceof QuotedSqlConverter)) {
+      return false;
+    }
+    QuotedSqlConverter rhs = (QuotedSqlConverter) obj;
+    return new EqualsBuilder()
+      .append(mValue, rhs.mValue)
+      .isEquals();
+  }
 }

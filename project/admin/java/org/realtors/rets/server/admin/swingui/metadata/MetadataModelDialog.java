@@ -82,237 +82,213 @@ import org.realtors.rets.server.admin.swingui.SwingUtils;
 import org.realtors.rets.server.admin.swingui.TextValuePanel;
 import org.realtors.rets.server.config.RetsConfig;
 
-public class MetadataModelDialog extends MetadataDialog
-{
-    public MetadataModelDialog(MetaObject object)
-    {
-        super(SwingUtils.getAdminFrame());
-        
-        mMetaObject = object;
-        
-        mAttributeNames = MetaObject.getStandardAttributeNames();
-        
-        setModal(true);
-        setTitle(mMetaObject.getMetadataTypeName());
+public class MetadataModelDialog extends MetadataDialog {
+  private static int nCOLS = 3;
+  private static String[] sRequired = {
+    "",
+    "Required"
+  };
+  private String[] mAttributeNames;
+  private List<JComboBox> mAttributeTypes;
+  private List<JLabel> mAttributes;
+  private List<JComboBox> mRequiredBoxes;
+  private JPanel mPanel;
+  private MetaObject mMetaObject;
+  private int mRows;
+  public MetadataModelDialog(MetaObject object) {
+    super(SwingUtils.getAdminFrame());
 
-        mPanel = new JPanel(new SpringLayout());
-        mRows = 0;
-        int empty = 0;
-        mAttributes = new ArrayList<JLabel>(mMetaObject.getAttributeNames().length);
-        mAttributeTypes = new ArrayList<JComboBox>(mMetaObject.getAttributeNames().length);
-        mRequiredBoxes = new ArrayList<JComboBox>(mMetaObject.getAttributeNames().length);
-        
-        for (String attribute : mMetaObject.getAttributeNames())
-        {
-            AttrType<?> attrType        = mMetaObject.getAttributeType(attribute);
-               
-            JComboBox   component       = new JComboBox(mAttributeNames);;
-            JLabel      label           = new JLabel(attribute + ":", JLabel.TRAILING);
-            JComboBox   required        = new JComboBox(sRequired);
-               
-            mAttributes.add(label);
-            mAttributeTypes.add(component);
-            mRequiredBoxes.add(required);
-               
-            label.setLabelFor(component);
-            component.setSelectedItem(MetaObject.getNameFromAttribute(attrType));
-            if (mMetaObject.isAttributeRequired(attribute))
-                required.setSelectedIndex(1);
-                   
-            mPanel.add(label);
-            mPanel.add(component);
-            mPanel.add(required);
-            
-            mRows++;
+    mMetaObject = object;
+
+    mAttributeNames = MetaObject.getStandardAttributeNames();
+
+    setModal(true);
+    setTitle(mMetaObject.getMetadataTypeName());
+
+    mPanel = new JPanel(new SpringLayout());
+    mRows = 0;
+    int empty = 0;
+    mAttributes = new ArrayList<JLabel>(mMetaObject.getAttributeNames().length);
+    mAttributeTypes = new ArrayList<JComboBox>(mMetaObject.getAttributeNames().length);
+    mRequiredBoxes = new ArrayList<JComboBox>(mMetaObject.getAttributeNames().length);
+
+    for (String attribute : mMetaObject.getAttributeNames()) {
+      AttrType<?> attrType = mMetaObject.getAttributeType(attribute);
+
+      JComboBox component = new JComboBox(mAttributeNames);
+      ;
+      JLabel label = new JLabel(attribute + ":", JLabel.TRAILING);
+      JComboBox required = new JComboBox(sRequired);
+
+      mAttributes.add(label);
+      mAttributeTypes.add(component);
+      mRequiredBoxes.add(required);
+
+      label.setLabelFor(component);
+      component.setSelectedItem(MetaObject.getNameFromAttribute(attrType));
+      if (mMetaObject.isAttributeRequired(attribute))
+        required.setSelectedIndex(1);
+
+      mPanel.add(label);
+      mPanel.add(component);
+      mPanel.add(required);
+
+      mRows++;
+    }
+
+    SwingUtils.SpringLayoutGrid(mPanel, mRows, nCOLS, 6, 6, 6, 6);
+
+    JPanel content = new JPanel();
+    content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+
+    content.add(mPanel);
+
+    Box buttonBox = Box.createHorizontalBox();
+    buttonBox.add(Box.createHorizontalGlue());
+    JButton addButton = new JButton(new AddEditButtonAction());
+    addButton.setSelected(true);
+    buttonBox.add(addButton);
+    buttonBox.add(Box.createHorizontalStrut(5));
+    buttonBox.add(new JButton(new SaveButtonAction()));
+    buttonBox.add(Box.createHorizontalStrut(5));
+    buttonBox.add(new JButton(new CancelButtonAction()));
+    buttonBox.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+    content.add(buttonBox);
+
+    setDefaultCloseOperation(HIDE_ON_CLOSE);
+    getContentPane().add(content);
+    pack();
+    setResizable(false);
+    SwingUtils.centerOnFrame(this, AdminFrame.getInstance());
+    setResponse(JOptionPane.CANCEL_OPTION);
+  }
+
+  private class AddEditButtonAction extends AbstractAction {
+    public AddEditButtonAction() {
+      super("New");
+    }
+
+    public void actionPerformed(ActionEvent event) {
+      /*
+       * Add a component to the dialog for new data.
+       */
+      String answer = (String) JOptionPane.showInputDialog(
+        SwingUtils.getAdminFrame(),
+        "Attribute Name?",
+        "Add Attribute",
+        JOptionPane.QUESTION_MESSAGE,
+        null,
+        null,
+        "X-Attribute");
+
+      if (answer != null) {
+        /*
+         * See if the name is a valid name.
+         */
+        char[] chars = answer.toCharArray();
+        if (!answer.startsWith("X-")) {
+          JOptionPane.showMessageDialog(
+            SwingUtils.getAdminFrame(),
+            "Metadata extensions must begin with \"X-\"!");
+          return;
         }
+        for (int i = 2; i < chars.length; i++) {
+          char c = chars[i];
+          if (!Character.isLetterOrDigit(c)) {
+            /*
+             * Allow for dash and underscore.
+             */
+            if ("-_".indexOf(c) == -1) {
+              JOptionPane.showMessageDialog(
+                SwingUtils.getAdminFrame(),
+                "\"" + answer +
+                  "\" can only contain alphanumeric characters,\n" +
+                  "a dash, or an underscore!");
+              return;
+            }
+          }
+        }
+
+        /*
+         * See if the attribute already exists.
+         */
+        if (mMetaObject.getAttributeType(answer) != null) {
+          JOptionPane.showMessageDialog(
+            SwingUtils.getAdminFrame(),
+            answer + " already exists!");
+          return;
+        }
+
+        for (int i = 0; i < mRows; i++) {
+          String candidate = mAttributes.get(i).getText();
+          /*
+           * The labels have a colon appended. Remove it.
+           */
+          candidate = candidate.substring(0, candidate.length() - 1);
+
+          if (candidate.equals(answer)) {
+            JOptionPane.showMessageDialog(
+              SwingUtils.getAdminFrame(),
+              candidate + " already exists!");
+            return;
+          }
+        }
+
+        JComboBox component = new JComboBox(mAttributeNames);
+        JLabel label = new JLabel(answer + ":", JLabel.TRAILING);
+        JComboBox required = new JComboBox(sRequired);
+
+        mAttributes.add(label);
+        mAttributeTypes.add(component);
+        mRequiredBoxes.add(required);
+
+        label.setLabelFor(component);
+        mPanel.add(label);
+        mPanel.add(component);
+        mPanel.add(required);
+        mRows++;
 
         SwingUtils.SpringLayoutGrid(mPanel, mRows, nCOLS, 6, 6, 6, 6);
-        
-        JPanel content = new JPanel();
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-
-        content.add(mPanel);
-
-        Box buttonBox = Box.createHorizontalBox();
-        buttonBox.add(Box.createHorizontalGlue());
-        JButton addButton = new JButton(new AddEditButtonAction());
-        addButton.setSelected(true);
-        buttonBox.add(addButton);
-        buttonBox.add(Box.createHorizontalStrut(5));
-        buttonBox.add(new JButton(new SaveButtonAction()));
-        buttonBox.add(Box.createHorizontalStrut(5));
-        buttonBox.add(new JButton(new CancelButtonAction()));
-        buttonBox.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        content.add(buttonBox);
-
-        setDefaultCloseOperation(HIDE_ON_CLOSE);
-        getContentPane().add(content);
         pack();
-        setResizable(false);
-        SwingUtils.centerOnFrame(this, AdminFrame.getInstance());
-        setResponse(JOptionPane.CANCEL_OPTION);
+        mPanel.repaint();
+      }
+    }
+  }
+
+  private class CancelButtonAction extends AbstractAction {
+    public CancelButtonAction() {
+      super("Cancel");
     }
 
-    private class AddEditButtonAction extends AbstractAction
-    {
-        public AddEditButtonAction()
-        {
-            super("New");
-        }
+    public void actionPerformed(ActionEvent event) {
+      setResponse(JOptionPane.CANCEL_OPTION);
+      setVisible(false);
+    }
+  }
 
-        public void actionPerformed(ActionEvent event)
-        {
-            /*
-             * Add a component to the dialog for new data.
-             */
-            String answer = (String) JOptionPane.showInputDialog(
-                    SwingUtils.getAdminFrame(),
-                    "Attribute Name?",
-                    "Add Attribute",
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    null,
-                    "X-Attribute");
-            
-            if (answer != null)
-            {
-                /*
-                 * See if the name is a valid name.
-                 */
-                char[] chars = answer.toCharArray();
-                if (!answer.startsWith("X-"))
-                {
-                      JOptionPane.showMessageDialog(
-                            SwingUtils.getAdminFrame(),
-                            "Metadata extensions must begin with \"X-\"!");    
-                    return;
-                }
-                for (int i = 2; i < chars.length; i++) 
-                {
-                    char c = chars[i];
-                    if (!Character.isLetterOrDigit(c)) 
-                    {
-                        /* 
-                         * Allow for dash and underscore.
-                         */
-                        if ("-_".indexOf(c) == -1) 
-                        {
-                              JOptionPane.showMessageDialog(
-                                    SwingUtils.getAdminFrame(),
-                                    "\"" + answer + 
-                                    "\" can only contain alphanumeric characters,\n" +
-                                    "a dash, or an underscore!");    
-                            return;
-                        }
-                    }
-                }
-
-                /*
-                 * See if the attribute already exists.
-                 */
-                if (mMetaObject.getAttributeType(answer) != null)
-                {
-                      JOptionPane.showMessageDialog(
-                            SwingUtils.getAdminFrame(),
-                            answer + " already exists!");    
-                    return;
-                }
-
-                for (int i = 0; i < mRows; i++)
-                {
-                    String candidate = mAttributes.get(i).getText();
-                    /*
-                     * The labels have a colon appended. Remove it.
-                     */
-                    candidate = candidate.substring(0, candidate.length() - 1);
-                    
-                    if (candidate.equals(answer))
-                    {
-                          JOptionPane.showMessageDialog(
-                                SwingUtils.getAdminFrame(),
-                                candidate + " already exists!");    
-                        return;
-                    }
-                }
-                
-                JComboBox    component   = new JComboBox(mAttributeNames);
-                JLabel       label       = new JLabel(answer + ":", JLabel.TRAILING);
-                JComboBox    required    = new JComboBox(sRequired);
-
-                mAttributes.add(label);
-                mAttributeTypes.add(component);
-                mRequiredBoxes.add(required);
-                   
-                label.setLabelFor(component);
-                mPanel.add(label);
-                mPanel.add(component);
-                mPanel.add(required);
-                mRows++;
-
-                SwingUtils.SpringLayoutGrid(mPanel, mRows, nCOLS, 6, 6, 6, 6);
-                pack();
-                mPanel.repaint();
-            }
-        }
+  private class SaveButtonAction extends AbstractAction {
+    public SaveButtonAction() {
+      super("Save");
     }
 
-    private class CancelButtonAction extends AbstractAction
-    {
-        public CancelButtonAction()
-        {
-            super("Cancel");
-        }
+    public void actionPerformed(ActionEvent event) {
+      for (int i = 0; i < mRows; i++) {
+        String key = (String) mAttributes.get(i).getText();
 
-        public void actionPerformed(ActionEvent event)
-        {
-            setResponse(JOptionPane.CANCEL_OPTION);
-            setVisible(false);
-        }
+        /*
+         * The labels have a colon appended. Remove it.
+         */
+        key = key.substring(0, key.length() - 1);
+
+        String value = (String) mAttributeTypes.get(i).getSelectedItem();
+        int index = mRequiredBoxes.get(i).getSelectedIndex();
+        AttrType<?> attrType = MetaObject.getAttributeFromName(value);
+        boolean required = (index == 1 ? true : false);
+
+        MetaObject.updateClassAttribute(mMetaObject, key, attrType, required);
+      }
+      setResponse(JOptionPane.OK_OPTION);
+      setVisible(false);
     }
-    
-    private class SaveButtonAction extends AbstractAction
-    {
-        public SaveButtonAction()
-        {
-            super("Save");
-        }
-
-        public void actionPerformed(ActionEvent event)
-        {
-            for (int i = 0; i < mRows; i++)
-            {
-                String key = (String)mAttributes.get(i).getText();
-        
-                /*
-                 * The labels have a colon appended. Remove it.
-                 */
-                key = key.substring(0, key.length() - 1);
-                               
-                String value = (String)mAttributeTypes.get(i).getSelectedItem();
-                int index = mRequiredBoxes.get(i).getSelectedIndex();
-                AttrType<?> attrType    = MetaObject.getAttributeFromName(value);
-                boolean required = (index == 1 ? true : false);
-                
-                MetaObject.updateClassAttribute(mMetaObject,  key, attrType, required);
-            }   
-            setResponse(JOptionPane.OK_OPTION);
-            setVisible(false);
-        }
-    }
-
-    private static int          nCOLS    = 3;
-    private static String []    sRequired = {
-                                                "",
-                                                "Required"
-                                            };
-
-    private String []           mAttributeNames;
-
-    private List<JComboBox>     mAttributeTypes;
-    private List<JLabel>        mAttributes;
-    private List<JComboBox>     mRequiredBoxes;
-
-    private JPanel              mPanel;
-    private MetaObject          mMetaObject;
-    private int                 mRows;
+  }
 }

@@ -15,46 +15,39 @@ import java.util.List;
 
 import org.realtors.rets.common.metadata.MetaObject;
 
-public class MetadataSegment
-{
-    public MetadataSegment(List<MetaObject> data, String[] levels, String version,
-                           Date date)
-    {
-        mData = data.toArray(new MetaObject[data.size()]);
-        mDataList = data;
-        mLevels = levels;
-        mVersion = version;
-        mDate = date;
-    }
+public class MetadataSegment {
+  private MetaObject[] mData;
+  private List<MetaObject> mDataList;
+  private String[] mLevels;
+  private String mVersion;
+  private Date mDate;
 
-    public MetaObject[] getData()
-    {
-        return mData;
-    }
+  public MetadataSegment(List<MetaObject> data, String[] levels, String version,
+                         Date date) {
+    mData = data.toArray(new MetaObject[data.size()]);
+    mDataList = data;
+    mLevels = levels;
+    mVersion = version;
+    mDate = date;
+  }
 
-    public List getDataList()
-    {
-        return mDataList;
-    }
+  public MetaObject[] getData() {
+    return mData;
+  }
 
-    public String[] getLevels()
-    {
-        return mLevels;
-    }
+  public List getDataList() {
+    return mDataList;
+  }
 
-    public String getVersion()
-    {
-        return mVersion;
-    }
+  public String[] getLevels() {
+    return mLevels;
+  }
 
-    public Date getDate()
-    {
-        return mDate;
-    }
+  public String getVersion() {
+    return mVersion;
+  }
 
-    private MetaObject[] mData;
-    private List<MetaObject> mDataList;
-    private String[] mLevels;
-    private String mVersion;
-    private Date mDate;
+  public Date getDate() {
+    return mDate;
+  }
 }

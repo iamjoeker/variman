@@ -13,34 +13,28 @@ import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 
-public class AccountingStatisticsUtils
-{
-    public static AccountingStatistics findByUser(User user)
-        throws RetsServerException, HibernateException
-    {
-        SessionHelper helper = RetsServer.createSessionHelper();
-        try
-        {
-            AccountingStatistics statistics = findByUser(user, helper);
-            return statistics;
-        }
-        finally
-        {
-            helper.close(LOG);
-        }
-    }
+public class AccountingStatisticsUtils {
+  private static final Logger LOG =
+    Logger.getLogger(AccountingStatisticsUtils.class);
 
-    public static AccountingStatistics findByUser(User user,
-                                                  SessionHelper helper)
-        throws HibernateException
-    {
-        Query query = helper.createQuery(
-            "  FROM AccountingStatistics stats" +
-            " WHERE stats.user.id = :user_id");
-        query.setLong("user_id", user.getId().longValue());
-        return (AccountingStatistics) query.uniqueResult();
+  public static AccountingStatistics findByUser(User user)
+    throws RetsServerException, HibernateException {
+    SessionHelper helper = RetsServer.createSessionHelper();
+    try {
+      AccountingStatistics statistics = findByUser(user, helper);
+      return statistics;
+    } finally {
+      helper.close(LOG);
     }
+  }
 
-    private static final Logger LOG =
-        Logger.getLogger(AccountingStatisticsUtils.class);
+  public static AccountingStatistics findByUser(User user,
+                                                SessionHelper helper)
+    throws HibernateException {
+    Query query = helper.createQuery(
+      "  FROM AccountingStatistics stats" +
+        " WHERE stats.user.id = :user_id");
+    query.setLong("user_id", user.getId().longValue());
+    return (AccountingStatistics) query.uniqueResult();
+  }
 }

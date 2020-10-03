@@ -12,29 +12,24 @@ package org.realtors.rets.server.dmql;
 
 import java.io.PrintWriter;
 
-public class NotClause implements SqlConverter
-{
-    public NotClause(SqlConverter negation)
-    {
-        mNegation = negation;
-    }
+public class NotClause implements SqlConverter {
+  private SqlConverter mNegation;
 
-    public SqlConverter getNegation()
-    {
-        return mNegation;
-    }
+  public NotClause(SqlConverter negation) {
+    mNegation = negation;
+  }
 
-    public void setNegation(SqlConverter negation)
-    {
-        mNegation = negation;
-    }
+  public SqlConverter getNegation() {
+    return mNegation;
+  }
 
-    public void toSql(PrintWriter out)
-    {
-        out.print("NOT (");
-        mNegation.toSql(out);
-        out.print(")");
-    }
+  public void setNegation(SqlConverter negation) {
+    mNegation = negation;
+  }
 
-    private SqlConverter mNegation;
+  public void toSql(PrintWriter out) {
+    out.print("NOT (");
+    mNegation.toSql(out);
+    out.print(")");
+  }
 }

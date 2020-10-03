@@ -20,184 +20,171 @@ import org.realtors.rets.server.Group;
 import org.realtors.rets.server.config.FilterRule;
 import org.realtors.rets.server.config.GroupRules;
 
-public class UpdateTypeFormatterTest extends FormatterTestCase
-{
-    public UpdateTypeFormatterTest()
-    {
-        Set<MTable> allTables = new LinkedHashSet<MTable>();
+public class UpdateTypeFormatterTest extends FormatterTestCase {
+  private MUpdateType mStatusType;
+  private MUpdateType mListPriceType;
+  private TableGroupFilter mGroupFilter;
+  private Group mNewspapers;
+  private Set<Group> mGroups;
 
-        MTable table = new MTable();
-        table.setUniqueId(Long.valueOf(1));
-        table.setSystemName("STATUS");
-        allTables.add(table);
+  public UpdateTypeFormatterTest() {
+    Set<MTable> allTables = new LinkedHashSet<MTable>();
 
-        mStatusType = new MUpdateType();
-        mStatusType.setUniqueId(Long.valueOf(1));
-        mStatusType.setMetadataEntryID("Status");
-        mStatusType.setMTable(table);
-        mStatusType.setSequence(12);
+    MTable table = new MTable();
+    table.setUniqueId(Long.valueOf(1));
+    table.setSystemName("STATUS");
+    allTables.add(table);
 
-        List<String> attributes = new ArrayList<String>();
-        attributes.add(UpdateTypeAttributeEnum.REQUIRED.toString());
-        attributes.add(UpdateTypeAttributeEnum.INTERACTIVEVALIDATE.toString());
-        String attributesStr = StringUtils.join(attributes, ",");
-        mStatusType.setAttributes(attributesStr);
+    mStatusType = new MUpdateType();
+    mStatusType.setUniqueId(Long.valueOf(1));
+    mStatusType.setMetadataEntryID("Status");
+    mStatusType.setMTable(table);
+    mStatusType.setSequence(12);
 
-        mStatusType.setDefault("0");
+    List<String> attributes = new ArrayList<String>();
+    attributes.add(UpdateTypeAttributeEnum.REQUIRED.toString());
+    attributes.add(UpdateTypeAttributeEnum.INTERACTIVEVALIDATE.toString());
+    String attributesStr = StringUtils.join(attributes, ",");
+    mStatusType.setAttributes(attributesStr);
 
-        Set<MValidationExpression> validationExpressions = new LinkedHashSet<MValidationExpression>();
-        MValidationExpression ve = new MValidationExpression();
-        ve.setUniqueId(Long.valueOf(1));
-        ve.setValidationExpressionID("VE1");
-        validationExpressions.add(ve);
-        ve = new MValidationExpression();
-        ve.setUniqueId(Long.valueOf(2));
-        ve.setValidationExpressionID("VE2");
-        validationExpressions.add(ve);
-        mStatusType.setMValidationExpressions(validationExpressions);
+    mStatusType.setDefault("0");
 
-        MUpdateHelp updateHelp = new MUpdateHelp();
-        updateHelp.setUniqueId(Long.valueOf(1));
-        updateHelp.setUpdateHelpID("UH1");
-        mStatusType.setMUpdateHelp(updateHelp);
+    Set<MValidationExpression> validationExpressions = new LinkedHashSet<MValidationExpression>();
+    MValidationExpression ve = new MValidationExpression();
+    ve.setUniqueId(Long.valueOf(1));
+    ve.setValidationExpressionID("VE1");
+    validationExpressions.add(ve);
+    ve = new MValidationExpression();
+    ve.setUniqueId(Long.valueOf(2));
+    ve.setValidationExpressionID("VE2");
+    validationExpressions.add(ve);
+    mStatusType.setMValidationExpressions(validationExpressions);
 
-        MValidationLookup validationLookup = new MValidationLookup();
-        validationLookup.setUniqueId(Long.valueOf(1));
-        validationLookup.setValidationLookupName("VL_NAME");
-        mStatusType.setMValidationLookup(validationLookup);
+    MUpdateHelp updateHelp = new MUpdateHelp();
+    updateHelp.setUniqueId(Long.valueOf(1));
+    updateHelp.setUpdateHelpID("UH1");
+    mStatusType.setMUpdateHelp(updateHelp);
 
-        MValidationExternal validationExternal = new MValidationExternal();
-        validationExternal.setUniqueId(Long.valueOf(1));
-        validationExternal.setValidationExternalName("VE_NAME");
-        mStatusType.setMValidationExternal(validationExternal);
-        mStatusType.setMaxUpdate(1);
+    MValidationLookup validationLookup = new MValidationLookup();
+    validationLookup.setUniqueId(Long.valueOf(1));
+    validationLookup.setValidationLookupName("VL_NAME");
+    mStatusType.setMValidationLookup(validationLookup);
 
-        table = new MTable();
-        table.setUniqueId(Long.valueOf(2));
-        table.setSystemName("LIST_PRICE");
-        allTables.add(table);
-        
-        mListPriceType = new MUpdateType();
-        mListPriceType.setUniqueId(Long.valueOf(2));
-        mListPriceType.setMTable(table);
-        mListPriceType.setSequence(13);
-        mListPriceType.setAttributes(attributesStr);
-        mListPriceType.setDefault("0");
-        mListPriceType.setMValidationExpressions(validationExpressions);
-        mListPriceType.setMUpdateHelp(updateHelp);
-        mListPriceType.setMValidationLookup(validationLookup);
-        mListPriceType.setMValidationExternal(validationExternal);
-        mListPriceType.setMaxUpdate(0);
-        
-        mGroupFilter = new TableGroupFilter();
-        mGroupFilter.setTables("Property", "RES", allTables);
+    MValidationExternal validationExternal = new MValidationExternal();
+    validationExternal.setUniqueId(Long.valueOf(1));
+    validationExternal.setValidationExternalName("VE_NAME");
+    mStatusType.setMValidationExternal(validationExternal);
+    mStatusType.setMaxUpdate(1);
 
-        mNewspapers = new Group("Newspapers");
-        mGroups = new LinkedHashSet<Group>();
-        mGroups.add(mNewspapers);
+    table = new MTable();
+    table.setUniqueId(Long.valueOf(2));
+    table.setSystemName("LIST_PRICE");
+    allTables.add(table);
 
-        FilterRule filterRule = new FilterRule(FilterRule.EXCLUDE);
-        filterRule.setResource("Property");
-        filterRule.setRetsClass("RES");
-        filterRule.addSystemName("LIST_PRICE");
-        GroupRules rules = new GroupRules(mNewspapers.getName());
-        rules.addFilterRule(filterRule);
-        mGroupFilter.addRules(rules);
-    }
+    mListPriceType = new MUpdateType();
+    mListPriceType.setUniqueId(Long.valueOf(2));
+    mListPriceType.setMTable(table);
+    mListPriceType.setSequence(13);
+    mListPriceType.setAttributes(attributesStr);
+    mListPriceType.setDefault("0");
+    mListPriceType.setMValidationExpressions(validationExpressions);
+    mListPriceType.setMUpdateHelp(updateHelp);
+    mListPriceType.setMValidationLookup(validationLookup);
+    mListPriceType.setMValidationExternal(validationExternal);
+    mListPriceType.setMaxUpdate(0);
 
-    protected List<MUpdateType> getData()
-    {
-        List<MUpdateType> updateTypes = new ArrayList<MUpdateType>();
-        updateTypes.add(mStatusType);
-        updateTypes.add(mListPriceType);
-        return updateTypes;
-    }
+    mGroupFilter = new TableGroupFilter();
+    mGroupFilter.setTables("Property", "RES", allTables);
 
-    protected TableGroupFilter getGroupFilter()
-    {
-        return mGroupFilter;
-    }
+    mNewspapers = new Group("Newspapers");
+    mGroups = new LinkedHashSet<Group>();
+    mGroups.add(mNewspapers);
 
-    protected Set<Group> getGroups()
-    {
-        return mGroups;
-    }
+    FilterRule filterRule = new FilterRule(FilterRule.EXCLUDE);
+    filterRule.setResource("Property");
+    filterRule.setRetsClass("RES");
+    filterRule.addSystemName("LIST_PRICE");
+    GroupRules rules = new GroupRules(mNewspapers.getName());
+    rules.addFilterRule(filterRule);
+    mGroupFilter.addRules(rules);
+  }
 
-    protected String[] getLevels()
-    {
-        return new String[] {"Property", "RES", "Change"};
-    }
+  protected List<MUpdateType> getData() {
+    List<MUpdateType> updateTypes = new ArrayList<MUpdateType>();
+    updateTypes.add(mStatusType);
+    updateTypes.add(mListPriceType);
+    return updateTypes;
+  }
 
-    protected MetadataFormatter getCompactFormatter()
-    {
-        return new CompactUpdateTypeFormatter();
-    }
+  protected TableGroupFilter getGroupFilter() {
+    return mGroupFilter;
+  }
 
-    protected MetadataFormatter getStandardFormatter()
-    {
-        return new StandardUpdateTypeFormatter();
-    }
+  protected Set<Group> getGroups() {
+    return mGroups;
+  }
 
-    protected String getExpectedCompact()
-    {
-        return
-            "<METADATA-UPDATE_TYPE Resource=\"Property\" Class=\"RES\" " +
-            "Update=\"Change\" Version=\"" + VERSION + "\" Date=\"" + DATE +
-            "\">\n" +
+  protected String[] getLevels() {
+    return new String[]{"Property", "RES", "Change"};
+  }
 
-            "<COLUMNS>\tMetadataEntryID\tSystemName\tSequence\tAttributes\tDefault\t" +
-            "ValidationExpressionID\tUpdateHelpID\tValidationLookupName\t" +
-            "ValidationExternalName\tMaxUpdate\t</COLUMNS>\n" +
+  protected MetadataFormatter getCompactFormatter() {
+    return new CompactUpdateTypeFormatter();
+  }
 
-            "<DATA>\tStatus\tSTATUS\t12\t2,4\t0\tVE1,VE2\tUH1\tVL_NAME\tVE_NAME\t1\t" +
-            "</DATA>\n" +
+  protected MetadataFormatter getStandardFormatter() {
+    return new StandardUpdateTypeFormatter();
+  }
 
-            "</METADATA-UPDATE_TYPE>\n";
-    }
+  protected String getExpectedCompact() {
+    return
+      "<METADATA-UPDATE_TYPE Resource=\"Property\" Class=\"RES\" " +
+        "Update=\"Change\" Version=\"" + VERSION + "\" Date=\"" + DATE +
+        "\">\n" +
 
-    protected String getExpectedCompactRecursive()
-    {
-        return getExpectedCompact();
-    }
+        "<COLUMNS>\tMetadataEntryID\tSystemName\tSequence\tAttributes\tDefault\t" +
+        "ValidationExpressionID\tUpdateHelpID\tValidationLookupName\t" +
+        "ValidationExternalName\tMaxUpdate\t</COLUMNS>\n" +
 
-    protected String getExpectedStandard()
-    {
-        return
-            "<METADATA-UPDATE_TYPE Resource=\"Property\" Class=\"RES\" " +
-            "Update=\"Change\" Version=\"" + VERSION + "\" Date=\"" + DATE +
-            "\">" + EOL +
-            "<UpdateField>" + EOL +
-            "<MetadataEntryID>Status</MetadataEntryID>" + EOL +
-            "<SystemName>STATUS</SystemName>" + EOL +
-            "<Sequence>12</Sequence>" + EOL +
-            "<Attributes>2,4</Attributes>" + EOL +
-            "<Default>0</Default>" + EOL +
-            "<ValidationExpressionID>VE1,VE2</ValidationExpressionID>" + EOL +
-            "<UpdateHelpID>UH1</UpdateHelpID>" + EOL +
-            "<ValidationLookupName>VL_NAME</ValidationLookupName>" + EOL +
-            "<ValidationExternalName>VE_NAME</ValidationExternalName>" + EOL +
-            "<MaxUpdate>1</MaxUpdate>" + EOL +
-            "</UpdateField>" + EOL +
-            "</METADATA-UPDATE_TYPE>" + EOL;
-    }
+        "<DATA>\tStatus\tSTATUS\t12\t2,4\t0\tVE1,VE2\tUH1\tVL_NAME\tVE_NAME\t1\t" +
+        "</DATA>\n" +
 
-    protected String getExpectedStandardRecursive()
-    {
-        return getExpectedStandard();
-    }
+        "</METADATA-UPDATE_TYPE>\n";
+  }
 
-    public void testCompactFormatIsEmptyIfAllTablesFiltered()
-    {
-        List<MUpdateType> data = new ArrayList<MUpdateType>();
-        data.add(mListPriceType);
-        String formatted = format(getCompactFormatter(), data,
-                                  getLevels(), FormatterContext.NOT_RECURSIVE);
-        assertLinesEqual("", formatted);
-    }
+  protected String getExpectedCompactRecursive() {
+    return getExpectedCompact();
+  }
 
-    private MUpdateType mStatusType;
-    private MUpdateType mListPriceType;
-    private TableGroupFilter mGroupFilter;
-    private Group mNewspapers;
-    private Set<Group> mGroups;
+  protected String getExpectedStandard() {
+    return
+      "<METADATA-UPDATE_TYPE Resource=\"Property\" Class=\"RES\" " +
+        "Update=\"Change\" Version=\"" + VERSION + "\" Date=\"" + DATE +
+        "\">" + EOL +
+        "<UpdateField>" + EOL +
+        "<MetadataEntryID>Status</MetadataEntryID>" + EOL +
+        "<SystemName>STATUS</SystemName>" + EOL +
+        "<Sequence>12</Sequence>" + EOL +
+        "<Attributes>2,4</Attributes>" + EOL +
+        "<Default>0</Default>" + EOL +
+        "<ValidationExpressionID>VE1,VE2</ValidationExpressionID>" + EOL +
+        "<UpdateHelpID>UH1</UpdateHelpID>" + EOL +
+        "<ValidationLookupName>VL_NAME</ValidationLookupName>" + EOL +
+        "<ValidationExternalName>VE_NAME</ValidationExternalName>" + EOL +
+        "<MaxUpdate>1</MaxUpdate>" + EOL +
+        "</UpdateField>" + EOL +
+        "</METADATA-UPDATE_TYPE>" + EOL;
+  }
+
+  protected String getExpectedStandardRecursive() {
+    return getExpectedStandard();
+  }
+
+  public void testCompactFormatIsEmptyIfAllTablesFiltered() {
+    List<MUpdateType> data = new ArrayList<MUpdateType>();
+    data.add(mListPriceType);
+    String formatted = format(getCompactFormatter(), data,
+      getLevels(), FormatterContext.NOT_RECURSIVE);
+    assertLinesEqual("", formatted);
+  }
 }

@@ -22,118 +22,100 @@ import org.realtors.rets.common.metadata.types.MTable;
 import org.realtors.rets.server.Group;
 import org.realtors.rets.server.protocol.TableGroupFilter;
 
-public class FormatterContext
-{
-    protected FormatterContext()
-    {
-        // Empty for subclasses
-    }
+public class FormatterContext {
+  public static final boolean RECURSIVE = true;
+  public static final boolean NOT_RECURSIVE = false;
+  private String mVersion;
+  private Date mDate;
+  private boolean mRecursive;
+  private PrintWriter mWriter;
+  private FormatterLookup mLookup;
+  private TableGroupFilter mGroupFilter;
+  private Set<Group> mGroups;
+  private RetsVersion mRetsVersion;
 
-    public FormatterContext(String version, Date date, boolean recursive,
-                            PrintWriter writer,
-                            FormatterLookup lookup,
-                            RetsVersion retsVersion)
-    {
-        mVersion = version;
-        mDate = date;
-        mRecursive = recursive;
-        mWriter = writer;
-        mLookup = lookup;
-        mRetsVersion = retsVersion;
-    }
+  protected FormatterContext() {
+    // Empty for subclasses
+  }
 
-    public String getVersion()
-    {
-        return mVersion;
-    }
+  public FormatterContext(String version, Date date, boolean recursive,
+                          PrintWriter writer,
+                          FormatterLookup lookup,
+                          RetsVersion retsVersion) {
+    mVersion = version;
+    mDate = date;
+    mRecursive = recursive;
+    mWriter = writer;
+    mLookup = lookup;
+    mRetsVersion = retsVersion;
+  }
 
-    protected void setVersion(String version)
-    {
-        mVersion = version;
-    }
+  public String getVersion() {
+    return mVersion;
+  }
 
-    public RetsVersion getRetsVersion()
-    {
-        return mRetsVersion;
-    }
+  protected void setVersion(String version) {
+    mVersion = version;
+  }
 
-    protected void setRetsVersion(RetsVersion retsVersion)
-    {
-        mRetsVersion = retsVersion;
-    }
+  public RetsVersion getRetsVersion() {
+    return mRetsVersion;
+  }
 
-    public Date getDate()
-    {
-        return mDate;
-    }
+  protected void setRetsVersion(RetsVersion retsVersion) {
+    mRetsVersion = retsVersion;
+  }
 
-    protected void setDate(Date date)
-    {
-        mDate = date;
-    }
+  public Date getDate() {
+    return mDate;
+  }
 
-    public boolean isRecursive()
-    {
-        return mRecursive;
-    }
+  protected void setDate(Date date) {
+    mDate = date;
+  }
 
-    protected void setRecursive(boolean recursive)
-    {
-        mRecursive = recursive;
-    }
+  public boolean isRecursive() {
+    return mRecursive;
+  }
 
-    public PrintWriter getWriter()
-    {
-        return mWriter;
-    }
+  protected void setRecursive(boolean recursive) {
+    mRecursive = recursive;
+  }
 
-    protected void setWriter(PrintWriter writer)
-    {
-        mWriter = writer;
-    }
+  public PrintWriter getWriter() {
+    return mWriter;
+  }
 
-    public void format(Collection<MetaObject> data, String[] levels)
-    {
-        MetadataFormatter formatter = mLookup.lookupFormatter(data);
-        formatter.format(this, data, levels);
-    }
+  protected void setWriter(PrintWriter writer) {
+    mWriter = writer;
+  }
 
-    protected void setLookup(FormatterLookup lookup)
-    {
-        mLookup = lookup;
-    }
+  public void format(Collection<MetaObject> data, String[] levels) {
+    MetadataFormatter formatter = mLookup.lookupFormatter(data);
+    formatter.format(this, data, levels);
+  }
 
-    /**
-     * Checks to see if a table is accessible for a resource and class.
-     *
-     * @param table table to check
-     * @param resource a RETS resource name
-     * @param retsClass a RETS class name
-     * @return <code>true</code> if table is valid
-     */
-    public boolean isAccessibleTable(MTable table, String resource,
-                                     String retsClass)
-    {
-        Set<MTable> tables = mGroupFilter.findTables(mGroups, resource, retsClass);
-        boolean isAccessibleTable = tables.contains(table);
-        return isAccessibleTable;
-    }
+  protected void setLookup(FormatterLookup lookup) {
+    mLookup = lookup;
+  }
 
-    protected void setTableFilter(TableGroupFilter groupFilter, Set<Group> groups)
-    {
-        mGroupFilter = groupFilter;
-        mGroups = groups;
-    }
+  /**
+   * Checks to see if a table is accessible for a resource and class.
+   *
+   * @param table     table to check
+   * @param resource  a RETS resource name
+   * @param retsClass a RETS class name
+   * @return <code>true</code> if table is valid
+   */
+  public boolean isAccessibleTable(MTable table, String resource,
+                                   String retsClass) {
+    Set<MTable> tables = mGroupFilter.findTables(mGroups, resource, retsClass);
+    boolean isAccessibleTable = tables.contains(table);
+    return isAccessibleTable;
+  }
 
-    public static final boolean RECURSIVE = true;
-    public static final boolean NOT_RECURSIVE = false;
-
-    private String mVersion;
-    private Date mDate;
-    private boolean mRecursive;
-    private PrintWriter mWriter;
-    private FormatterLookup mLookup;
-    private TableGroupFilter mGroupFilter;
-    private Set<Group> mGroups;
-    private RetsVersion mRetsVersion;
+  protected void setTableFilter(TableGroupFilter groupFilter, Set<Group> groups) {
+    mGroupFilter = groupFilter;
+    mGroups = groups;
+  }
 }

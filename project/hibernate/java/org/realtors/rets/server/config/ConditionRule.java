@@ -3,69 +3,61 @@ package org.realtors.rets.server.config;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ConditionRule
-{
-    public String getResource()
-    {
-        return mResource;
-    }
+public class ConditionRule {
+  private String mResource;
+  private String mRetsClass;
+  private String mSqlConstraint;
+  private Integer mId;
+  private Map mExtendableProperties;
 
-    public void setResource(String resource)
-    {
-        mResource = resource;
-    }
+  public String getResource() {
+    return mResource;
+  }
 
-    public String getRetsClass()
-    {
-        return mRetsClass;
-    }
+  public void setResource(String resource) {
+    mResource = resource;
+  }
 
-    public void setRetsClass(String retsClass)
-    {
-        mRetsClass = retsClass;
-    }
+  public String getRetsClass() {
+    return mRetsClass;
+  }
 
-    public String getSqlConstraint()
-    {
-        return mSqlConstraint;
-    }
+  public void setRetsClass(String retsClass) {
+    mRetsClass = retsClass;
+  }
 
-    public void setSqlConstraint(String sqlConstraint)
-    {
-        mSqlConstraint = sqlConstraint;
-    }
+  public String getSqlConstraint() {
+    return mSqlConstraint;
+  }
 
-    public Integer getId() {
-        return this.mId;
-    }
+  public void setSqlConstraint(String sqlConstraint) {
+    mSqlConstraint = sqlConstraint;
+  }
 
-    public void setId(Integer id) {
-        this.mId = id;
-    }
+  public Integer getId() {
+    return this.mId;
+  }
 
-    public Map getExtendableProperties()
-    {
-        if (mExtendableProperties == null) {
-            mExtendableProperties = new LinkedHashMap();
-        }
-       return mExtendableProperties;
-    }
+  public void setId(Integer id) {
+    this.mId = id;
+  }
 
-    public void setExtendableProperties(Map extendableProperties) {
-           this.mExtendableProperties = extendableProperties;
+  public Map getExtendableProperties() {
+    if (mExtendableProperties == null) {
+      mExtendableProperties = new LinkedHashMap();
     }
+    return mExtendableProperties;
+  }
 
-    public Object getExtendableProperty(String name) {
-        return getExtendableProperties().get(name);
-    }
+  public void setExtendableProperties(Map extendableProperties) {
+    this.mExtendableProperties = extendableProperties;
+  }
 
-    public void setExtendableProperty(String name, Object value) {
-        getExtendableProperties().put(name, value);
-    }
+  public Object getExtendableProperty(String name) {
+    return getExtendableProperties().get(name);
+  }
 
-    private String mResource;
-    private String mRetsClass;
-    private String mSqlConstraint;
-    private Integer mId;
-    private Map mExtendableProperties;
+  public void setExtendableProperty(String name, Object value) {
+    getExtendableProperties().put(name, value);
+  }
 }

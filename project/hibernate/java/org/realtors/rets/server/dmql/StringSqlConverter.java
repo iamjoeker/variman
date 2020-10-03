@@ -17,36 +17,30 @@ import org.realtors.rets.server.Util;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
-public class StringSqlConverter implements SqlConverter
-{
-    public StringSqlConverter(String string)
-    {
-        mString = string;
-    }
+public class StringSqlConverter implements SqlConverter {
+  private String mString;
 
-    public void toSql(PrintWriter out)
-    {
-        out.print(mString);
-    }
+  public StringSqlConverter(String string) {
+    mString = string;
+  }
 
-    public String toString()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append(mString)
-            .toString();
-    }
+  public void toSql(PrintWriter out) {
+    out.print(mString);
+  }
 
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof StringSqlConverter))
-        {
-            return false;
-        }
-        StringSqlConverter rhs = (StringSqlConverter) obj;
-        return new EqualsBuilder()
-            .append(mString, rhs.mString)
-            .isEquals();
-    }
+  public String toString() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append(mString)
+      .toString();
+  }
 
-    private String mString;
+  public boolean equals(Object obj) {
+    if (!(obj instanceof StringSqlConverter)) {
+      return false;
+    }
+    StringSqlConverter rhs = (StringSqlConverter) obj;
+    return new EqualsBuilder()
+      .append(mString, rhs.mString)
+      .isEquals();
+  }
 }

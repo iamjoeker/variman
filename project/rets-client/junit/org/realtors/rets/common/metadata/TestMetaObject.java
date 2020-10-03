@@ -3,57 +3,57 @@ package org.realtors.rets.common.metadata;
 import java.util.Map;
 
 class TestMetaObject extends MetaObject {
-	
-	public static final String SYSTEM_NAME = "SystemName";
-	public static final String STRING1 = "String1";
-	private static int sAddAttributeCount;
 
-	public TestMetaObject(boolean strictParsing) {
-		super(strictParsing);
-	}
+  public static final String SYSTEM_NAME = "SystemName";
+  public static final String STRING1 = "String1";
+  private static int sAddAttributeCount;
 
-	@Override
-	public MetadataType[] getChildTypes() {
-		return sNO_CHILDREN;
-	}
+  public TestMetaObject(boolean strictParsing) {
+    super(strictParsing);
+  }
 
-	@Override
-	protected String getIdAttr() {
-		return SYSTEM_NAME;
-	}
+  public static void resetAddAttributeCount() {
+    sAddAttributeCount = 0;
+  }
 
-	@Override
-	protected void addAttributesToMap(Map attributeMap) {
-		attributeMap.put(SYSTEM_NAME, sAlphanum10);
-		attributeMap.put(STRING1, sText);
-		sAddAttributeCount++;
-	}
+  public static int getAddAttributeCount() {
+    return sAddAttributeCount;
+  }
 
-	public String getSystemName() {
-		return getStringAttribute(SYSTEM_NAME);
-	}
+  @Override
+  public MetadataType[] getChildTypes() {
+    return sNO_CHILDREN;
+  }
 
-	public String getString1() {
-		return getStringAttribute(STRING1);
-	}
+  @Override
+  protected String getIdAttr() {
+    return SYSTEM_NAME;
+  }
 
-	public static void resetAddAttributeCount() {
-		sAddAttributeCount = 0;
-	}
+  @Override
+  protected void addAttributesToMap(Map attributeMap) {
+    attributeMap.put(SYSTEM_NAME, sAlphanum10);
+    attributeMap.put(STRING1, sText);
+    sAddAttributeCount++;
+  }
 
-	public static int getAddAttributeCount() {
-		return sAddAttributeCount;
-	}
+  public String getSystemName() {
+    return getStringAttribute(SYSTEM_NAME);
+  }
 
-	public boolean isAttributeRequired(String name) {
-		return false;
-	}
-	
-	public final String getMetadataTypeName() {
-		return "SYSTEM";
-	}
-	
-	public final MetadataType getMetadataType() {
-		return MetadataType.SYSTEM;
-	}
+  public String getString1() {
+    return getStringAttribute(STRING1);
+  }
+
+  public boolean isAttributeRequired(String name) {
+    return false;
+  }
+
+  public final String getMetadataTypeName() {
+    return "SYSTEM";
+  }
+
+  public final MetadataType getMetadataType() {
+    return MetadataType.SYSTEM;
+  }
 }
