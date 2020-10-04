@@ -11,25 +11,25 @@ import org.jdom.input.SAXBuilder;
  * javadoc string.
  */
 public class ChangePasswordResponse {
-	public ChangePasswordResponse(InputStream stream) throws RetsException {
-		SAXBuilder builder = new SAXBuilder();
-		Document document = null;
-		try {
-			document = builder.build(stream);
-		} catch (Exception e) {
-			throw new RetsException(e);
-		}
-		Element rets = document.getRootElement();
-		if (!rets.getName().equals("RETS")) {
-			throw new RetsException("Invalid Change Password Response");
-		}
+  public ChangePasswordResponse(InputStream stream) throws RetsException {
+    SAXBuilder builder = new SAXBuilder();
+    Document document = null;
+    try {
+      document = builder.build(stream);
+    } catch (Exception e) {
+      throw new RetsException(e);
+    }
+    Element rets = document.getRootElement();
+    if (!rets.getName().equals("RETS")) {
+      throw new RetsException("Invalid Change Password Response");
+    }
 
-		int replyCode = Integer.parseInt(rets.getAttributeValue("ReplyCode"));
-		if (replyCode != 0) {
-			InvalidReplyCodeException exception;
-			exception = new InvalidReplyCodeException(replyCode);
-			exception.setRemoteMessage(rets.getAttributeValue("ReplyText"));
-			throw exception;
-		}
-	}
+    int replyCode = Integer.parseInt(rets.getAttributeValue("ReplyCode"));
+    if (replyCode != 0) {
+      InvalidReplyCodeException exception;
+      exception = new InvalidReplyCodeException(replyCode);
+      exception.setRemoteMessage(rets.getAttributeValue("ReplyText"));
+      throw exception;
+    }
+  }
 }

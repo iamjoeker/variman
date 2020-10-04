@@ -21,256 +21,212 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 /**
  * @hibernate.class table="rets_user"
  */
-public class User implements Serializable, Comparable
-{
-    public User()
-    {
-        mPasswordMethod = PasswordMethod.getDefaultMethod();
-    }
+public class User implements Serializable, Comparable {
+  private Long mId;
+  private String mFirstName;
+  private String mLastName;
+  private String mUsername;
+  private String mPassword;
+  private PasswordMethod mPasswordMethod;
+  private String mAgentCode;
+  private String mBrokerCode;
+  private SortedSet mGroups;
 
-    /**
-     *
-     * @return a Long object
-     *
-     * @hibernate.id generator-class="native"
-     */
-    public Long getId()
-    {
-        return mId;
-    }
+  public User() {
+    mPasswordMethod = PasswordMethod.getDefaultMethod();
+  }
 
-    public void setId(Long id)
-    {
-        mId = id;
-    }
+  /**
+   * @return a Long object
+   * @hibernate.id generator-class="native"
+   */
+  public Long getId() {
+    return mId;
+  }
 
-    public String getName()
-    {
-        return mFirstName + " " + mLastName;
-    }
+  public void setId(Long id) {
+    mId = id;
+  }
 
-    /**
-     *
-     * @return a String
-     *
-     * @hibernate.property length="80"
-     *   not-null="true"
-     */
-    public String getFirstName()
-    {
-        return mFirstName;
-    }
+  public String getName() {
+    return mFirstName + " " + mLastName;
+  }
 
-    public void setFirstName(String firstName)
-    {
-        mFirstName = firstName;
-    }
+  /**
+   * @return a String
+   * @hibernate.property length="80"
+   * not-null="true"
+   */
+  public String getFirstName() {
+    return mFirstName;
+  }
 
-    /**
-     *
-     * @return a String
-     *
-     * @hibernate.property length="80"
-     *   not-null="true"
-     */
-    public String getLastName()
-    {
-        return mLastName;
-    }
+  public void setFirstName(String firstName) {
+    mFirstName = firstName;
+  }
 
-    public void setLastName(String lastName)
-    {
-        mLastName = lastName;
-    }
+  /**
+   * @return a String
+   * @hibernate.property length="80"
+   * not-null="true"
+   */
+  public String getLastName() {
+    return mLastName;
+  }
 
-    /**
-     *
-     * @return a String
-     *
-     * @hibernate.property unique="true"
-     *   not-null="true"
-     *   length="32"
-     */
-    public String getUsername()
-    {
-        return mUsername;
-    }
+  public void setLastName(String lastName) {
+    mLastName = lastName;
+  }
 
-    public void setUsername(String username)
-    {
-        mUsername = username;
-    }
+  /**
+   * @return a String
+   * @hibernate.property unique="true"
+   * not-null="true"
+   * length="32"
+   */
+  public String getUsername() {
+    return mUsername;
+  }
 
-    /**
-     *
-     * @return a PasswordMethod object
-     *
-     * @hibernate.property
-     *   type="org.realtors.rets.server.PasswordMethodType"
-     */
-    public PasswordMethod getPasswordMethod()
-    {
-        return mPasswordMethod;
-    }
+  public void setUsername(String username) {
+    mUsername = username;
+  }
 
-    public boolean isPasswordMethod(String method)
-    {
-        return mPasswordMethod.getMethod().equals(method);
-    }
+  /**
+   * @return a PasswordMethod object
+   * @hibernate.property type="org.realtors.rets.server.PasswordMethodType"
+   */
+  public PasswordMethod getPasswordMethod() {
+    return mPasswordMethod;
+  }
 
-    /**
-     * Sets the method used to hash the password for backend storage. The
-     * default method is plain text, i.e. no hashing.
-     *
-     * @param passwordMethod
-     */
-    public void setPasswordMethod(PasswordMethod passwordMethod)
-    {
-        mPasswordMethod = passwordMethod;
-    }
+  /**
+   * Sets the method used to hash the password for backend storage. The
+   * default method is plain text, i.e. no hashing.
+   *
+   * @param passwordMethod
+   */
+  public void setPasswordMethod(PasswordMethod passwordMethod) {
+    mPasswordMethod = passwordMethod;
+  }
 
-    /**
-     * @return The hashed password
-     *
-     * @hibernate.property length="80"
-     */
-    public String getPassword()
-    {
-        return mPassword;
-    }
+  public boolean isPasswordMethod(String method) {
+    return mPasswordMethod.getMethod().equals(method);
+  }
 
-    /**
-     * Sets the hashed password. This should only be called by hibernate when
-     * loaded from the database. To change the password use changePassword()
-     * as it correctly hashes the password using the current password method.
-     *
-     *  @param password Hashed password
-     */
-    public void setPassword(String password)
-    {
-        mPassword = password;
-    }
+  /**
+   * @return The hashed password
+   * @hibernate.property length="80"
+   */
+  public String getPassword() {
+    return mPassword;
+  }
 
-    /**
-     * Changes this user's password. The plain text password may be hashed so
-     * getPassword() may not be the same as passed in here.
-     *
-     * @param plainTextPassword New password, in plain text
-     */
-    public void changePassword(String plainTextPassword)
-    {
-        mPassword = mPasswordMethod.hash(mUsername, plainTextPassword);
-    }
+  /**
+   * Sets the hashed password. This should only be called by hibernate when
+   * loaded from the database. To change the password use changePassword()
+   * as it correctly hashes the password using the current password method.
+   *
+   * @param password Hashed password
+   */
+  public void setPassword(String password) {
+    mPassword = password;
+  }
 
-    public boolean verifyPassword(String passwordToVerify)
-    {
-        return mPasswordMethod.verifyPassword(mPassword, passwordToVerify);
-    }
+  /**
+   * Changes this user's password. The plain text password may be hashed so
+   * getPassword() may not be the same as passed in here.
+   *
+   * @param plainTextPassword New password, in plain text
+   */
+  public void changePassword(String plainTextPassword) {
+    mPassword = mPasswordMethod.hash(mUsername, plainTextPassword);
+  }
 
-    /**
-     * Returns the agent code.
-     *
-     * @return The agent code
-     *
-     * @hibernate.property length="80"
-     */
-    public String getAgentCode()
-    {
-        return mAgentCode;
-    }
+  public boolean verifyPassword(String passwordToVerify) {
+    return mPasswordMethod.verifyPassword(mPassword, passwordToVerify);
+  }
 
-    public void setAgentCode(String agentCode)
-    {
-        mAgentCode = agentCode;
-    }
+  /**
+   * Returns the agent code.
+   *
+   * @return The agent code
+   * @hibernate.property length="80"
+   */
+  public String getAgentCode() {
+    return mAgentCode;
+  }
 
-    /**
-     * Returns the broker code.
-     *
-     * @return The broker code
-     *
-     * @hibernate.property length="80"
-     */
-    public String getBrokerCode()
-    {
-        return mBrokerCode;
-    }
+  public void setAgentCode(String agentCode) {
+    mAgentCode = agentCode;
+  }
 
-    public void setBrokerCode(String brokerCode)
-    {
-        mBrokerCode = brokerCode;
-    }
+  /**
+   * Returns the broker code.
+   *
+   * @return The broker code
+   * @hibernate.property length="80"
+   */
+  public String getBrokerCode() {
+    return mBrokerCode;
+  }
 
-    /**
-     * @hibernate.set table="rets_user_groups" lazy="true"
-     *   sort="natural"
-     * @hibernate.key column="user_id"
-     * @hibernate.many-to-many column="group_id"
-     *   class="org.realtors.rets.server.Group"
-     */
-    protected SortedSet getGroups()
-    {
-        return mGroups;
-    }
+  public void setBrokerCode(String brokerCode) {
+    mBrokerCode = brokerCode;
+  }
 
-    protected void setGroups(SortedSet groups)
-    {
-        mGroups = groups;
-    }
+  /**
+   * @hibernate.set table="rets_user_groups" lazy="true"
+   * sort="natural"
+   * @hibernate.key column="user_id"
+   * @hibernate.many-to-many column="group_id"
+   * class="org.realtors.rets.server.Group"
+   */
+  protected SortedSet getGroups() {
+    return mGroups;
+  }
 
-    public String toString()
-    {
-        return getName();    
-    }
+  protected void setGroups(SortedSet groups) {
+    mGroups = groups;
+  }
 
-    public String dump()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append("id", mId)
-            .append("username", mUsername)
-            .append("password", mPassword)
-            .append("password method", mPasswordMethod)
-            .toString();
-    }
+  public String toString() {
+    return getName();
+  }
 
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof User))
-        {
-            return false;
-        }
-        User rhs = (User) obj;
-        return new EqualsBuilder()
-            .append(mLastName, rhs.mLastName)
-            .append(mFirstName, rhs.mFirstName)
-            .append(mUsername, rhs.mUsername)
-            .isEquals();
-    }
+  public String dump() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append("id", mId)
+      .append("username", mUsername)
+      .append("password", mPassword)
+      .append("password method", mPasswordMethod)
+      .toString();
+  }
 
-    public int hashCode()
-    {
-        return new HashCodeBuilder()
-            .append(mUsername)
-            .toHashCode();
+  public boolean equals(Object obj) {
+    if (!(obj instanceof User)) {
+      return false;
     }
+    User rhs = (User) obj;
+    return new EqualsBuilder()
+      .append(mLastName, rhs.mLastName)
+      .append(mFirstName, rhs.mFirstName)
+      .append(mUsername, rhs.mUsername)
+      .isEquals();
+  }
 
-    public int compareTo(Object obj)
-    {
-        User rhs = (User) obj;
-        return new CompareToBuilder()
-            .append(mLastName, rhs.mLastName)
-            .append(mFirstName, rhs.mFirstName)
-            .append(mUsername, rhs.mUsername)
-            .toComparison();
-    }
+  public int hashCode() {
+    return new HashCodeBuilder()
+      .append(mUsername)
+      .toHashCode();
+  }
 
-    private Long mId;
-    private String mFirstName;
-    private String mLastName;
-    private String mUsername;
-    private String mPassword;
-    private PasswordMethod mPasswordMethod;
-    private String mAgentCode;
-    private String mBrokerCode;
-    private SortedSet mGroups;
+  public int compareTo(Object obj) {
+    User rhs = (User) obj;
+    return new CompareToBuilder()
+      .append(mLastName, rhs.mLastName)
+      .append(mFirstName, rhs.mFirstName)
+      .append(mUsername, rhs.mUsername)
+      .toComparison();
+  }
 }

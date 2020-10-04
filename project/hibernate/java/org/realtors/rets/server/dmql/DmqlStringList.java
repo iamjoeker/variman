@@ -20,89 +20,75 @@ import org.realtors.rets.server.Util;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class DmqlStringList implements SqlConverter
-{
-    public DmqlStringList(String field)
-    {
-        mField = field;
-        mSqlColumn = mField;
-        mStrings = new ArrayList();
+public class DmqlStringList implements SqlConverter {
+  private String mField;
+  private String mSqlColumn;
+  private List mStrings;
+
+  public DmqlStringList(String field) {
+    mField = field;
+    mSqlColumn = mField;
+    mStrings = new ArrayList();
+  }
+
+  public DmqlStringList(String field, DmqlString string) {
+    this(field);
+    add(string);
+  }
+
+  public String getField() {
+    return mField;
+  }
+
+  public String getSqlColumn() {
+    return mSqlColumn;
+  }
+
+  public void setSqlColumn(String sqlColumn) {
+    mSqlColumn = sqlColumn;
+  }
+
+  public void add(DmqlString string) {
+    mStrings.add(string);
+  }
+
+  public Iterator getStrings() {
+    return mStrings.iterator();
+  }
+
+  public void toSql(PrintWriter out) {
+    String separator = "";
+    for (int i = 0; i < mStrings.size(); i++) {
+      DmqlString dmqlString = (DmqlString) mStrings.get(i);
+      out.print(separator);
+      out.print(mSqlColumn);
+      dmqlString.toSql(out);
+      separator = " OR ";
+    }
+  }
+
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
 
-    public DmqlStringList(String field, DmqlString string)
-    {
-        this(field);
-        add(string);
+    if (!(o instanceof DmqlStringList)) {
+      return false;
     }
 
-    public String getField()
-    {
-        return mField;
-    }
+    final DmqlStringList rhs = (DmqlStringList) o;
+    return new EqualsBuilder()
+      .append(mField, rhs.mField)
+      .append(mSqlColumn, rhs.mSqlColumn)
+      .append(mStrings, rhs.mStrings)
+      .isEquals();
+  }
 
-    public void setSqlColumn(String sqlColumn)
-    {
-        mSqlColumn = sqlColumn;
-    }
-
-    public String getSqlColumn()
-    {
-        return mSqlColumn;
-    }
-
-    public void add(DmqlString string)
-    {
-        mStrings.add(string);
-    }
-
-    public Iterator getStrings()
-    {
-        return mStrings.iterator();
-    }
-
-    public void toSql(PrintWriter out)
-    {
-        String separator = "";
-        for (int i = 0; i < mStrings.size(); i++)
-        {
-            DmqlString dmqlString = (DmqlString) mStrings.get(i);
-            out.print(separator);
-            out.print(mSqlColumn);
-            dmqlString.toSql(out);
-            separator = " OR ";
-        }
-    }
-
-    public boolean equals(Object o)
-    {
-        if (this == o)
-        {
-            return true;
-        }
-
-        if (!(o instanceof DmqlStringList))
-        {
-            return false;
-        }
-
-        final DmqlStringList rhs = (DmqlStringList) o;
-        return new EqualsBuilder()
-            .append(mField, rhs.mField)
-            .append(mSqlColumn, rhs.mSqlColumn)
-            .append(mStrings, rhs.mStrings)
-            .isEquals();
-    }
-
-    public String toString()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append(mField)
-            .append(mSqlColumn)
-            .append(mStrings)
-            .toString();
-    }
-
-    private String mField;
-    private String mSqlColumn;
-    private List mStrings;
+  public String toString() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append(mField)
+      .append(mSqlColumn)
+      .append(mStrings)
+      .toString();
+  }
 }

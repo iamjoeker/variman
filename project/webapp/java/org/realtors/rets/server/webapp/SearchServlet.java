@@ -23,29 +23,26 @@ import org.realtors.rets.server.protocol.SearchTransactionStatistics;
 
 /**
  * @web.servlet name="search-servlet"
- * @web.servlet-mapping  url-pattern="/rets/search"
+ * @web.servlet-mapping url-pattern="/rets/search"
  */
-public class SearchServlet extends RetsServlet
-{
-    public static final String SEARCH_TRANSACTION_STATISTICS_KEY = SearchTransactionStatistics.class.getName();
+public class SearchServlet extends RetsServlet {
+  public static final String SEARCH_TRANSACTION_STATISTICS_KEY = SearchTransactionStatistics.class.getName();
+  private static final Logger LOG =
+    Logger.getLogger(SearchServlet.class);
 
-    protected void doRets(RetsServletRequest request,
-                          RetsServletResponse response)
-        throws RetsServerException, IOException
-    {
-        PrintWriter out = response.getXmlWriter();
-        SearchParameters parameters =
-            new SearchParameters(request.getParameterMap(),
-                                 request.getRetsVersion(),
-                                 getUser(request.getSession()));
-        LOG.info(parameters);
-        SearchTransaction search = RetsServer.createSearchTransaction();
-        search.setParameters(parameters);
-        SearchTransactionStatistics searchTransactionStatistics =
-            search.execute(out, RetsServer.getMetadataManager(), RetsServer.getSessions());
-        request.setAttribute(SEARCH_TRANSACTION_STATISTICS_KEY, searchTransactionStatistics);
-    }
-
-    private static final Logger LOG =
-        Logger.getLogger(SearchServlet.class);
+  protected void doRets(RetsServletRequest request,
+                        RetsServletResponse response)
+    throws RetsServerException, IOException {
+    PrintWriter out = response.getXmlWriter();
+    SearchParameters parameters =
+      new SearchParameters(request.getParameterMap(),
+        request.getRetsVersion(),
+        getUser(request.getSession()));
+    LOG.info(parameters);
+    SearchTransaction search = RetsServer.createSearchTransaction();
+    search.setParameters(parameters);
+    SearchTransactionStatistics searchTransactionStatistics =
+      search.execute(out, RetsServer.getMetadataManager(), RetsServer.getSessions());
+    request.setAttribute(SEARCH_TRANSACTION_STATISTICS_KEY, searchTransactionStatistics);
+  }
 }

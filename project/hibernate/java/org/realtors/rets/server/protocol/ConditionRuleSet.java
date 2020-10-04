@@ -18,68 +18,57 @@ import org.realtors.rets.server.Group;
 import org.realtors.rets.server.config.ConditionRule;
 import org.realtors.rets.server.config.GroupRules;
 
-public class ConditionRuleSet
-{
-    public ConditionRuleSet()
-    {
-        mSqlConstraints = new HashMap();
-    }
+public class ConditionRuleSet {
+  private Map mSqlConstraints;
 
-    public void addRules(GroupRules rules)
-    {
-        List conditionRules = rules.getConditionRules();
-        for (int i = 0; i < conditionRules.size(); i++)
-        {
-            ConditionRule rule = (ConditionRule) conditionRules.get(i);
-            String constraintsKey = getConstraintsKey(rules.getGroupName(),
-                                                      rule.getResource(),
-                                                      rule.getRetsClass());
-            mSqlConstraints.put(constraintsKey, rule.getSqlConstraint());
-        }
-    }
+  public ConditionRuleSet() {
+    mSqlConstraints = new HashMap();
+  }
 
-    public String findSqlConstraint(Set groups, String resource,
-                                    String retsClass)
-    {
-        StringBuffer allConstraints = new StringBuffer();
-        int count = 0;
-        String prefix = "(";
-        for (Iterator iterator = groups.iterator(); iterator.hasNext();)
-        {
-            Group group = (Group) iterator.next();
-            String constraint = findSqlConstraint(group, resource, retsClass);
-            if (StringUtils.isNotBlank(constraint))
-            {
-                allConstraints.append(prefix).append(constraint).append(")");
-                prefix = " AND (";
-                count++;
-            }
-        }
-        if (count > 1)
-        {
-            allConstraints.insert(0, "(").append(")");
-        }
-        return allConstraints.toString();
-    }
+  protected static String getConstraintsKey(final String groupName, final String resourceID, final String className) {
+    final String constraintKey = groupName + ":" + resourceID + ":" + className;
+    return constraintKey;
+  }
 
-    private String findSqlConstraint(Group group, String resource,
-                                  String retsClass)
-    {
-        String groupName = group.getName();
-        String constraintsKey = getConstraintsKey(groupName, resource, retsClass);
-        String constraint = (String) mSqlConstraints.get(constraintsKey);
-        if (constraint == null)
-        {
-            return "";
-        }
-        return constraint;
+  public void addRules(GroupRules rules) {
+    List conditionRules = rules.getConditionRules();
+    for (int i = 0; i < conditionRules.size(); i++) {
+      ConditionRule rule = (ConditionRule) conditionRules.get(i);
+      String constraintsKey = getConstraintsKey(rules.getGroupName(),
+        rule.getResource(),
+        rule.getRetsClass());
+      mSqlConstraints.put(constraintsKey, rule.getSqlConstraint());
     }
+  }
 
-    protected static String getConstraintsKey(final String groupName, final String resourceID, final String className)
-    {
-        final String constraintKey = groupName + ":" + resourceID + ":" + className;
-        return constraintKey;
+  public String findSqlConstraint(Set groups, String resource,
+                                  String retsClass) {
+    StringBuffer allConstraints = new StringBuffer();
+    int count = 0;
+    String prefix = "(";
+    for (Iterator iterator = groups.iterator(); iterator.hasNext(); ) {
+      Group group = (Group) iterator.next();
+      String constraint = findSqlConstraint(group, resource, retsClass);
+      if (StringUtils.isNotBlank(constraint)) {
+        allConstraints.append(prefix).append(constraint).append(")");
+        prefix = " AND (";
+        count++;
+      }
     }
+    if (count > 1) {
+      allConstraints.insert(0, "(").append(")");
+    }
+    return allConstraints.toString();
+  }
 
-    private Map mSqlConstraints;
+  private String findSqlConstraint(Group group, String resource,
+                                   String retsClass) {
+    String groupName = group.getName();
+    String constraintsKey = getConstraintsKey(groupName, resource, retsClass);
+    String constraint = (String) mSqlConstraints.get(constraintsKey);
+    if (constraint == null) {
+      return "";
+    }
+    return constraint;
+  }
 }

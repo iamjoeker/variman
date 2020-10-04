@@ -14,5 +14,5 @@ import org.realtors.rets.server.protocol.ConditionRuleSet;
  * gets created.
  */
 public interface ConditionRuleSetFactory {
-    public ConditionRuleSet getConditionRuleSet(RetsConfig config);
+  public ConditionRuleSet getConditionRuleSet(RetsConfig config);
 }

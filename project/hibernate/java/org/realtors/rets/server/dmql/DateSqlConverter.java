@@ -11,64 +11,50 @@ import org.apache.commons.lang.exception.NestableRuntimeException;
 
 import org.realtors.rets.server.Util;
 
-public class DateSqlConverter implements SqlConverter
-{
-    public DateSqlConverter()
-    {
-        mDate = null;
-    }
+public class DateSqlConverter implements SqlConverter {
+  private static final SimpleDateFormat sFromDmql =
+    new SimpleDateFormat("yyyy-MM-dd");
+  private static final SimpleDateFormat sToSql =
+    new SimpleDateFormat("''yyyy-MM-dd''");
+  private Date mDate;
 
-    public DateSqlConverter(String date)
-    {
-        try
-        {
-            mDate = sFromDmql.parse(date);
-        }
-        catch (ParseException e)
-        {
-            throw new NestableRuntimeException(e);
-        }
-    }
+  public DateSqlConverter() {
+    mDate = null;
+  }
 
-    public void toSql(PrintWriter out)
-    {
-        out.print(sToSql.format(getDateForFormatting()));
+  public DateSqlConverter(String date) {
+    try {
+      mDate = sFromDmql.parse(date);
+    } catch (ParseException e) {
+      throw new NestableRuntimeException(e);
     }
+  }
 
-    private Date getDateForFormatting()
-    {
-        if (mDate == null)
-        {
-            return new Date();
-        }
-        else
-        {
-            return mDate;
-        }
+  public void toSql(PrintWriter out) {
+    out.print(sToSql.format(getDateForFormatting()));
+  }
+
+  private Date getDateForFormatting() {
+    if (mDate == null) {
+      return new Date();
+    } else {
+      return mDate;
     }
+  }
 
-    public String toString()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append(mDate)
-            .toString();
+  public String toString() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append(mDate)
+      .toString();
+  }
+
+  public boolean equals(Object obj) {
+    if (!(obj instanceof DateSqlConverter)) {
+      return false;
     }
-
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof DateSqlConverter))
-        {
-            return false;
-        }
-        DateSqlConverter rhs = (DateSqlConverter) obj;
-        return new EqualsBuilder()
-            .append(mDate, rhs.mDate)
-            .isEquals();
-    }
-
-    private static final SimpleDateFormat sFromDmql =
-        new SimpleDateFormat("yyyy-MM-dd");
-    private static final SimpleDateFormat sToSql =
-        new SimpleDateFormat("''yyyy-MM-dd''");
-    private Date mDate;
+    DateSqlConverter rhs = (DateSqlConverter) obj;
+    return new EqualsBuilder()
+      .append(mDate, rhs.mDate)
+      .isEquals();
+  }
 }

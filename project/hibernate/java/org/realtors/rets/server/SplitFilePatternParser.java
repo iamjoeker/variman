@@ -15,50 +15,42 @@ import org.apache.log4j.helpers.LogLog;
 import org.apache.log4j.helpers.PatternConverter;
 import org.apache.log4j.spi.LoggingEvent;
 
-public class SplitFilePatternParser extends PatternParser
-{
-    public SplitFilePatternParser(String pattern)
-    {
-        super(pattern);
+public class SplitFilePatternParser extends PatternParser {
+  public SplitFilePatternParser(String pattern) {
+    super(pattern);
+  }
+
+  protected void finalizeConverter(char formatChar) {
+    switch (formatChar) {
+      case 'X':
+      case 'x':
+      case 'p':
+      case 't':
+        super.finalizeConverter(formatChar);
+        break;
+
+      default:
+        LogLog.error("Unexpected char [" + formatChar +
+          "] at position " + i + " in conversion patterrn.");
+        addConverter(
+          new LiteralPatternConverter(currentLiteral.toString()));
+        currentLiteral.setLength(0);
+    }
+  }
+
+  private static class LiteralPatternConverter extends PatternConverter {
+    private String mLiteral;
+
+    LiteralPatternConverter(String value) {
+      mLiteral = value;
     }
 
-    protected void finalizeConverter(char formatChar)
-    {
-        switch (formatChar)
-        {
-            case 'X':
-            case 'x':
-            case 'p':
-            case 't':
-                super.finalizeConverter(formatChar);
-                break;
-
-            default:
-                LogLog.error("Unexpected char [" + formatChar +
-                             "] at position " + i + " in conversion patterrn.");
-                addConverter(
-                    new LiteralPatternConverter(currentLiteral.toString()));
-                currentLiteral.setLength(0);
-        }
+    public final void format(StringBuffer sbuf, LoggingEvent event) {
+      sbuf.append(mLiteral);
     }
 
-    private static class LiteralPatternConverter extends PatternConverter
-    {
-        LiteralPatternConverter(String value)
-        {
-            mLiteral = value;
-        }
-
-        public final void format(StringBuffer sbuf, LoggingEvent event)
-        {
-            sbuf.append(mLiteral);
-        }
-
-        public String convert(LoggingEvent event)
-        {
-            return mLiteral;
-        }
-
-        private String mLiteral;
+    public String convert(LoggingEvent event) {
+      return mLiteral;
     }
+  }
 }

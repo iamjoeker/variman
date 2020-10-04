@@ -17,17 +17,17 @@ import org.realtors.rets.server.metadata.MetadataChangedListener;
  */
 public class WebAppMetadataChangedListener implements MetadataChangedListener {
 
-    private static final Logger LOG = Logger.getLogger(WebAppMetadataChangedListener.class);
+  private static final Logger LOG = Logger.getLogger(WebAppMetadataChangedListener.class);
 
-    /*- (non-Javadoc)
-     * @see org.realtors.rets.server.metadata.MetadataChangedListener#metadataChanged()
-     */
-    public void metadataChanged() {
-        try {
-            WebApp.loadConfiguration();
-        } catch (RetsServerException e) {
-            LOG.fatal("An error occurred while loading the metadata.", e);
-        }
+  /*- (non-Javadoc)
+   * @see org.realtors.rets.server.metadata.MetadataChangedListener#metadataChanged()
+   */
+  public void metadataChanged() {
+    try {
+      WebApp.loadConfiguration();
+    } catch (RetsServerException e) {
+      LOG.fatal("An error occurred while loading the metadata.", e);
     }
+  }
 
 }

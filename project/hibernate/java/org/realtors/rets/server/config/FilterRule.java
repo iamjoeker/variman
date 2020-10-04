@@ -11,163 +11,142 @@ import org.apache.commons.lang.StringUtils;
 /**
  * Represents a field filtering rule (either include or exclude)
  */
-public class FilterRule
-{
-    public FilterRule()
-    {
-        this(INCLUDE);
-    }
+public class FilterRule {
+  public static final Type INCLUDE = new Type("include");
+  public static final Type EXCLUDE = new Type("exclude");
+  private Type mType;
+  private String mResource;
+  private String mRetsClass;
+  private List mSystemNames;
+  private int mId;
+  private Map mExtendableProperties;
 
-    public FilterRule(Type type)
-    {
-        mType = type;
-        mSystemNames = new ArrayList();
-    }
+  public FilterRule() {
+    this(INCLUDE);
+  }
 
-    public Type getType()
-    {
-        return mType;
-    }
+  public FilterRule(Type type) {
+    mType = type;
+    mSystemNames = new ArrayList();
+  }
 
-    public void setType(Type type)
-    {
-        mType = type;
-    }
+  public Type getType() {
+    return mType;
+  }
 
-    public String getResource()
-    {
-        return mResource;
-    }
+  public void setType(Type type) {
+    mType = type;
+  }
 
-    public void setResource(String resource)
-    {
-        mResource = resource;
-    }
+  public String getResource() {
+    return mResource;
+  }
 
-    public String getRetsClass()
-    {
-        return mRetsClass;
-    }
+  public void setResource(String resource) {
+    mResource = resource;
+  }
 
-    public void setRetsClass(String retsClass)
-    {
-        mRetsClass = retsClass;
-    }
+  public String getRetsClass() {
+    return mRetsClass;
+  }
 
-    public List getSystemNames()
-    {
-        return mSystemNames;
-    }
+  public void setRetsClass(String retsClass) {
+    mRetsClass = retsClass;
+  }
 
-    public void setSystemNames(List systemNames)
-    {
-        mSystemNames = systemNames;
-    }
+  public List getSystemNames() {
+    return mSystemNames;
+  }
 
-    public void addSystemName(String systemName)
-    {
-        mSystemNames.add(systemName);
-    }
+  public void setSystemNames(List systemNames) {
+    mSystemNames = systemNames;
+  }
 
-    /**
-     * Determines if the specified system name is a member of this
-     * rule.
-     *
-     * @param systemName    the system name of interest
-     * @return true if this rule contains an entry for systemName, false otherwise
-     */
-    public boolean containsSystemName(String systemName) {
-        return this.mSystemNames.contains(systemName);
-    }
+  public void addSystemName(String systemName) {
+    mSystemNames.add(systemName);
+  }
 
-    /**
-     * Determines whether the specified system name should be included
-     * based on this filter rule.
-     * 
-     * @param systemName    the system name to check
-     * @return true if the system name should be included, false otherwise.
-     * @todo Fix this method.  It is misleading with multiple groups.
-     */
-    public boolean includeSystemName(String systemName)
-    {
-        boolean includeSystemName = mSystemNames.contains(systemName);
-        
-        if (mType == EXCLUDE)
-        {
-            includeSystemName = !includeSystemName;
-        }
-        return includeSystemName;
-    }
-    
-    
-    /**
-     * Determine whether the specified system name should be excluded
-     * based on this filter rule
-     * 
-     * @param systemName    the system to check
-     * @return true if the system name should be excluded, false otherwise.
-     */
-    public boolean excludeSystemName(String systemName) {
-        if (mType == EXCLUDE && this.mSystemNames.contains(systemName)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+  /**
+   * Determines if the specified system name is a member of this
+   * rule.
+   *
+   * @param systemName the system name of interest
+   * @return true if this rule contains an entry for systemName, false otherwise
+   */
+  public boolean containsSystemName(String systemName) {
+    return this.mSystemNames.contains(systemName);
+  }
 
-    public String toString()
-    {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("For ").append(mResource).append(":").append(mRetsClass);
-        buffer.append(", ").append(mType).append(" fields: ");
-        buffer.append(StringUtils.join(mSystemNames.iterator(), " "));
-        return buffer.toString();
-    }
+  /**
+   * Determines whether the specified system name should be included
+   * based on this filter rule.
+   *
+   * @param systemName the system name to check
+   * @return true if the system name should be included, false otherwise.
+   * @todo Fix this method.  It is misleading with multiple groups.
+   */
+  public boolean includeSystemName(String systemName) {
+    boolean includeSystemName = mSystemNames.contains(systemName);
 
-    public static class Type extends Enum
-    {
-        private Type(String type)
-        {
-            super(type);
-        }
+    if (mType == EXCLUDE) {
+      includeSystemName = !includeSystemName;
     }
+    return includeSystemName;
+  }
 
-    public int getId()
-    {
-        return mId;
+  /**
+   * Determine whether the specified system name should be excluded
+   * based on this filter rule
+   *
+   * @param systemName the system to check
+   * @return true if the system name should be excluded, false otherwise.
+   */
+  public boolean excludeSystemName(String systemName) {
+    if (mType == EXCLUDE && this.mSystemNames.contains(systemName)) {
+      return true;
+    } else {
+      return false;
     }
+  }
 
-    public void setId(int id)
-    {
-        mId = id;
+  public String toString() {
+    StringBuffer buffer = new StringBuffer();
+    buffer.append("For ").append(mResource).append(":").append(mRetsClass);
+    buffer.append(", ").append(mType).append(" fields: ");
+    buffer.append(StringUtils.join(mSystemNames.iterator(), " "));
+    return buffer.toString();
+  }
+
+  public int getId() {
+    return mId;
+  }
+
+  public void setId(int id) {
+    mId = id;
+  }
+
+  public Map getExtendableProperties() {
+    if (mExtendableProperties == null) {
+      mExtendableProperties = new LinkedHashMap();
     }
+    return mExtendableProperties;
+  }
 
-    public Map getExtendableProperties()
-    {
-        if (mExtendableProperties == null) {
-            mExtendableProperties = new LinkedHashMap();
-        }
-       return mExtendableProperties;
+  public void setExtendableProperties(Map extendableProperties) {
+    this.mExtendableProperties = extendableProperties;
+  }
+
+  public Object getExtendableProperty(String name) {
+    return getExtendableProperties().get(name);
+  }
+
+  public void setExtendableProperty(String name, Object value) {
+    getExtendableProperties().put(name, value);
+  }
+
+  public static class Type extends Enum {
+    private Type(String type) {
+      super(type);
     }
-
-    public void setExtendableProperties(Map extendableProperties) {
-           this.mExtendableProperties = extendableProperties;
-    }
-
-    public Object getExtendableProperty(String name) {
-        return getExtendableProperties().get(name);
-    }
-
-    public void setExtendableProperty(String name, Object value) {
-        getExtendableProperties().put(name, value);
-    }
-
-    public static final Type INCLUDE = new Type("include");
-    public static final Type EXCLUDE = new Type("exclude");
-    private Type mType;
-    private String mResource;
-    private String mRetsClass;
-    private List mSystemNames;
-    private int mId;
-    private Map mExtendableProperties;
+  }
 }

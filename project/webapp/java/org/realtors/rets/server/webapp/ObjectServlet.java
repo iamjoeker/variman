@@ -19,66 +19,60 @@ import org.realtors.rets.server.protocol.ObjectStream;
 
 /**
  * @web.servlet name="object-servlet"
- * @web.servlet-mapping  url-pattern="/objects/*"
+ * @web.servlet-mapping url-pattern="/objects/*"
  */
-public class ObjectServlet extends RetsServlet
-{
-    protected boolean isXmlResponse()
-    {
-        return false;
+public class ObjectServlet extends RetsServlet {
+  private static final Logger LOG =
+    Logger.getLogger(ObjectServlet.class);
+
+  protected boolean isXmlResponse() {
+    return false;
+  }
+
+  protected void doRets(RetsServletRequest request,
+                        RetsServletResponse response)
+    throws RetsServerException, IOException {
+    String contextPath = request.getContextPath();
+    String servletPath = request.getServletPath();
+    String uri = request.getRequestURI();
+    String componentPath = uri;
+    componentPath = componentPath.substring(contextPath.length());
+    componentPath = componentPath.substring(servletPath.length());
+
+    String[] pathComponents = StringUtils.split(componentPath, "/");
+    if (LOG.isDebugEnabled()) {
+      LOG.debug("URI: " + uri);
+      LOG.debug("Component path: " + componentPath);
+      LOG.debug("Path Components: " + Arrays.asList(pathComponents));
     }
 
-    protected void doRets(RetsServletRequest request,
-                          RetsServletResponse response)
-        throws RetsServerException, IOException
-    {
-        String contextPath = request.getContextPath();
-        String servletPath = request.getServletPath();
-        String uri = request.getRequestURI();
-        String componentPath = uri;
-        componentPath = componentPath.substring(contextPath.length());
-        componentPath = componentPath.substring(servletPath.length());
-
-        String[] pathComponents = StringUtils.split(componentPath, "/");
-        if (LOG.isDebugEnabled())
-        {
-            LOG.debug("URI: " + uri);
-            LOG.debug("Component path: " + componentPath);
-            LOG.debug("Path Components: " + Arrays.asList(pathComponents));
-        }
-
-        if ((pathComponents.length != 4) || uri.endsWith("/"))
-        {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, uri);
-            return;
-        }
-
-        String resource = pathComponents[0];
-        String type = pathComponents[1];
-        String key = pathComponents[2];
-        int id = NumberUtils.toInt(pathComponents[3]);
-
-        GetObjectTransaction transaction =
-            new GetObjectTransaction(resource, type);
-        RetsConfig retsConfig = RetsServer.getRetsConfiguration();
-        transaction.setRootDirectory(retsConfig.getGetObjectRoot());
-        transaction.setPhotoPattern(retsConfig.getPhotoPattern());
-        transaction.setObjectSetPattern(retsConfig.getObjectSetPattern());
-        ObjectDescriptor objectDescriptor =
-            transaction.findObjectDescriptor(key, id);
-        if (objectDescriptor == null)
-        {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, uri);
-            return;
-        }
-
-        LOG.debug("Object URL: " + objectDescriptor.getUrl());
-        ObjectStream objectStream = objectDescriptor.openObjectStream();
-        response.setContentType(objectStream.getMimeType());
-        IOUtils.copyStream(objectStream.getInputStream(),
-                           response.getOutputStream());
+    if ((pathComponents.length != 4) || uri.endsWith("/")) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND, uri);
+      return;
     }
 
-    private static final Logger LOG =
-        Logger.getLogger(ObjectServlet.class);
+    String resource = pathComponents[0];
+    String type = pathComponents[1];
+    String key = pathComponents[2];
+    int id = NumberUtils.toInt(pathComponents[3]);
+
+    GetObjectTransaction transaction =
+      new GetObjectTransaction(resource, type);
+    RetsConfig retsConfig = RetsServer.getRetsConfiguration();
+    transaction.setRootDirectory(retsConfig.getGetObjectRoot());
+    transaction.setPhotoPattern(retsConfig.getPhotoPattern());
+    transaction.setObjectSetPattern(retsConfig.getObjectSetPattern());
+    ObjectDescriptor objectDescriptor =
+      transaction.findObjectDescriptor(key, id);
+    if (objectDescriptor == null) {
+      response.sendError(HttpServletResponse.SC_NOT_FOUND, uri);
+      return;
+    }
+
+    LOG.debug("Object URL: " + objectDescriptor.getUrl());
+    ObjectStream objectStream = objectDescriptor.openObjectStream();
+    response.setContentType(objectStream.getMimeType());
+    IOUtils.copyStream(objectStream.getInputStream(),
+      response.getOutputStream());
+  }
 }

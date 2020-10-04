@@ -8,19 +8,19 @@
 package org.realtors.rets.common.metadata;
 
 public class MetaParseException extends MetadataException {
-	public MetaParseException() {
-		super();
-	}
+  public MetaParseException() {
+    super();
+  }
 
-	public MetaParseException(String msg) {
-		super(msg);
-	}
+  public MetaParseException(String msg) {
+    super(msg);
+  }
 
-	public MetaParseException(Throwable cause) {
-		super(cause);
-	}
+  public MetaParseException(Throwable cause) {
+    super(cause);
+  }
 
-	public MetaParseException(String msg, Throwable cause) {
-		super(msg, cause);
-	}
+  public MetaParseException(String msg, Throwable cause) {
+    super(msg, cause);
+  }
 }

@@ -16,24 +16,22 @@ import org.realtors.rets.server.protocol.ConditionRuleSet;
 /**
  * Default implementation of the condition rule set factory.
  */
-public class DefaultConditionRuleSetFactory implements ConditionRuleSetFactory
-{
-    /*- (non-Javadoc)
-     * @see org.realtors.rets.server.ConditionRuleSetFactory#getConditionRuleSet(org.realtors.rets.server.config.RetsConfig)
-     */
-    public ConditionRuleSet getConditionRuleSet(RetsConfig config)
-    {
-        LOG.debug("Creating condition rule set");
-        ConditionRuleSet ruleSet = new ConditionRuleSet();
-        List<GroupRules> securityConstraints = config.getAllGroupRules();
-        for (int i = 0; i < securityConstraints.size(); i++) {
-            GroupRules rules = securityConstraints.get(i);
-            LOG.debug("Adding condition rules for " + rules.getGroupName());
-            ruleSet.addRules(rules);
-        }
-        return ruleSet;
-    }
+public class DefaultConditionRuleSetFactory implements ConditionRuleSetFactory {
+  private static final Logger LOG =
+    Logger.getLogger(DefaultConditionRuleSetFactory.class);
 
-    private static final Logger LOG =
-        Logger.getLogger(DefaultConditionRuleSetFactory.class);
+  /*- (non-Javadoc)
+   * @see org.realtors.rets.server.ConditionRuleSetFactory#getConditionRuleSet(org.realtors.rets.server.config.RetsConfig)
+   */
+  public ConditionRuleSet getConditionRuleSet(RetsConfig config) {
+    LOG.debug("Creating condition rule set");
+    ConditionRuleSet ruleSet = new ConditionRuleSet();
+    List<GroupRules> securityConstraints = config.getAllGroupRules();
+    for (int i = 0; i < securityConstraints.size(); i++) {
+      GroupRules rules = securityConstraints.get(i);
+      LOG.debug("Adding condition rules for " + rules.getGroupName());
+      ruleSet.addRules(rules);
+    }
+    return ruleSet;
+  }
 }

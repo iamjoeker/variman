@@ -8,123 +8,126 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 public class GetObjectResponseIterator<T extends SingleObjectResponse> implements GetObjectIterator<T> {
-	public static final char CR = '\r';
-	public static final char LF = '\n';
-	public static final String EOL = CR+""+LF;
-	public static final String BS = "--";
+  public static final char CR = '\r';
+  public static final char LF = '\n';
+  public static final String EOL = CR + "" + LF;
+  public static final String BS = "--";
 
-	private final PushbackInputStream multipartStream;
-	private final String boundary;
-	private Boolean hasNext;
+  private final PushbackInputStream multipartStream;
+  private final String boundary;
+  private Boolean hasNext;
 
-	public static <T extends SingleObjectResponse> GetObjectIterator<T> createIterator(final GetObjectResponse response, int streamBufferSize) throws Exception {
-		String boundary = response.getBoundary();
-		if (boundary != null)
-			return new GetObjectResponseIterator(response, boundary, streamBufferSize);
+  private GetObjectResponseIterator(GetObjectResponse response, String boundary, int streamBufferSize) throws Exception {
+    this.boundary = boundary;
 
-		return new GetObjectIterator<T>() {
-			public void close() throws IOException{
-				response.getInputStream().close();
-			}
-			public boolean hasNext() {
-				return false;
-			}
-			public T next() {
-				throw new NoSuchElementException();
-			}
-			public void remove() {
-				throw new UnsupportedOperationException("");
-			}
-		};
-	}
+    BufferedInputStream input = new BufferedInputStream(response.getInputStream(), streamBufferSize);
+    this.multipartStream = new PushbackInputStream(input, BS.length() + this.boundary.length() + EOL.length());
+  }
 
-	private GetObjectResponseIterator(GetObjectResponse response, String boundary, int streamBufferSize) throws Exception {
-		this.boundary = boundary;
+  public static <T extends SingleObjectResponse> GetObjectIterator<T> createIterator(final GetObjectResponse response, int streamBufferSize) throws Exception {
+    String boundary = response.getBoundary();
+    if (boundary != null)
+      return new GetObjectResponseIterator(response, boundary, streamBufferSize);
 
-		BufferedInputStream input = new BufferedInputStream(response.getInputStream(), streamBufferSize);
-		this.multipartStream = new PushbackInputStream(input, BS.length() + this.boundary.length() + EOL.length());
-	}
+    return new GetObjectIterator<T>() {
+      public void close() throws IOException {
+        response.getInputStream().close();
+      }
 
-	public boolean hasNext() {
-		if (this.hasNext != null) 
-			return this.hasNext.booleanValue();
+      public boolean hasNext() {
+        return false;
+      }
 
-		try {
-			this.hasNext = new Boolean(this.getHaveNext());
-			return this.hasNext.booleanValue();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+      public T next() {
+        throw new NoSuchElementException();
+      }
 
-	public T next() {
-		if (!this.hasNext())
-			throw new NoSuchElementException();
+      public void remove() {
+        throw new UnsupportedOperationException("");
+      }
+    };
+  }
 
-		this.hasNext = null;
-		try {
-			return getNext();
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
+  public boolean hasNext() {
+    if (this.hasNext != null)
+      return this.hasNext.booleanValue();
 
-	public void remove() {
-		throw new UnsupportedOperationException();
-	}
+    try {
+      this.hasNext = new Boolean(this.getHaveNext());
+      return this.hasNext.booleanValue();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
-	public void close() throws IOException {
-		this.multipartStream.close();
-	}
+  public T next() {
+    if (!this.hasNext())
+      throw new NoSuchElementException();
 
-	private boolean getHaveNext() throws IOException {
-		String line = null;
-		while ((line = this.readLine()) != null) {
-			if (line.equals(BS+this.boundary))
-				return true;
-			if (line.equals(BS+this.boundary+BS))
-				return false;
-		}
-		return false;
-	}
+    this.hasNext = null;
+    try {
+      return getNext();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
 
-	private T getNext() throws Exception {
-		Map headers = new HashMap();
-		String header = null;
-		while (!(header = this.readLine()).equals("")) {
-			int nvSeperatorIndex = header.indexOf(':');
-			if (nvSeperatorIndex == -1)
-				throw new IllegalArgumentException("No header name value seperator found for header: " + header);
+  public void remove() {
+    throw new UnsupportedOperationException();
+  }
 
-			String name = header.substring(0, nvSeperatorIndex);
-			String value = header.substring(nvSeperatorIndex + 1).trim();
-			headers.put(name, value);
+  public void close() throws IOException {
+    this.multipartStream.close();
+  }
 
-		}
-		return (T)new SingleObjectResponse(headers, new SinglePartInputStream(this.multipartStream, BS+this.boundary));
-	}
+  private boolean getHaveNext() throws IOException {
+    String line = null;
+    while ((line = this.readLine()) != null) {
+      if (line.equals(BS + this.boundary))
+        return true;
+      if (line.equals(BS + this.boundary + BS))
+        return false;
+    }
+    return false;
+  }
 
-	// TODO find existing library to do this
-	private String readLine() throws IOException {
-		boolean eolReached = false;
-		StringBuffer line = new StringBuffer();
-		int currentChar = -1;
-		while (!eolReached && (currentChar = this.multipartStream.read()) != -1) {
-			eolReached = (currentChar == CR || currentChar == LF);
-			if (!eolReached)
-				line.append((char) currentChar);
-		}
+  private T getNext() throws Exception {
+    Map headers = new HashMap();
+    String header = null;
+    while (!(header = this.readLine()).equals("")) {
+      int nvSeperatorIndex = header.indexOf(':');
+      if (nvSeperatorIndex == -1)
+        throw new IllegalArgumentException("No header name value seperator found for header: " + header);
 
-		if (currentChar == -1 && line.length() == 0)
-			return null;
+      String name = header.substring(0, nvSeperatorIndex);
+      String value = header.substring(nvSeperatorIndex + 1).trim();
+      headers.put(name, value);
 
-		if (currentChar == CR) {
-			int nextChar = this.multipartStream.read();
-			if (nextChar != LF)
-				this.multipartStream.unread(new byte[] { (byte) nextChar });
-		}
+    }
+    return (T) new SingleObjectResponse(headers, new SinglePartInputStream(this.multipartStream, BS + this.boundary));
+  }
 
-		return line.toString();
-	}
+  // TODO find existing library to do this
+  private String readLine() throws IOException {
+    boolean eolReached = false;
+    StringBuffer line = new StringBuffer();
+    int currentChar = -1;
+    while (!eolReached && (currentChar = this.multipartStream.read()) != -1) {
+      eolReached = (currentChar == CR || currentChar == LF);
+      if (!eolReached)
+        line.append((char) currentChar);
+    }
+
+    if (currentChar == -1 && line.length() == 0)
+      return null;
+
+    if (currentChar == CR) {
+      int nextChar = this.multipartStream.read();
+      if (nextChar != LF)
+        this.multipartStream.unread(new byte[]{(byte) nextChar});
+    }
+
+    return line.toString();
+  }
 
 }

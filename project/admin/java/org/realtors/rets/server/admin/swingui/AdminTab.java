@@ -11,27 +11,21 @@ import javax.swing.JPanel;
  * Time: 11:29:54 AM
  * To change this template use File | Settings | File Templates.
  */
-public class AdminTab extends JPanel
-{
-    public AdminTab()
-    {
-        super();
-    }
+public class AdminTab extends JPanel {
+  public AdminTab() {
+    super();
+  }
 
-    public AdminTab(LayoutManager layout)
-    {
-        super(layout);
-    }
+  public AdminTab(LayoutManager layout) {
+    super(layout);
+  }
 
-    public void tabSelected()
-    {
-    }
+  public void tabSelected() {
+  }
 
-    public void tabDeselected()
-    {
-    }
+  public void tabDeselected() {
+  }
 
-    public void refreshTab()
-    {
-    }
+  public void refreshTab() {
+  }
 }

@@ -8,15 +8,15 @@
 package org.realtors.rets.client;
 
 public class MetaCollectorImpl extends MetaCollectorAdapter {
-	private final RetsTransport mTransport;
+  private final RetsTransport mTransport;
 
-	public MetaCollectorImpl(RetsTransport transport) {
-		this.mTransport = transport;
-	}
+  public MetaCollectorImpl(RetsTransport transport) {
+    this.mTransport = transport;
+  }
 
-	@Override
-	protected GetMetadataResponse doRequest(GetMetadataRequest req) throws RetsException {
-		return this.mTransport.getMetadata(req);
-	}
+  @Override
+  protected GetMetadataResponse doRequest(GetMetadataRequest req) throws RetsException {
+    return this.mTransport.getMetadata(req);
+  }
 
 }

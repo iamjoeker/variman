@@ -24,18 +24,16 @@ import org.apache.log4j.Logger;
  * @web.servlet name="log4j-servlet"
  * @web.servlet-mapping url-pattern="/log4j"
  */
-public class Log4jServlet extends HttpServlet
-{
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException
-    {
-        WebApp.loadLog4j();
-        resp.setContentType("text/plain");
-        PrintWriter out = resp.getWriter();
-        out.println("Done");
-        LOG.warn("Log4j reloaded");
-    }
+public class Log4jServlet extends HttpServlet {
+  private static final Logger LOG = Logger.getLogger(Log4jServlet.class);
 
-    private static final Logger LOG = Logger.getLogger(Log4jServlet.class);
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+    throws ServletException, IOException {
+    WebApp.loadLog4j();
+    resp.setContentType("text/plain");
+    PrintWriter out = resp.getWriter();
+    out.println("Done");
+    LOG.warn("Log4j reloaded");
+  }
 
 }

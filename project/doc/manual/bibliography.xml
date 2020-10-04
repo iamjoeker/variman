@@ -59,14 +59,16 @@
     <abbrev>&name;</abbrev>
     <title>&name; Web Site</title>
     <releaseinfo>
-      <ulink url="http://www.crt.realtors.org/projects/rets/variman/">http://www.crt.realtors.org/projects/rets/variman/</ulink>
+      <ulink url="http://www.crt.realtors.org/projects/rets/variman/">
+        http://www.crt.realtors.org/projects/rets/variman/
+      </ulink>
     </releaseinfo>
   </biblioentry>
 </bibliography>
 
-<!--
-Local Variables:
-mode: xml
-sgml-parent-document: ("manual.xml" "" "bibliography")
-End:
--->
+  <!--
+  Local Variables:
+  mode: xml
+  sgml-parent-document: ("manual.xml" "" "bibliography")
+  End:
+  -->

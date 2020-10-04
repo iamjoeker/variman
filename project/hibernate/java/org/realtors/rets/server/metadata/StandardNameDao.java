@@ -16,27 +16,27 @@ import org.realtors.rets.common.metadata.Metadata;
 /**
  * The data access interface for StandardNameManager.
  */
-public interface StandardNameDao 
-{
+public interface StandardNameDao {
 
-    /**
-     * @return The StandardNameMap.
-     */
-    public Map<String, StandardNameEntry> getStandardNameMap() throws Exception;
-    
-    /**
-     * @return The StandardNamePathMap.
-     */
-    public Map<String, ArrayList<String>> getStandardNamePathMap() throws Exception;
+  /**
+   * @return The StandardNameMap.
+   */
+  public Map<String, StandardNameEntry> getStandardNameMap() throws Exception;
 
-    /**
-     * Save the Standard Names.
-     */
-    public void saveStandardNameMap(Map<String, StandardNameEntry> standardNameMap) throws Exception;
-    
-    /**
-     * Set the base path.
-     * @param basePath A string containing the base path to WEB-INF if needed.
-     */
-    public void setBasePath(String basePath);
+  /**
+   * @return The StandardNamePathMap.
+   */
+  public Map<String, ArrayList<String>> getStandardNamePathMap() throws Exception;
+
+  /**
+   * Save the Standard Names.
+   */
+  public void saveStandardNameMap(Map<String, StandardNameEntry> standardNameMap) throws Exception;
+
+  /**
+   * Set the base path.
+   *
+   * @param basePath A string containing the base path to WEB-INF if needed.
+   */
+  public void setBasePath(String basePath);
 }

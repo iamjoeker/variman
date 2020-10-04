@@ -9,175 +9,147 @@
 package org.realtors.rets.server.config;
 
 import java.io.Serializable;
+
 import org.realtors.rets.server.Util;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-public class DatabaseConfig implements Serializable
-{
-    public int getMaxActive()
-    {
-        return mMaxActive;
-    }
+public class DatabaseConfig implements Serializable {
+  private DatabaseType mDatabaseType;
+  private String mHostName;
+  private String mDatabaseName;
+  private String mUsername;
+  private String mPassword;
+  private int mMaxActive;
+  private int mMaxWait;
+  private int mMaxIdle;
+  private int mMaxPsActive;
+  private int mMaxPsWait;
+  private int mMaxPsIdle;
+  private boolean mShowSql;
 
-    public void setMaxActive(int maxActive)
-    {
-        mMaxActive = maxActive;
-    }
+  public int getMaxActive() {
+    return mMaxActive;
+  }
 
-    public int getMaxIdle()
-    {
-        return mMaxIdle;
-    }
+  public void setMaxActive(int maxActive) {
+    mMaxActive = maxActive;
+  }
 
-    public void setMaxIdle(int maxIdle)
-    {
-        mMaxIdle = maxIdle;
-    }
+  public int getMaxIdle() {
+    return mMaxIdle;
+  }
 
-    public int getMaxPsActive()
-    {
-        return mMaxPsActive;
-    }
+  public void setMaxIdle(int maxIdle) {
+    mMaxIdle = maxIdle;
+  }
 
-    public void setMaxPsActive(int maxPsActive)
-    {
-        mMaxPsActive = maxPsActive;
-    }
+  public int getMaxPsActive() {
+    return mMaxPsActive;
+  }
 
-    public int getMaxPsIdle()
-    {
-        return mMaxPsIdle;
-    }
+  public void setMaxPsActive(int maxPsActive) {
+    mMaxPsActive = maxPsActive;
+  }
 
-    public void setMaxPsIdle(int maxPsIdle)
-    {
-        mMaxPsIdle = maxPsIdle;
-    }
+  public int getMaxPsIdle() {
+    return mMaxPsIdle;
+  }
 
-    public int getMaxPsWait()
-    {
-        return mMaxPsWait;
-    }
+  public void setMaxPsIdle(int maxPsIdle) {
+    mMaxPsIdle = maxPsIdle;
+  }
 
-    public void setMaxPsWait(int maxPsWait)
-    {
-        mMaxPsWait = maxPsWait;
-    }
+  public int getMaxPsWait() {
+    return mMaxPsWait;
+  }
 
-    public int getMaxWait()
-    {
-        return mMaxWait;
-    }
+  public void setMaxPsWait(int maxPsWait) {
+    mMaxPsWait = maxPsWait;
+  }
 
-    public void setMaxWait(int maxWait)
-    {
-        mMaxWait = maxWait;
-    }
+  public int getMaxWait() {
+    return mMaxWait;
+  }
 
-    public DatabaseType getDatabaseType()
-    {
-        return mDatabaseType;
-    }
+  public void setMaxWait(int maxWait) {
+    mMaxWait = maxWait;
+  }
 
-    public void setDatabaseType(DatabaseType databaseType)
-    {
-        mDatabaseType = databaseType;
-    }
+  public DatabaseType getDatabaseType() {
+    return mDatabaseType;
+  }
 
-    public String getHostName()
-    {
-        return mHostName;
-    }
+  public void setDatabaseType(DatabaseType databaseType) {
+    mDatabaseType = databaseType;
+  }
 
-    public void setHostName(String hostName)
-    {
-        mHostName = hostName;
-    }
+  public String getHostName() {
+    return mHostName;
+  }
 
-    public String getDatabaseName()
-    {
-        return mDatabaseName;
-    }
+  public void setHostName(String hostName) {
+    mHostName = hostName;
+  }
 
-    public void setDatabaseName(String databaseName)
-    {
-        mDatabaseName = databaseName;
-    }
+  public String getDatabaseName() {
+    return mDatabaseName;
+  }
 
-    public String getDriver()
-    {
-        return mDatabaseType.getDriverClass();
-    }
+  public void setDatabaseName(String databaseName) {
+    mDatabaseName = databaseName;
+  }
 
-    public String getDialect()
-    {
-        return mDatabaseType.getDialectClass();
-    }
+  public String getDriver() {
+    return mDatabaseType.getDriverClass();
+  }
 
-    public String getUrl()
-    {
-        return mDatabaseType.getUrl(mHostName, mDatabaseName);
-    }
+  public String getDialect() {
+    return mDatabaseType.getDialectClass();
+  }
 
-    public String getUsername()
-    {
-        return mUsername;
-    }
+  public String getUrl() {
+    return mDatabaseType.getUrl(mHostName, mDatabaseName);
+  }
 
-    public void setUsername(String username)
-    {
-        mUsername = username;
-    }
+  public String getUsername() {
+    return mUsername;
+  }
 
-    public String getPassword()
-    {
-        return mPassword;
-    }
+  public void setUsername(String username) {
+    mUsername = username;
+  }
 
-    public void setPassword(String password)
-    {
-        mPassword = password;
-    }
+  public String getPassword() {
+    return mPassword;
+  }
 
-    public void setShowSql(boolean showSql)
-    {
-        mShowSql = showSql;
-    }
+  public void setPassword(String password) {
+    mPassword = password;
+  }
 
-    public boolean getShowSql()
-    {
-        return mShowSql;
-    }
+  public boolean getShowSql() {
+    return mShowSql;
+  }
 
-    public String toString()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append("type", mDatabaseType)
-            .append("host name", mHostName)
-            .append("database name", mDatabaseName)
-            .append("username", mUsername)
-            .append("password", mPassword)
-            .append("max active", mMaxActive)
-            .append("max wait", mMaxWait)
-            .append("max idle", mMaxIdle)
-            .append("max ps active", mMaxPsActive)
-            .append("max ps wait", mMaxPsWait)
-            .append("max ps idle", mMaxPsIdle)
-            .append("show sql", mShowSql)
-            .toString();
-    }
+  public void setShowSql(boolean showSql) {
+    mShowSql = showSql;
+  }
 
-    private DatabaseType mDatabaseType;
-    private String mHostName;
-    private String mDatabaseName;
-    private String mUsername;
-    private String mPassword;
-    private int mMaxActive;
-    private int mMaxWait;
-    private int mMaxIdle;
-    private int mMaxPsActive;
-    private int mMaxPsWait;
-    private int mMaxPsIdle;
-    private boolean mShowSql;
+  public String toString() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append("type", mDatabaseType)
+      .append("host name", mHostName)
+      .append("database name", mDatabaseName)
+      .append("username", mUsername)
+      .append("password", mPassword)
+      .append("max active", mMaxActive)
+      .append("max wait", mMaxWait)
+      .append("max idle", mMaxIdle)
+      .append("max ps active", mMaxPsActive)
+      .append("max ps wait", mMaxPsWait)
+      .append("max ps idle", mMaxPsIdle)
+      .append("show sql", mShowSql)
+      .toString();
+  }
 }

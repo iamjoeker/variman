@@ -11,14 +11,14 @@ import java.util.EventListener;
 
 /**
  * An event listener which can listen when the RETS configuration changes.
- * 
+ *
  * @author Danny
  */
 public interface RetsConfigChangedListener extends EventListener {
 
-    /**
-     * Called when the RETS configuration has changed.
-     */
-    public void retsConfigChanged();
+  /**
+   * Called when the RETS configuration has changed.
+   */
+  public void retsConfigChanged();
 
 }

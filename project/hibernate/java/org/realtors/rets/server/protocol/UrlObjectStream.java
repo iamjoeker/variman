@@ -5,32 +5,27 @@ import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
 
-public class UrlObjectStream implements ObjectStream
-{
-    public UrlObjectStream(URL url) throws IOException
-    {
-        URLConnection urlConnection = url.openConnection();
-        mInputStream = urlConnection.getInputStream();
-        mMimeType = urlConnection.getContentType();
-    }
+public class UrlObjectStream implements ObjectStream {
+  private InputStream mInputStream;
+  private String mMimeType;
 
-    public UrlObjectStream(URL url, String mimeType) throws IOException
-    {
-        URLConnection urlConnection = url.openConnection();
-        mInputStream = urlConnection.getInputStream();
-        mMimeType = mimeType;
-    }
+  public UrlObjectStream(URL url) throws IOException {
+    URLConnection urlConnection = url.openConnection();
+    mInputStream = urlConnection.getInputStream();
+    mMimeType = urlConnection.getContentType();
+  }
 
-    public InputStream getInputStream()
-    {
-        return mInputStream;
-    }
+  public UrlObjectStream(URL url, String mimeType) throws IOException {
+    URLConnection urlConnection = url.openConnection();
+    mInputStream = urlConnection.getInputStream();
+    mMimeType = mimeType;
+  }
 
-    public String getMimeType()
-    {
-        return mMimeType;
-    }
+  public InputStream getInputStream() {
+    return mInputStream;
+  }
 
-    private InputStream mInputStream;
-    private String mMimeType;
+  public String getMimeType() {
+    return mMimeType;
+  }
 }

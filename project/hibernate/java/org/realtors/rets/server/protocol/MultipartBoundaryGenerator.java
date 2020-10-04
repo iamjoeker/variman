@@ -7,7 +7,6 @@ package org.realtors.rets.server.protocol;
  * Time: 11:38:26 AM
  * To change this template use File | Settings | File Templates.
  */
-public interface MultipartBoundaryGenerator
-{
-    public String generateBoundary();
+public interface MultipartBoundaryGenerator {
+  public String generateBoundary();
 }

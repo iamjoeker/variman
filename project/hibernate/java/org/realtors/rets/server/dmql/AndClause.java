@@ -19,57 +19,48 @@ import org.realtors.rets.server.Util;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.EqualsBuilder;
 
-public class AndClause implements SqlConverter
-{
-    public AndClause()
-    {
-        mElements = new ArrayList();
-    }
+public class AndClause implements SqlConverter {
+  private List mElements;
 
-    public AndClause(SqlConverter left, SqlConverter right)
-    {
-        this();
-        add(left);
-        add(right);
-    }
+  public AndClause() {
+    mElements = new ArrayList();
+  }
 
-    public void toSql(PrintWriter out)
-    {
-        String separator = "";
-        for (int i = 0; i < mElements.size(); i++)
-        {
-            SqlConverter converter = (SqlConverter) mElements.get(i);
-            out.print(separator);
-            out.print("(");
-            converter.toSql(out);
-            out.print(")");
-            separator = " AND ";
-        }
-    }
+  public AndClause(SqlConverter left, SqlConverter right) {
+    this();
+    add(left);
+    add(right);
+  }
 
-    public void add(SqlConverter sqlConverter)
-    {
-        mElements.add(sqlConverter);
+  public void toSql(PrintWriter out) {
+    String separator = "";
+    for (int i = 0; i < mElements.size(); i++) {
+      SqlConverter converter = (SqlConverter) mElements.get(i);
+      out.print(separator);
+      out.print("(");
+      converter.toSql(out);
+      out.print(")");
+      separator = " AND ";
     }
+  }
 
-    public String toString()
-    {
-        return new ToStringBuilder(this, Util.SHORT_STYLE)
-            .append(mElements)
-            .toString();
+  public void add(SqlConverter sqlConverter) {
+    mElements.add(sqlConverter);
+  }
+
+  public String toString() {
+    return new ToStringBuilder(this, Util.SHORT_STYLE)
+      .append(mElements)
+      .toString();
+  }
+
+  public boolean equals(Object obj) {
+    if (!(obj instanceof AndClause)) {
+      return false;
     }
-
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof AndClause))
-        {
-            return false;
-        }
-        AndClause rhs = (AndClause) obj;
-        return new EqualsBuilder()
-            .append(mElements, rhs.mElements)
-            .isEquals();
-    }
-
-    private List mElements;
+    AndClause rhs = (AndClause) obj;
+    return new EqualsBuilder()
+      .append(mElements, rhs.mElements)
+      .isEquals();
+  }
 }

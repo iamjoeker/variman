@@ -29,185 +29,182 @@ import org.realtors.rets.common.metadata.types.MValidationLookup;
 import org.realtors.rets.common.metadata.types.MValidationLookupType;
 
 public abstract class MetadataBuilder {
-	protected MetadataBuilder() {
-		this.mStrict = MetaObject.DEFAULT_PARSING;
-	}
+  private static final Log LOG = LogFactory.getLog(MetadataBuilder.class);
+  private boolean mStrict;
 
-	public boolean isStrict() {
-		return this.mStrict;
-	}
+  protected MetadataBuilder() {
+    this.mStrict = MetaObject.DEFAULT_PARSING;
+  }
 
-	public void setStrict(boolean strict) {
-		this.mStrict = strict;
-	}
+  protected static void setAttribute(MetaObject obj, String key, String value) {
+    try {
+      obj.setAttribute(key, value);
+    } catch (MetaParseException e) {
+      LOG.error(e);
+    }
+  }
 
-	protected Metadata finish(MSystem system) {
-		return new Metadata(system);
-	}
+  public boolean isStrict() {
+    return this.mStrict;
+  }
 
-	protected static void setAttribute(MetaObject obj, String key, String value) {
-		try
-		{
-			obj.setAttribute(key, value);
-		}
-		catch (MetaParseException e)
-		{
-			LOG.error(e);
-		}
-	}
+  public void setStrict(boolean strict) {
+    this.mStrict = strict;
+  }
 
-	protected MSystem buildSystem() {
-		MSystem system = new MSystem(this.mStrict);
-		return system;
-	}
+  protected Metadata finish(MSystem system) {
+    return new Metadata(system);
+  }
 
-	protected MResource buildResource() {
-		MResource resource = new MResource(this.mStrict);
-		return resource;
-	}
+  protected MSystem buildSystem() {
+    MSystem system = new MSystem(this.mStrict);
+    return system;
+  }
 
-	protected MForeignKey buildForeignKey() {
-		MForeignKey key = new MForeignKey(this.mStrict);
-		return key;
-	}
+  protected MResource buildResource() {
+    MResource resource = new MResource(this.mStrict);
+    return resource;
+  }
 
-	protected MClass buildClass() {
-		MClass clazz = new MClass(this.mStrict);
-		return clazz;
-	}
+  protected MForeignKey buildForeignKey() {
+    MForeignKey key = new MForeignKey(this.mStrict);
+    return key;
+  }
 
-	protected MTable buildTable() {
-		MTable table = new MTable(this.mStrict);
-		return table;
-	}
+  protected MClass buildClass() {
+    MClass clazz = new MClass(this.mStrict);
+    return clazz;
+  }
 
-	protected MUpdate buildUpdate() {
-		MUpdate update = new MUpdate(this.mStrict);
-		return update;
-	}
+  protected MTable buildTable() {
+    MTable table = new MTable(this.mStrict);
+    return table;
+  }
 
-	protected MUpdateType buildUpdateType() {
-		MUpdateType updatetype = new MUpdateType(this.mStrict);
-		return updatetype;
-	}
+  protected MUpdate buildUpdate() {
+    MUpdate update = new MUpdate(this.mStrict);
+    return update;
+  }
 
-	protected MObject buildObject() {
-		MObject obj = new MObject(this.mStrict);
-		return obj;
-	}
+  protected MUpdateType buildUpdateType() {
+    MUpdateType updatetype = new MUpdateType(this.mStrict);
+    return updatetype;
+  }
 
-	protected MSearchHelp buildSearchHelp() {
-		MSearchHelp help = new MSearchHelp(this.mStrict);
-		return help;
-	}
+  protected MObject buildObject() {
+    MObject obj = new MObject(this.mStrict);
+    return obj;
+  }
 
-	protected MEditMask buildEditMask() {
-		MEditMask mask = new MEditMask(this.mStrict);
-		return mask;
-	}
+  protected MSearchHelp buildSearchHelp() {
+    MSearchHelp help = new MSearchHelp(this.mStrict);
+    return help;
+  }
 
-	protected MLookup buildLookup() {
-		MLookup lookup = new MLookup(this.mStrict);
-		return lookup;
-	}
+  protected MEditMask buildEditMask() {
+    MEditMask mask = new MEditMask(this.mStrict);
+    return mask;
+  }
 
-	protected MLookupType buildLookupType() {
-		MLookupType type = new MLookupType(this.mStrict);
-		return type;
-	}
+  protected MLookup buildLookup() {
+    MLookup lookup = new MLookup(this.mStrict);
+    return lookup;
+  }
 
-	protected MUpdateHelp buildUpdateHelp() {
-		MUpdateHelp help = new MUpdateHelp(this.mStrict);
-		return help;
-	}
+  protected MLookupType buildLookupType() {
+    MLookupType type = new MLookupType(this.mStrict);
+    return type;
+  }
 
-	protected MValidationLookup buildValidationLookup() {
-		MValidationLookup lookup = new MValidationLookup(this.mStrict);
-		return lookup;
-	}
+  protected MUpdateHelp buildUpdateHelp() {
+    MUpdateHelp help = new MUpdateHelp(this.mStrict);
+    return help;
+  }
 
-	protected MValidationExternalType buildValidationExternalType() {
-		MValidationExternalType type = new MValidationExternalType(this.mStrict);
-		return type;
-	}
+  protected MValidationLookup buildValidationLookup() {
+    MValidationLookup lookup = new MValidationLookup(this.mStrict);
+    return lookup;
+  }
 
-	protected MValidationExpression buildValidationExpression() {
-		MValidationExpression expression = new MValidationExpression(this.mStrict);
-		return expression;
-	}
+  protected MValidationExternalType buildValidationExternalType() {
+    MValidationExternalType type = new MValidationExternalType(this.mStrict);
+    return type;
+  }
 
-	protected MValidationExternal buildValidationExternal() {
-		MValidationExternal external = new MValidationExternal(this.mStrict);
-		return external;
-	}
+  protected MValidationExpression buildValidationExpression() {
+    MValidationExpression expression = new MValidationExpression(this.mStrict);
+    return expression;
+  }
 
-	protected MValidationLookupType buildValidationLookupType() {
-		MValidationLookupType lookupType = new MValidationLookupType(this.mStrict);
-		return lookupType;
-	}
+  protected MValidationExternal buildValidationExternal() {
+    MValidationExternal external = new MValidationExternal(this.mStrict);
+    return external;
+  }
 
-	public abstract Metadata doBuild(Object src) throws MetadataException;
+  protected MValidationLookupType buildValidationLookupType() {
+    MValidationLookupType lookupType = new MValidationLookupType(this.mStrict);
+    return lookupType;
+  }
 
-	public abstract MetaObject[] parse(Object src) throws MetadataException;
+  public abstract Metadata doBuild(Object src) throws MetadataException;
 
-	protected MetaObject newType(MetadataType type) {
-		if (type == MetadataType.SYSTEM) {
-			return buildSystem();
-		}
-		if (type == MetadataType.RESOURCE) {
-			return buildResource();
-		}
-		if (type == MetadataType.FOREIGN_KEYS) {
-			return buildForeignKey();
-		}
-		if (type == MetadataType.CLASS) {
-			return buildClass();
-		}
-		if (type == MetadataType.TABLE) {
-			return buildTable();
-		}
-		if (type == MetadataType.UPDATE) {
-			return buildUpdate();
-		}
-		if (type == MetadataType.UPDATE_TYPE) {
-			return buildUpdateType();
-		}
-		if (type == MetadataType.OBJECT) {
-			return buildObject();
-		}
-		if (type == MetadataType.SEARCH_HELP) {
-			return buildSearchHelp();
-		}
-		if (type == MetadataType.EDITMASK) {
-			return buildEditMask();
-		}
-		if (type == MetadataType.UPDATE_HELP) {
-			return buildUpdateHelp();
-		}
-		if (type == MetadataType.LOOKUP) {
-			return buildLookup();
-		}
-		if (type == MetadataType.LOOKUP_TYPE) {
-			return buildLookupType();
-		}
-		if (type == MetadataType.VALIDATION_LOOKUP) {
-			return buildValidationLookup();
-		}
-		if (type == MetadataType.VALIDATION_LOOKUP_TYPE) {
-			return buildValidationLookupType();
-		}
-		if (type == MetadataType.VALIDATION_EXTERNAL) {
-			return buildValidationExternal();
-		}
-		if (type == MetadataType.VALIDATION_EXTERNAL_TYPE) {
-			return buildValidationExternalType();
-		}
-		if (type == MetadataType.VALIDATION_EXPRESSION) {
-			return buildValidationExpression();
-		}
-		throw new RuntimeException("No metadata type class found for " + type.name());
-	}
+  public abstract MetaObject[] parse(Object src) throws MetadataException;
 
-	private boolean mStrict;
-	private static final Log LOG = LogFactory.getLog(MetadataBuilder.class);
+  protected MetaObject newType(MetadataType type) {
+    if (type == MetadataType.SYSTEM) {
+      return buildSystem();
+    }
+    if (type == MetadataType.RESOURCE) {
+      return buildResource();
+    }
+    if (type == MetadataType.FOREIGN_KEYS) {
+      return buildForeignKey();
+    }
+    if (type == MetadataType.CLASS) {
+      return buildClass();
+    }
+    if (type == MetadataType.TABLE) {
+      return buildTable();
+    }
+    if (type == MetadataType.UPDATE) {
+      return buildUpdate();
+    }
+    if (type == MetadataType.UPDATE_TYPE) {
+      return buildUpdateType();
+    }
+    if (type == MetadataType.OBJECT) {
+      return buildObject();
+    }
+    if (type == MetadataType.SEARCH_HELP) {
+      return buildSearchHelp();
+    }
+    if (type == MetadataType.EDITMASK) {
+      return buildEditMask();
+    }
+    if (type == MetadataType.UPDATE_HELP) {
+      return buildUpdateHelp();
+    }
+    if (type == MetadataType.LOOKUP) {
+      return buildLookup();
+    }
+    if (type == MetadataType.LOOKUP_TYPE) {
+      return buildLookupType();
+    }
+    if (type == MetadataType.VALIDATION_LOOKUP) {
+      return buildValidationLookup();
+    }
+    if (type == MetadataType.VALIDATION_LOOKUP_TYPE) {
+      return buildValidationLookupType();
+    }
+    if (type == MetadataType.VALIDATION_EXTERNAL) {
+      return buildValidationExternal();
+    }
+    if (type == MetadataType.VALIDATION_EXTERNAL_TYPE) {
+      return buildValidationExternalType();
+    }
+    if (type == MetadataType.VALIDATION_EXPRESSION) {
+      return buildValidationExpression();
+    }
+    throw new RuntimeException("No metadata type class found for " + type.name());
+  }
 }

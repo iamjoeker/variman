@@ -19,47 +19,44 @@ import org.realtors.rets.server.dmql.DmqlParserMetadata;
  * Default implementation of the {@link SqlStatements} interface. This
  * implementation is a simple "container" implementation where the associated
  * objects are passed into the constructor.
- * 
+ *
  * @author Danny
  */
-public class DefaultSqlStatements implements SqlStatements
-{
-    private Query mCountQuery;
-    private SearchQuery mSearchQuery;
-    
-    public DefaultSqlStatements(final Query countQuery, final SearchQuery searchQuery)
-    {
-        if (countQuery == null) {
-            throw new NullPointerException("Count query must not be null.");
-        }
-        mCountQuery = countQuery;
-        if (searchQuery == null) {
-            throw new NullPointerException("Search query must not be null.");
-        }
-        mSearchQuery = searchQuery;
-    }
-    
-    public DefaultSqlStatements(final String countQuerySql, final String searchQuerySql, final List/*String*/ selectedColumnNames, final DmqlParserMetadata dmqlParserMetadata)
-    {
-        if (StringUtils.isBlank(countQuerySql)) {
-            throw new IllegalArgumentException("Count query SQL must not be null or empty.");
-        }
-        mCountQuery = new DefaultQuery(countQuerySql);
-        mSearchQuery = new DefaultSearchQuery(searchQuerySql, selectedColumnNames, dmqlParserMetadata);
-    }
+public class DefaultSqlStatements implements SqlStatements {
+  private Query mCountQuery;
+  private SearchQuery mSearchQuery;
 
-    /* (non-Javadoc)
-     * @see org.realtors.rets.server.protocol.SearchSqlBuilder.SqlStatements#getCountQuery()
-     */
-    public Query getCountQuery() {
-        return mCountQuery;
+  public DefaultSqlStatements(final Query countQuery, final SearchQuery searchQuery) {
+    if (countQuery == null) {
+      throw new NullPointerException("Count query must not be null.");
     }
+    mCountQuery = countQuery;
+    if (searchQuery == null) {
+      throw new NullPointerException("Search query must not be null.");
+    }
+    mSearchQuery = searchQuery;
+  }
 
-    /* (non-Javadoc)
-     * @see org.realtors.rets.server.protocol.SearchSqlBuilder.SqlStatements#getSearchQuery()
-     */
-    public SearchQuery getSearchQuery() {
-        return mSearchQuery;
+  public DefaultSqlStatements(final String countQuerySql, final String searchQuerySql, final List/*String*/ selectedColumnNames, final DmqlParserMetadata dmqlParserMetadata) {
+    if (StringUtils.isBlank(countQuerySql)) {
+      throw new IllegalArgumentException("Count query SQL must not be null or empty.");
     }
-    
+    mCountQuery = new DefaultQuery(countQuerySql);
+    mSearchQuery = new DefaultSearchQuery(searchQuerySql, selectedColumnNames, dmqlParserMetadata);
+  }
+
+  /* (non-Javadoc)
+   * @see org.realtors.rets.server.protocol.SearchSqlBuilder.SqlStatements#getCountQuery()
+   */
+  public Query getCountQuery() {
+    return mCountQuery;
+  }
+
+  /* (non-Javadoc)
+   * @see org.realtors.rets.server.protocol.SearchSqlBuilder.SqlStatements#getSearchQuery()
+   */
+  public SearchQuery getSearchQuery() {
+    return mSearchQuery;
+  }
+
 }

@@ -22,68 +22,61 @@ import org.realtors.rets.common.metadata.types.MValidationExternalType;
 import org.realtors.rets.common.util.TagBuilder;
 
 public class StandardValidationExternalTypeFormatter
-    extends BaseStandardFormatter
-{
-    public void format(FormatterContext context,
-                       Collection<MetaObject> validationExternalTypes, String[] levels)
-    {
-        RetsVersion retsVersion = context.getRetsVersion();
-        PrintWriter out = context.getWriter();
-        TagBuilder metadata =
-            new TagBuilder(out, "METADATA-VALIDATION_EXTERNAL_TYPE")
-            .appendAttribute("Resource", levels[RESOURCE_LEVEL])
-            .appendAttribute("ValidationExternalName",
-                             levels[VALIDATION_EXTERNAL_LEVEL])
-            .appendAttribute("Version", context.getVersion())
-            .appendAttribute("Date", context.getDate(), context.getRetsVersion())
-            .beginContentOnNewLine();
+  extends BaseStandardFormatter {
+  public void format(FormatterContext context,
+                     Collection<MetaObject> validationExternalTypes, String[] levels) {
+    RetsVersion retsVersion = context.getRetsVersion();
+    PrintWriter out = context.getWriter();
+    TagBuilder metadata =
+      new TagBuilder(out, "METADATA-VALIDATION_EXTERNAL_TYPE")
+        .appendAttribute("Resource", levels[RESOURCE_LEVEL])
+        .appendAttribute("ValidationExternalName",
+          levels[VALIDATION_EXTERNAL_LEVEL])
+        .appendAttribute("Version", context.getVersion())
+        .appendAttribute("Date", context.getDate(), context.getRetsVersion())
+        .beginContentOnNewLine();
 
-        for (Iterator<?> i = validationExternalTypes.iterator(); i.hasNext();)
-        {
-            MValidationExternalType validationExternalType =
-                (MValidationExternalType) i.next();
-            TagBuilder tag = new TagBuilder(out, "ValidationExternal")
-                .beginContentOnNewLine();
-            
-            if (!retsVersion.equals(RetsVersion.RETS_1_0) && !retsVersion.equals(RetsVersion.RETS_1_5))
-            {
-                // Added 1.7 DTD
-                TagBuilder.simpleTag(out, "MetadataEntryID", validationExternalType.getMetadataEntryID());
-            }
+    for (Iterator<?> i = validationExternalTypes.iterator(); i.hasNext(); ) {
+      MValidationExternalType validationExternalType =
+        (MValidationExternalType) i.next();
+      TagBuilder tag = new TagBuilder(out, "ValidationExternal")
+        .beginContentOnNewLine();
 
-            String searchFieldCsv = validationExternalType.getSearchField();
-            List<?> sorted = FormatUtil.toSortedStringList(
-                    MValidationExternalType.toSearchFields(searchFieldCsv));
-            for (int j = 0; j < sorted.size(); j++)
-            {
-                TagBuilder.simpleTag(out, "SearchField", sorted.get(j));
-            }
+      if (!retsVersion.equals(RetsVersion.RETS_1_0) && !retsVersion.equals(RetsVersion.RETS_1_5)) {
+        // Added 1.7 DTD
+        TagBuilder.simpleTag(out, "MetadataEntryID", validationExternalType.getMetadataEntryID());
+      }
 
-            String displayFieldCsv = validationExternalType.getDisplayField();
-            sorted = FormatUtil.toSortedStringList(
-                    MValidationExternalType.toDisplayFields(displayFieldCsv));
-            for (int j = 0; j < sorted.size(); j++)
-            {
-                TagBuilder.simpleTag(out, "DisplayField", sorted.get(j));
-            }
+      String searchFieldCsv = validationExternalType.getSearchField();
+      List<?> sorted = FormatUtil.toSortedStringList(
+        MValidationExternalType.toSearchFields(searchFieldCsv));
+      for (int j = 0; j < sorted.size(); j++) {
+        TagBuilder.simpleTag(out, "SearchField", sorted.get(j));
+      }
 
-            String resultFieldsCsv = validationExternalType.getResultFields();
-            Map<String, String> resultFieldsMap = MValidationExternalType.toResultFieldsMap(resultFieldsCsv);
-            sorted = FormatUtil.toSortedStringList(resultFieldsMap.keySet());
-            for (int j = 0; j < sorted.size(); j++)
-            {
-                TagBuilder resultFieldsTag = new TagBuilder(out, "ResultFields")
-                    .beginContentOnNewLine();
-                String source = (String) sorted.get(j);
-                String target = resultFieldsMap.get(source);
-                TagBuilder.simpleTag(out, "Source", source);
-                TagBuilder.simpleTag(out, "Target", target);
-                resultFieldsTag.close();
-            }
+      String displayFieldCsv = validationExternalType.getDisplayField();
+      sorted = FormatUtil.toSortedStringList(
+        MValidationExternalType.toDisplayFields(displayFieldCsv));
+      for (int j = 0; j < sorted.size(); j++) {
+        TagBuilder.simpleTag(out, "DisplayField", sorted.get(j));
+      }
 
-            tag.close();
-        }
+      String resultFieldsCsv = validationExternalType.getResultFields();
+      Map<String, String> resultFieldsMap = MValidationExternalType.toResultFieldsMap(resultFieldsCsv);
+      sorted = FormatUtil.toSortedStringList(resultFieldsMap.keySet());
+      for (int j = 0; j < sorted.size(); j++) {
+        TagBuilder resultFieldsTag = new TagBuilder(out, "ResultFields")
+          .beginContentOnNewLine();
+        String source = (String) sorted.get(j);
+        String target = resultFieldsMap.get(source);
+        TagBuilder.simpleTag(out, "Source", source);
+        TagBuilder.simpleTag(out, "Target", target);
+        resultFieldsTag.close();
+      }
 
-        metadata.close();
+      tag.close();
     }
+
+    metadata.close();
+  }
 }

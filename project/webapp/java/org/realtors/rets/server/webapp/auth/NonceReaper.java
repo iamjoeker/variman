@@ -19,42 +19,37 @@ import org.apache.log4j.Logger;
 /**
  * Expires nonces on a nonce table once a minute.
  */
-public class NonceReaper
-{
-    /**
-     * Create a new nonce reaper for a nonce table.
-     *
-     * @param nonceTable Nonce table to expire
-     */
-    public NonceReaper(NonceTable nonceTable)
-    {
-        mNonceTable = nonceTable;
-        mTimer = new Timer();
-        mTimer.schedule(new ReaperTask(),
-                        DateUtils.MILLIS_PER_MINUTE,     // Initial delay
-                        DateUtils.MILLIS_PER_MINUTE);    // Subsequent delay
-        LOG.debug("Started nonce reaper");
-    }
+public class NonceReaper {
+  private static final Logger LOG =
+    Logger.getLogger(NonceReaper.class);
+  private NonceTable mNonceTable;
+  private Timer mTimer;
 
-    /**
-     * Stops expiring nonces.
-     */ 
-    public void stop()
-    {
-        LOG.debug("Stopping nonce reaper");
-        mTimer.cancel();
-    }
+  /**
+   * Create a new nonce reaper for a nonce table.
+   *
+   * @param nonceTable Nonce table to expire
+   */
+  public NonceReaper(NonceTable nonceTable) {
+    mNonceTable = nonceTable;
+    mTimer = new Timer();
+    mTimer.schedule(new ReaperTask(),
+      DateUtils.MILLIS_PER_MINUTE,     // Initial delay
+      DateUtils.MILLIS_PER_MINUTE);    // Subsequent delay
+    LOG.debug("Started nonce reaper");
+  }
 
-    private class ReaperTask extends TimerTask
-    {
-        public void run()
-        {
-            mNonceTable.expireNonces();
-        }
-    }
+  /**
+   * Stops expiring nonces.
+   */
+  public void stop() {
+    LOG.debug("Stopping nonce reaper");
+    mTimer.cancel();
+  }
 
-    private static final Logger LOG =
-        Logger.getLogger(NonceReaper.class);
-    private NonceTable mNonceTable;
-    private Timer mTimer;
+  private class ReaperTask extends TimerTask {
+    public void run() {
+      mNonceTable.expireNonces();
+    }
+  }
 }

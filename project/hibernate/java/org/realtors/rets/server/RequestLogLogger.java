@@ -10,17 +10,17 @@ package org.realtors.rets.server;
 
 /**
  * A repository of {@link RequestLogEntry}s.
- * 
+ *
  * @author Danny
  */
 public interface RequestLogLogger {
 
-    /**
-     * Logs a new request log entry to this repository.
-     * 
-     * @param requestLogEntry The request log entry to be added. Must not be
-     *         {@code null}.
-     */
-    public void logEntry(RequestLogEntry requestLogEntry);
+  /**
+   * Logs a new request log entry to this repository.
+   *
+   * @param requestLogEntry The request log entry to be added. Must not be
+   *                        {@code null}.
+   */
+  public void logEntry(RequestLogEntry requestLogEntry);
 
 }

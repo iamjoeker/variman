@@ -8,28 +8,24 @@
 
 package org.realtors.rets.server.admin;
 
-public class StringJoiner
-{
-    public StringJoiner(String separator)
-    {
-        mSeparator = separator;
-        mCurrentSeparator = "";
-        mBuffer = new StringBuffer();
-    }
+public class StringJoiner {
+  private String mSeparator;
+  private String mCurrentSeparator;
+  private StringBuffer mBuffer;
 
-    public void append(Object object)
-    {
-        mBuffer.append(mCurrentSeparator);
-        mBuffer.append(object.toString());
-        mCurrentSeparator = mSeparator;
-    }
+  public StringJoiner(String separator) {
+    mSeparator = separator;
+    mCurrentSeparator = "";
+    mBuffer = new StringBuffer();
+  }
 
-    public String toString()
-    {
-        return mBuffer.toString();
-    }
+  public void append(Object object) {
+    mBuffer.append(mCurrentSeparator);
+    mBuffer.append(object.toString());
+    mCurrentSeparator = mSeparator;
+  }
 
-    private String mSeparator;
-    private String mCurrentSeparator;
-    private StringBuffer mBuffer;
+  public String toString() {
+    return mBuffer.toString();
+  }
 }
