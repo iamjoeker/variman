@@ -510,7 +510,7 @@
   </target>
 
   <target name="test-rets-client" depends="build-rets-client">
-    <depend srcDir="project/rets-client/junit"
+    <depend srcDir="project/rets-client/test"
             destDir="build/rets-client/tests/classes"
             cache="build/rets-client/tests/depcache" closure="yes">
       <classpath>
@@ -518,7 +518,7 @@
         <path refid="rets-client.path" />
       </classpath>
     </depend>
-    <javac srcdir="project/rets-client/junit"
+    <javac srcdir="project/rets-client/test"
            destdir="build/rets-client/tests/classes"
            target="${compile.vmtarget}" source="${compile.vmsource}"
            optimize="${compile.optimize}"
@@ -531,7 +531,7 @@
       </classpath>
     </javac>
     <copy todir="build/rets-client/tests/classes">
-      <fileset dir="project/rets-client/junit"
+      <fileset dir="project/rets-client/test"
                includes="**/*"
                excludes="**/*.java"
       />
