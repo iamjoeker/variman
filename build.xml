@@ -114,6 +114,7 @@
     <pathelement path="${rets-client.jar}" />
     <pathelement path="${apple-java-ext.jar}" />
     <pathelement path="build/hibernate/jar/${project.name}-hibernate.jar" />
+    <pathelement path="${spring.jar}" />
   </path>
 
   <path id="rets-client.path">
@@ -145,6 +146,11 @@
     <condition property="isJDK1.7">
       <and>
         <equals arg1="${ant.java.version}" arg2="1.7" />
+      </and>
+    </condition>
+    <condition property="isJDK1.8">
+      <and>
+        <equals arg1="${ant.java.version}" arg2="1.8" />
       </and>
     </condition>
   </target>
@@ -243,7 +249,7 @@
         <path refid="hibernate.path" />
       </classpath>
     </javac>
-    <javac srcdir="project/hibernate/test/java"
+    <javac srcdir="project/hibernate/test"
            destdir="build/hibernate/test/classes"
            target="${compile.vmtarget}" source="${compile.vmsource}"
            optimize="${compile.optimize}"
@@ -256,7 +262,7 @@
       </classpath>
     </javac>
     <copy todir="build/hibernate/test/classes">
-      <fileset dir="project/hibernate/test/java" includes="**/*"
+      <fileset dir="project/hibernate/test" includes="**/*"
                excludes="**/*.java" />
     </copy>
 
@@ -598,7 +604,7 @@
       </classpath>
     </javac>
 
-    <depend srcDir="project/webapp/test/java"
+    <depend srcDir="project/webapp/test"
             destDir="build/webapp/test/classes"
             cache="build/depcache" closure="yes">
       <classpath>
@@ -606,7 +612,7 @@
         <pathelement path="${junit.jar}" />
       </classpath>
     </depend>
-    <javac srcdir="project/webapp/test/java"
+    <javac srcdir="project/webapp/test"
            destDir="build/webapp/test/classes"
            target="${compile.vmtarget}" source="${compile.vmsource}"
            optimize="${compile.optimize}" debug="${compile.debug}"
@@ -625,7 +631,7 @@
       <fileset dir="project/webapp/java" includes="**/*" excludes="**/*.java" />
     </copy>
     <copy todir="build/webapp/test/classes">
-      <fileset dir="project/webapp/test/java" includes="**/*"
+      <fileset dir="project/webapp/test" includes="**/*"
                excludes="**/*.java" />
     </copy>
     <propertyfile file="build/rets-server/variman/WEB-INF/classes/${project.name}-webapp.properties">
@@ -715,12 +721,12 @@
     <copy todir="build/rets-server/variman/WEB-INF/lib"
           file="${spring.jar}" />
 
-    <copy todir="build/rets-server/variman/WEB-INF/rets"
-          file="project/webapp/config/rets-config.xml" />
+<!--    <copy todir="build/rets-server/variman/WEB-INF/rets"
+          file="project/webapp/config/rets-config.xml" />-->
     <copy todir="build/rets-server/variman/WEB-INF/rets"
           file="project/webapp/config/rets-config.xml.dist" />
-    <copy todir="build/rets-server/variman/WEB-INF/rets"
-          file="project/webapp/config/rets-logging.properties" />
+    <copy file="project/webapp/config/rets-logging.properties.dist"
+          tofile="build/rets-server/variman/WEB-INF/rets/rets-logging.properties" />
     <copy todir="build/rets-server/variman/WEB-INF/rets"
           file="project/webapp/config/rets-logging.properties.dist" />
     <copy todir="build/rets-server/variman/WEB-INF"
@@ -775,7 +781,7 @@
     <copy file="${commons-logging.jar}" todir="build/rets-server/admin/lib" />
 
     <!-- build the test code -->
-    <depend srcDir="project/admin/test/java"
+    <depend srcDir="project/admin/test"
             destDir="build/admin/test/classes"
             cache="build/admin/test/depcache" closure="yes">
       <classpath>
@@ -783,7 +789,7 @@
         <pathelement location="build/admin/classes" />
       </classpath>
     </depend>
-    <javac srcdir="project/admin/test/java"
+    <javac srcdir="project/admin/test"
            destdir="build/admin/test/classes"
            target="${compile.vmtarget}" source="${compile.vmsource}"
            optimize="${compile.optimize}" debug="${compile.debug}"
