@@ -4,6 +4,10 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class ReplyCode {
+  static {
+    CODES = new HashMap<Integer, ReplyCode>();
+  }
+
   public static final ReplyCode SUCCESS = new ReplyCode(0, "Success");
   public static final ReplyCode ZERO_BALANCE = new ReplyCode(20003, "Zero balance");
   public static final ReplyCode BROKER_CODE_REQUIRED = new ReplyCode(20012, "Broker code required");
@@ -47,7 +51,7 @@ public class ReplyCode {
   public static final ReplyCode MISCELLANEOUS_ERROR = new ReplyCode(20513, "Miscellanous error");
   public static final ReplyCode REQUESTED_DTD_UNAVAILABLE = new ReplyCode(20514, "Requested DTD unvailable");
   // static initialization loop.... this declaration _MUST_ come before the members
-  private static final Map<Integer, ReplyCode> CODES = new HashMap<Integer, ReplyCode>();
+  private static final Map<Integer, ReplyCode> CODES;
   private final int mValue;
   private final String mMessage;
 

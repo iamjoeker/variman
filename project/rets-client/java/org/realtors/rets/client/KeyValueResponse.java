@@ -74,14 +74,18 @@ abstract public class KeyValueResponse {
     StringTokenizer tokenizer = new StringTokenizer(retsResponse.getText(), CRLF);
     while (tokenizer.hasMoreTokens()) {
       String line = tokenizer.nextToken();
-      String splits[] = StringUtils.split(line, "=");
+      String[] splits = StringUtils.split(line, "=");
       String key = splits[0].trim();
-      // guard against a missing value in a KeyValueResponse
-      String value = splits.length > 1 ? splits[1].trim() : "";
-      if (LOG.isDebugEnabled()) {
-        LOG.debug("<" + key + "> -> <" + value + ">");
+
+      if (key.length() > 0) {
+        // guard against a missing value in a KeyValueResponse
+        String value = splits.length > 1 ? splits[1].trim() : "";
+        if (LOG.isDebugEnabled()) {
+          LOG.debug("<" + key + "> -> <" + value + ">");
+        }
+
+        this.handleKeyValue(key, value);
       }
-      this.handleKeyValue(key, value);
     }
   }
 
